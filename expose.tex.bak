@@ -173,7 +173,7 @@ sorting=ynt
 
 % Motivation, Relevanz, methodisches Vorgehen und Hypothesen
 \section{Motivation}
-Mein Interesse zu diesem Themenkomplex erstreckt sich über mehrere Ebenen. Neben der asymmetrischen und der dahinterliegenden Mathematik, gehört die Programmierung selbst und die Umsetzung eines sicheren Messengers im Tornetzwerk zu meiner Hauptmotivation mich diesem komplexen Thema anzunehmen.
+Mein Interesse zu diesem Themenkomplex erstreckt sich über mehrere Ebenen. Neben der asymmetrischen und der dahinterliegenden Mathematik, gehört die Programmierung selbst und die Umsetzung eines sicheren Messengers im Tornetzwer
 \subsection{Tor-Netzwerk}
 Ich interessiere mich schon lange für das Tor-Netzwerk, habe aber nie so richtig einen Zugang dazu gefunden, bis auf das Dark-Web. Aber es sind nicht nur die schlechten Seiten, welche das Tor-Netzwerk so besonders machen. Für mich ist es interessant, wie dieses Netzwerk auch wirklich aufgebaut ist bzw. wie die verschiedenen Circuits miteinander interagieren und wo, wie, warum bei welchem Prozess verschlüsselt wird. Ein weiterer wichtiger Aspekt ist dabei, dass das Tor-Netzwerk es auch schafft, sodass die Verbindungen nicht zurückverfolgt werden können. Auch dieser Aspekt interessiert mich.
 
