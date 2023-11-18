@@ -173,14 +173,16 @@ sorting=ynt
 
 % Motivation, Relevanz, methodisches Vorgehen und Hypothesen
 \section{Motivation}
-Mein Interesse zu diesem Themenkomplex erstreckt sich über mehrere Ebenen. Neben der asymmetrischen und der dahinterliegenden Mathematik, gehört die Programmierung selbst und die Umsetzung eines sicheren Messengers im Tornetzwer
+Mein Interesse zu diesem Themenkomplex erstreckt sich über mehrere Ebenen. Neben der asymmetrischen und der dahinterliegenden Mathematik, gehört die Programmierung selbst und die Umsetzung eines sicheren Messengers im Tornetzwerk zu meiner Hauptmotivation mich diesem komplexen Thema anzunehmen.
 \subsection{Tor-Netzwerk}
-Ich interessiere mich schon lange für das Tor-Netzwerk, habe aber nie so richtig einen Zugang dazu gefunden, bis auf das Dark-Web. Aber es sind nicht nur die schlechten Seiten, welche das Tor-Netzwerk so besonders machen. Für mich ist es interessant, wie dieses Netzwerk auch wirklich aufgebaut ist bzw. wie die verschiedenen Circuits miteinander interagieren und wo, wie, warum bei welchem Prozess verschlüsselt wird. Ein weiterer wichtiger Aspekt ist dabei, dass das Tor-Netzwerk es auch schafft, sodass die Verbindungen nicht zurückverfolgt werden können. Auch dieser Aspekt interessiert mich.
+Das Tor-Netzwerk und die Struktur dessen verfolge ich schon seit ein paar Jahren mit hohen Interesse. Oftmals ist das Tor-Netzwerk mit dem Begriff des Darknets verbunden, wodurch es bei den meisten Menschen negative Assoziationen hervorruft. Vor alldem die schwierige Rückverfolgung spielt eine große Rolle in dem Darknet. Sie ist der Grund für mein Interesse, die Struktur zu verstehen und darauf einen neuartigen Messenger zu programmieren.
 
 \subsection{Asymmetrische Verschlüsselung}
-Wie bereits erwähnt, denke ich, dass die Mathematik hinter der asymmetrischen Verschlüsselung interessant ist, und wie man es schafft, sodass der Angreifer nur mit dem öffentlichen Schlüssel eine Nachricht nicht entschlüsseln kann.
+Innerhalb der asymmetrischen Verschlüsselung steht für mich ein mathematischer Erklärungsansatz mit unter im Vordergrund meines Interesses: "Wie schafft es der Angreifer nur mit dem öffentlichen Schlüssel eine verschlüsselte Nachricht nicht entschlüsseln zu können".
 
 \subsection{Programmatischer Aspekt}
+Die höchste Aufmerksamkeit gilt der Programmierung selbst. Die vielen Facetten des Tor-Netzwerkes mit der asymmetrischen Verschlüsselung zu verknüpfen, sodass am Ende ein funktionierender Messenger entsteht. Die Dezentralisierung des Messengers tragen nochmals zu der Schwierigkeit bei, sodass tiefe Kenntnisse der Informatik gefragt sind. Auch um dieses Wissen zu erlangen bin 
+
 Natürlich spielt für mich auch das Programmieren eine große Rolle, eben weil ich viel Spaß daran habe. Die vielen Facetten das Tor-Netzwerk miteinander zu verbinden und sich eine eigene Infrastruktur für die Kommunikation zwischen den Clients zu errichten ist, denke ich, sehr interessant, da es hier im Tor-Netzwerk zwar Server gibt, ich aber mit meinem Ansatz versuchen möchte, dass der Messenger zudem dezentralisiert ist. 
 
 \section{Relevanz}
