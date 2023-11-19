@@ -1,19 +1,21 @@
 \documentclass[a4paper,10pt,ngerman,
   headheight=28pt,]{scrartcl}
+  
+ 
+% PACKAGES  
+\usepackage[a4paper,left=3cm,right=4cm,top=2.5cm,bottom=2.5cm]{geometry}
+
 \usepackage[T1]{fontenc}
 \usepackage[utf8x]{inputenc}
 \usepackage{csquotes}
 \usepackage{babel}
 \usepackage{relsize}
 \usepackage{setspace}
-\usepackage[a4paper,left=3cm,right=4cm,top=2.5cm,bottom=2.5cm]{geometry}
 
 \usepackage{lineno}
 
-% Die nächsten vier Felder bitte anpassen:
-\newcommand{\Titel}{Dezentralisierte asymmetrische Verschlüsselung über Tor:\\[0.2em]\smaller{}Die Lösung für sicheres Messaging?} % Titel für Facharbeit
-\newcommand{\Author}{Hendrik Lind}     % Ich
-\newcommand{\School}{Windthorst-Gymnasium Meppen}     % Ich
+\usepackage{tabularray}
+\usepackage{float}
 
 % Literaturverzeichnis
 \usepackage[
@@ -23,9 +25,23 @@ sorting=ynt
 ]{biblatex}
 \addbibresource{refs.bib}
 
-\usepackage{tabularray}
-\usepackage{float}
- 
+
+
+
+% Die nächsten vier Felder bitte anpassen:
+\newcommand{\Titel}{Dezentralisierte asymmetrische Verschlüsselung über Tor} % Titel für Facharbeit
+\newcommand{\SubTitel}{Die Lösung für sicheres Messaging?}
+\newcommand{\Author}{Hendrik Lind}     % Ich
+\newcommand{\Department}{Seminarfach Informatik}
+\newcommand{\School}{Windthorst-Gymnasium Meppen}
+\newcommand{\Country}{Deutschland}
+\newcommand{\Abgabe}{20. November 2023}
+
+\newcommand{\thesisDegree}{Exposé zur Facharbeit}
+\newcommand{\faculty}{Seminarfach Informatik}
+\newcommand{\thesisPlaceDate}{\today}
+
+
 % Kopf- und Fußzeilen
 \usepackage{scrlayer-scrpage, lastpage}
 \setkomafont{pageheadfoot}{\large\textrm}
@@ -41,7 +57,6 @@ sorting=ynt
 % Für mathematische Befehle und Symbole
 \usepackage{amsmath}
 \usepackage{amssymb}
-
 \usepackage{wrapfig}
 
 % Für Bilder
@@ -60,56 +75,9 @@ sorting=ynt
 
 
 % 1.5 Line spacing
-%\setstretch{1.25}
+\setstretch{1.5}
 
-% Defining rust langauge
-\definecolor{GrayCodeBlock}{RGB}{241,241,241}
-\definecolor{BlackText}{RGB}{110,107,94}
-\definecolor{RedTypename}{RGB}{182,86,17}
-\definecolor{GreenString}{RGB}{96,172,57}
-\definecolor{PurpleKeyword}{RGB}{184,84,212}
-\definecolor{GrayComment}{RGB}{170,170,170}
-\definecolor{GoldDocumentation}{RGB}{180,165,45}
-\lstdefinelanguage{rust}
-{
-    columns=fullflexible,
-    keepspaces=true,
-    frame=single,
-    framesep=0pt,
-    framerule=0pt,
-    framexleftmargin=4pt,
-    framexrightmargin=4pt,
-    framextopmargin=5pt,
-    framexbottommargin=3pt,
-    xleftmargin=4pt,
-    xrightmargin=4pt,
-    backgroundcolor=\color{GrayCodeBlock},
-    basicstyle=\ttfamily\color{BlackText},
-    keywords={
-        true,false,
-        unsafe,async,await,move,
-        use,pub,crate,super,self,mod,
-        struct,enum,fn,const,static,let,mut,ref,type,impl,dyn,trait,where,as,
-        break,continue,if,else,while,for,loop,match,return,yield,in
-    },
-    keywordstyle=\color{PurpleKeyword},
-    ndkeywords={
-        bool,u8,u16,u32,u64,u128,i8,i16,i32,i64,i128,char,str,
-        Self,Option,Some,None,Result,Ok,Err,String,Box,Vec,Rc,Arc,Cell,RefCell,HashMap,BTreeMap,
-        macro_rules
-    },
-    ndkeywordstyle=\color{RedTypename},
-    comment=[l][\color{GrayComment}\slshape]{//},
-    morecomment=[s][\color{GrayComment}\slshape]{/*}{*/},
-    morecomment=[l][\color{GoldDocumentation}\slshape]{///},
-    morecomment=[s][\color{GoldDocumentation}\slshape]{/*!}{*/},
-    morecomment=[l][\color{GoldDocumentation}\slshape]{//!},
-    morecomment=[s][\color{RedTypename}]{\#![}{]},
-    morecomment=[s][\color{RedTypename}]{\#[}{]},
-    stringstyle=\color{GreenString},
-    string=[b]"
-}
-% end
+\include{RustLanguage}
 
 % Umlaute erlauben
 \lstset{literate=%
@@ -150,19 +118,30 @@ sorting=ynt
 \usepackage[hidelinks]{hyperref} % Anklickbare Links im Dokument
 \usepackage{cleveref}
 
+
+% Titlepage required things
+
+
+% Necessary packages for the titlepage:
+\usepackage{tikz}
+\usetikzlibrary{calc}
+%\usepackage{graphicx}
+\usepackage{newtxtext}
+%\usepackage{float}
+\usepackage{comment}
+% This command changes the font style where SLU promotes Arial
+%\newenvironment{myfont}{\fontfamily{phv}\selectfont}{\par}
+
+
+
+
 % Facharbeit
 
-% Daten für die Titelseite
-\title{\textbf{\Huge\Titel}}
-\author{\LARGE \Author \\\\}
-\author{\LARGE \School \\\\}
-\date{\LARGE\today}
-
 \begin{document}
+\include{titlePage}
 
-\maketitle
-\tableofcontents
 \setcounter{page}{0}
+\tableofcontents
 
 \vspace{0.5cm}
 \pagebreak
@@ -201,7 +180,7 @@ Das Konzept der asymmetrischen Verschlüsselung muss im Zusammenhang mit dem Tor
 Die Einbindung des Tor-Netzwerkes ist ein weiterer tragender Pfeiler für meine Facharbeit. Mithilfe des Tor-Netzwerkes lassen sich sicher und anonym Datenpakete verschicken, wobei die Schwierigkeit der Rückverfolgung für außenstehende maximiert wird. Ein tiefes Verständnis der Infrastruktur dieses Netzwerkes ist erfordert, um die Verknüpfungen und Verschlüsselungsvorgehen zwischen den Servern des Tor-Netzwerkes zu verstehen und somit eine nahtlose Einbindung zu garantieren. Neben der fachlichen Komponente, soll auch durch eine klare und einfache Sprache ein Leser ohne spezielle Fachkenntnisse mit dem Aufbau und der Funktionsweise des Tor-Netzwerkes vertraut gemacht werden.
 
 \subsection{Aufbau}
-Die Facharbeit werde ich mit einer Einleitung beginnen, welche das ausarbeitete Problem vorstellt und das Interesse des Lesers erweckt, indem bei einem bekannten Beispiel eines Messengingdienstes auf ein Sicherheitsbedenken hingewiesen wird. Anschließend werde ich eine Definition für Messengingdienste angeben und mich auf statistische Grundlagen beziehen, sodass der Leser eine nötige Vorstellung solcher Dienste hat. Danach werde ich mögliche Lösungsvorschläge vorstellen und mich für einen dezentralisierten Ende-zu-Ende-verschlüsselten Messenger über das Tor-Netzwerk entscheiden, da dieser meiner Ansicht nach die möglichen Sicherheitsrisiken großflächig abdeckt. Folglich werde ich die asymmetrische Verschlüsselung vorstellen, welche sowohl im Tor-Netzwerk als auch in meinem Messenger eine große Rolle spielen wird. Wichtig ist es auch, die mathematische Ebene miteinzubeziehen und Berechnungen anzufertigen, wie lang ein möglicher Angreifer bräuchte, um ein Schlüsselpaar zu knacken. Aber auch auf mögliche Schwachstellen in Protokollen sollte aufmerksam gemacht werden, sodass es Angreifern schwerfällt, die Software im Tor-Netzwerk zu erkennen. Mit diesem erklärten Verschlüsselungsverfahren lässt sich nun zum Tor-Netzwerk überleiten. Die Infrastruktur und die Ziele dessen sollten hervorgehoben werden, sodass der Leser versteht, inwiefern das Tor-Netzwerk eine Sicherheit liefert und wo selbst das Tor-Netzwerk seine Grenzen hat. Aber auch ein Fokus auf die Nutzbarkeit dieses Programms sollte gelegt werden. So soll die Software eine gut ausgeprägte Nutzerfreundlichkeit besitzen, sodass selbst einfache Nutzer ohne tiefgreifende Informatikkenntnisse eine solche Software benutzen können. Die Dezentralisierung sollte aber auch, wenn wir das Tor-Netzwerk benutzen, nicht in Vergessenheit geraten. Nur mit der Dezentralisierung ist es möglich, kompromittierte Server zu umgehen und sicherzustellen, dass Nutzer (\textit{fast}) nicht gefasst werden können. Somit ist also ein dynamisches Netzwerkmodell zwischen Server und Client erforderlich, sodass hier eine sichere und kontrollierte Kommunikation herrscht. Um weitere Sicherheitsrisiken auszuschließen, wie zum Beispiel ein $BufferOverflow$, werde ich mich in meiner Facharbeit größtenteils auf die Programmiersprache $Rust$ beziehen. Ein weiterer Vorteil dieser ist, die Software in eine einzige ausführbare Datei kompilieren zu können.
+Die Facharbeit werde ich mit einer Einleitung beginnen, welche das ausarbeitete Problem vorstellt und das Interesse des Lesers erweckt, indem bei einem bekannten Beispiel eines Messengingdienstes auf ein Sicherheitsbedenken hingewiesen wird. Anschließend werde ich eine Definition für Messengingdienste angeben und mich auf statistische Grundlagen beziehen, sodass der Leser eine nötige Vorstellung solcher Dienste hat. Danach werde ich mögliche Lösungsvorschläge vorstellen und mich für einen dezentralisierten Ende-zu-Ende-verschlüsselten Messenger über das Tor-Netzwerk entscheiden, da dieser meiner Ansicht nach die möglichen Sicherheitsrisiken großflächig abdeckt. Folglich werde ich die asymmetrische Verschlüsselung vorstellen, welche sowohl im Tor-Netzwerk als auch in meinem Messenger eine große Rolle spielen wird. Wichtig ist es auch, die mathematische Ebene miteinzubeziehen und Berechnungen anzufertigen, wie lang ein möglicher Angreifer bräuchte, um ein Schlüsselpaar zu knacken. Aber auch auf mögliche Schwachstellen in Protokollen sollte aufmerksam gemacht werden, sodass es Angreifern schwerfällt, die Software im Tor-Netzwerk zu erkennen. Mit diesem erklärten Verschlüsselungsverfahren lässt sich nun zum Tor-Netzwerk überleiten. Die Infrastruktur und die Ziele des Tor-Netzwerkes sollten hervorgehoben werden, sodass der Leser versteht, inwiefern das Tor-Netzwerk eine Sicherheit liefert und wo selbst das Tor-Netzwerk seine Grenzen hat. Aber auch ein Fokus auf die Nutzbarkeit dieses Programms sollte gelegt werden. So soll die Software eine gut ausgeprägte Nutzerfreundlichkeit besitzen, sodass selbst einfache Nutzer ohne tiefgreifende Informatikkenntnisse eine solche Software benutzen können. Die Dezentralisierung sollte aber auch, wenn wir das Tor-Netzwerk benutzen, nicht in Vergessenheit geraten. Nur mit der Dezentralisierung ist es möglich, kompromittierte Server zu umgehen und sicherzustellen, dass Nutzer (\textit{fast}) nicht gefasst werden können. Somit ist also ein dynamisches Netzwerkmodell zwischen Server und Client erforderlich, sodass hier eine sichere und kontrollierte Kommunikation herrscht. Um weitere Sicherheitsrisiken auszuschließen, wie zum Beispiel ein $BufferOverflow$, werde ich mich in meiner Facharbeit größtenteils auf die Programmiersprache $Rust$ beziehen. Ein weiterer Vorteil dieser ist, die Software in eine einzige ausführbare Datei kompilieren zu können.
 
 \section{Hypothesen}
 Aus meiner Sicht lassen sich drei Aussagen aus meinem Exposé herausarbeiten:

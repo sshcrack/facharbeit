@@ -1,0 +1,94 @@
+% To add this template to the main.tex file, just add the command "\include{titlePageSLU} after "\begin{docuemnt}" in the main.tex file
+
+
+% In this segment, enter the desired data to be shown at the title page
+\newcommand{\thesisAuthor}{Firstname Lastname}
+\newcommand{\thesisTitle}{Interesting Thesis Title}
+\newcommand{\thesisSubTitle}{little bit more descriptive}
+\newcommand{\thesisTitleTranslated}{Translated Headline}
+\newcommand{\thesisDegree}{Master thesis project}
+\newcommand{\university}{Swedish University of Argicultural Science, SLU}
+\newcommand{\credits}{30 hp}
+\newcommand{\faculty}{Faculty of blablabalba}
+\newcommand{\thesisPlaceDate}{Place of puplication, Year}
+\newcommand{\company}{Company name}
+
+%------------------------------------------------------------------------------
+\begin{titlepage}
+\thispagestyle{empty}
+\myfont
+
+% Use this line of code if both SLU loggo and company/other institution loggo is desired. The positions are possible to change with the \hspace and \vspace syntax.
+\begin{figure} [H]
+\vspace{-3cm}
+ \centering
+\begin{minipage}[t]{.45\linewidth}
+  \raggedright
+  % Upload and include SLU loggo here:
+  \hspace*{-2cm}\includegraphics[width=\linewidth]{slu_logo_webb.png}
+  
+\end{minipage}%
+  \begin{minipage}[t]{.45\linewidth}
+  \vspace{-3.3cm}
+ \raggedleft
+% Upload and include other loggo here (loggo of wikipedia is used as an example):
+ \hspace*{1cm}\includegraphics[width =0.5\textwidth]{wikilogo.png} \hspace*{-1cm}
+ 
+\end{minipage}
+\end{figure}
+
+
+% If only the logo for SLU is desired, delete "\begin{comment}" and "\end{comment}" to use this line of code:
+\begin{comment}
+\begin{figure}
+\vspace{-3cm}
+    \hspace*{-2cm}\includegraphics[width = 0.3\textwidth]{slu_logo_webb.png}\hspace*{-2cm}
+\end{figure}
+\end{comment}
+
+
+% Adds background picture. Delete code if no background picture is wanted.
+\begin{tikzpicture}[overlay, remember picture]
+\node[anchor=south west, 
+      xshift=-0.2cm, 
+      yshift=-0.2cm] 
+     at (current page.south west)
+     {\includegraphics[width = 1.8\textwidth, height = 9cm]{background.png}}; 
+\end{tikzpicture}
+
+
+\vspace{1cm}
+\par
+\noindent
+\Huge
+\textbf{\thesisTitle}
+\vspace{0.2cm}
+\LARGE
+\par
+\noindent
+- \thesisSubTitle\\
+\rule[0.3cm]{\linewidth}{2pt}
+\Large
+
+% Delete this line if no translation is desired
+\noindent
+\textit{\thesisTitleTranslated}
+
+\vspace{2cm}
+\noindent
+\LARGE
+\thesisAuthor\\
+\vspace{4 cm}
+\small
+\par \noindent
+\thesisDegree $\cdot$ \credits
+\par \noindent
+\university
+\par \noindent
+\faculty
+\par \noindent
+\company
+\par \noindent
+\thesisPlaceDate
+
+\end{titlepage}
