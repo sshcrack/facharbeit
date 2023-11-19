@@ -27,9 +27,9 @@ sorting=ynt
 
 
 
-
 % Die nächsten vier Felder bitte anpassen:
-\newcommand{\Titel}{Dezentralisierte asymmetrische Verschlüsselung über Tor} % Titel für Facharbeit
+\newcommand{\Titel}{Dezentralisierte asymmetrische \\ Verschlüsselung über Tor} % Titel für Facharbeit
+\newcommand{\PageTitel}{Dezentralisierte asymmetrische Verschlüsselung über Tor} % Titel für Facharbeit
 \newcommand{\SubTitel}{Die Lösung für sicheres Messaging?}
 \newcommand{\Author}{Hendrik Lind}     % Ich
 \newcommand{\Department}{Seminarfach Informatik}
@@ -45,7 +45,7 @@ sorting=ynt
 % Kopf- und Fußzeilen
 \usepackage{scrlayer-scrpage, lastpage}
 \setkomafont{pageheadfoot}{\large\textrm}
-\lohead{\Titel}
+\lohead{\PageTitel}
 \rohead{\Author}
 \cfoot*{\thepage{}/\pageref{LastPage}}
 
@@ -139,9 +139,8 @@ sorting=ynt
 
 \begin{document}
 \include{titlePage}
-
-\setcounter{page}{0}
 \tableofcontents
+\setcounter{page}{0}
 
 \vspace{0.5cm}
 \pagebreak
