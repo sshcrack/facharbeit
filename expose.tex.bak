@@ -1,4 +1,4 @@
-\documentclass[a4paper,ngerman, headheight=28pt,11pt]{scrartcl}
+\documentclass[a4paper,ngerman, headheight=28pt,12pt]{scrartcl}
   
   
 % PACKAGES  
@@ -27,7 +27,7 @@ sorting=ynt
 
 % Die nächsten vier Felder bitte anpassen:
 \newcommand{\Titel}{Dezentralisierte asymmetrische \\ Verschlüsselung über Tor} % Titel für Facharbeit
-\newcommand{\PageTitel}{Dezentralisierte asymmetrische Verschlüsselung über Tor} % Titel für Facharbeit
+\newcommand{\PageTitel}{Dezentralisierte asymmetrische\\  Verschlüsselung über Tor} % Titel für Facharbeit
 \newcommand{\SubTitel}{Die Lösung für sicheres Messaging?}
 \newcommand{\Author}{Hendrik Lind}     % Ich
 \newcommand{\Department}{Seminarfach Informatik}
@@ -140,7 +140,7 @@ sorting=ynt
 \include{titlePage}
 \tableofcontents
 \setcounter{page}{0}
-
+\thispagestyle{empty}
 \vspace{0.5cm}
 \pagebreak
 
@@ -157,7 +157,7 @@ Das Tor-Netzwerk und die Struktur dessen verfolge ich schon seit ein paar Jahren
 Innerhalb der asymmetrischen Verschlüsselung steht für mich ein mathematischer Erklärungsansatz mitunter im Vordergrund meines Interesses: \glqq Wie schafft es der Angreifer nur mit dem öffentlichen Schlüssel eine verschlüsselte Nachricht nicht entschlüsseln zu können\grqq.
 
 \subsection{Programmatischer Aspekt}
-Die höchste Aufmerksamkeit gilt der Programmierung selbst. Die vielen Facetten des Tor-Netzwerkes mit der asymmetrischen Verschlüsselung zu verknüpfen, sodass am Ende ein funktionierender Messenger entsteht. Die Dezentralisierung des Messengers tragen nochmals zu der Schwierigkeit bei, sodass tiefe Kenntnisse der Informatik gefragt sind. Auch um dieses Wissen zu erlangen bin ich Feuer und Flamme.
+Die höchste Aufmerksamkeit gilt der Programmierung selbst. Die vielen Facetten des Tor-Netzwerkes mit der asymmetrischen Verschlüsselung zu verknüpfen, sodass am Ende ein funktionierender Messenger entsteht. Die Dezentralisierung des Messengers tragen nochmals zu der Schwierigkeit bei, sodass tiefe Kenntnisse der Informatik gefragt sind. Auch um dieses Wissen zu erlangen bin ich Feuer und Flamme.\cite{texbook}
 
 \section{Relevanz}
 In der heutigen Zeit spielt die Sicherheit in der Informatik eine immer größere Rolle. Besonders bei Messengerdiensten wird dieser Aspekt nochmals relevanter, da oftmals nicht nur personenbezogene Daten, sondern auch sensible Informationen als Chatnachrichten übertragen werden. Auch in Ländern mit eingeschränkter oder gar keiner Meinungsfreiheit wird Sicherheit und Anonymität wichtiger denn je. Über einen Tor-Messenger können oppositionelle Meinungen und Sichtweisen das autoritäre geführte Land verlassen. In diesem Kontext nimmt die asymmetrische Verschlüsselung eine bedeutende Rolle ein. Mit der Verschlüsselung wird verhindert, dass der Staat Nachrichten mitlesen bzw. Absender ausfindig machen kann. Nahezu jeder benutzt heutzutage Messenger, egal ob nur zum Verabreden mit einer Person oder zum Austausch von sensiblen Geschäftsdaten zwischen Unternehmen. Auch hier wird wieder die Frage wichtig: \glqq Wie sicher ist das eigentlich?\grqq
@@ -191,6 +191,8 @@ Die Meinungsfreiheit wird gestärkt, vor allem in Ländern mit starker Zensur, d
 \subsection{Nicht umsetzbar in herkömmlichen Messengern}
 Diese Art des Messengers ist nicht in herkömmlichen Messengern umsetzbar, da dieser über das Tor-Netzwerk fungiert. Das Netzwerk zieht somit die Konsequenz einer langsamen Datenübertragung mit sich, da es mehrere Verschlüsselungsebenen hat. Die Dezentralisierung des Netzwerkes verlangsamt es nochmals. Das verschicken einer Nachricht wird somit sehr langsam.
 
+
+\nolinenumbers
 \printbibliography %Prints bibliography
 
 \end{document}
