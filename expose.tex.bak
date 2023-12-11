@@ -1,7 +1,6 @@
-\documentclass[a4paper,10pt,ngerman,
-  headheight=28pt,]{scrartcl}
+\documentclass[a4paper,ngerman, headheight=28pt,11pt]{scrartcl}
   
- 
+  
 % PACKAGES  
 \usepackage[a4paper,left=3cm,right=4cm,top=2.5cm,bottom=2.5cm]{geometry}
 
@@ -26,7 +25,6 @@ sorting=ynt
 \addbibresource{refs.bib}
 
 
-
 % Die nächsten vier Felder bitte anpassen:
 \newcommand{\Titel}{Dezentralisierte asymmetrische \\ Verschlüsselung über Tor} % Titel für Facharbeit
 \newcommand{\PageTitel}{Dezentralisierte asymmetrische Verschlüsselung über Tor} % Titel für Facharbeit
@@ -42,6 +40,7 @@ sorting=ynt
 \newcommand{\thesisPlaceDate}{\today}
 
 
+%\fontsize{12pt}{12pt}\selectfont
 % Kopf- und Fußzeilen
 \usepackage{scrlayer-scrpage, lastpage}
 \setkomafont{pageheadfoot}{\large\textrm}
