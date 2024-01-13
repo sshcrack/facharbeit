@@ -1,0 +1,189 @@
+\documentclass[a4paper,ngerman, headheight=28pt,12pt]{scrartcl}
+  
+  
+% PACKAGES  
+\usepackage[a4paper,left=3cm,right=4cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+%\usepackage{fontspec}
+\usepackage{csquotes}
+\usepackage{babel}
+\usepackage{relsize}
+\usepackage{setspace}
+
+\usepackage{lineno}
+
+\usepackage{tabularray}
+\usepackage{float}
+
+% Literaturverzeichnis
+\usepackage[
+backend=biber,
+style=alphabetic,
+sorting=ynt
+]{biblatex}
+\addbibresource{refs_facharbeit.bib}
+
+%\setmainfont{Calibri}
+\newcommand{\LongMinus}{–}
+\newcommand{\TwitterIcon}{X}
+
+
+% Die nächsten vier Felder bitte anpassen:
+\newcommand{\Titel}{Dezentralisierte asymmetrische \\ Verschlüsselung über Tor} % Titel für Facharbeit
+\newcommand{\SubTitel}{Die Lösung für sicheres Messaging?}
+
+\newcommand{\PageTitel}{Dezentralisierte asymmetrische Verschlüsselung \\ über Tor \LongMinus Die Lösung für sicheres Messaging?} % Seitentitel für Facharbeit
+\newcommand{\Author}{Hendrik Lind}     % Ich
+\newcommand{\Department}{Seminarfach Informatik}
+\newcommand{\School}{Windthorst-Gymnasium Meppen}
+\newcommand{\Country}{Deutschland}
+\newcommand{\Abgabe}{20. November 2023}
+
+\newcommand{\thesisDegree}{Facharbeit}
+\newcommand{\faculty}{Seminarfach Informatik}
+\newcommand{\thesisPlaceDate}{\today}
+
+\newcommand{\vcite}[1]{\cite[vgl.][]{#1}}
+
+
+% Kopf- und Fußzeilen
+\usepackage{scrlayer-scrpage, lastpage}
+\setkomafont{pageheadfoot}{\large\textrm}
+\lohead{\PageTitel}
+\rohead{\Author}
+\cfoot*{\thepage{}/\pageref{LastPage}}
+
+% Position des Titels
+\usepackage{titling}
+\setlength{\droptitle}{-1.0cm}
+
+
+% Für mathematische Befehle und Symbole
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{wrapfig}
+
+% Für Bilder
+\usepackage{graphicx}
+\usepackage{graphbox}
+
+% Für Algorithmen
+\usepackage{algpseudocode}
+
+% Für Quelltext
+\usepackage{listings}
+\usepackage{color}
+
+
+\graphicspath{ {./img/} }
+
+
+% 1.5 Line spacing
+\setstretch{1.5}
+
+\include{RustLanguage}
+
+% Umlaute erlauben
+\lstset{literate=%
+  {Ö}{{\"O}}1
+  {Ä}{{\"A}}1
+  {Ü}{{\"U}}1
+  {ß}{{\ss}}1
+  {ü}{{\"u}}1
+  {ä}{{\"a}}1
+  {ö}{{\"o}}1
+}
+%end
+
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{
+  keywordstyle=\color{blue},commentstyle=\color{mygreen},
+  stringstyle=\color{mymauve},rulecolor=\color{black},
+  basicstyle=\footnotesize\ttfamily,numberstyle=\tiny\color{mygray},
+  captionpos=b, % sets the caption-position to bottom
+  keepspaces=true, % keeps spaces in text
+  numbers=left, numbersep=5pt, showspaces=false,showstringspaces=true,
+  showtabs=false, stepnumber=2, tabsize=2, title=\lstname
+}
+\lstset{language=Rust}          % Set your language (you can change the language for each code-block optionally)
+\lstdefinelanguage{JavaScript}{ % JavaScript ist als einzige Sprache noch nicht vordefiniert
+  keywords={break, case, catch, continue, debugger, default, delete, do, else, finally, for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, void, while, with},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  sensitive=true
+}
+
+% Diese beiden Pakete müssen zuletzt geladen werden
+\usepackage[hidelinks]{hyperref} % Anklickbare Links im Dokument
+\usepackage{cleveref}
+
+
+% Titlepage required things
+
+
+% Necessary packages for the titlepage:
+\usepackage{tikz}
+\usetikzlibrary{calc}
+%\usepackage{graphicx}
+% \usepackage{newtxtext}
+%\usepackage{float}
+\usepackage{comment}
+% This command changes the font style where SLU promotes Arial
+%\newenvironment{myfont}{\fontfamily{phv}\selectfont}{\par}
+
+
+
+
+% Facharbeit
+
+\begin{document}
+\include{titlePage}
+\tableofcontents
+\setcounter{page}{0}
+\thispagestyle{empty}
+\vspace{0.5cm}
+\pagebreak
+
+
+\linenumbers
+\modulolinenumbers[5]
+% Auf 225 Millionen Euro Strafe wurde Whatsapp im Jahre 2021 verklagt \vcite{WSkand}. Bei der Social-Media Plattform Snapchat werden Direktnachrichten im Klartext auf dem Server gespeichert \vcite{}
+
+\section{Einleitung}
+Nord Korea, China, Russland. In all diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. \cite{UnPop}. % check for Russia and North Korea as well
+Meinungsfreiheit ist stark beschränkt, rund 1,6 Milliarden Menschen sind nur in diesen drei Staaten betroffen \vcite{UnPop}. Wie können Bürger dieser Staaten ihre Meinung also verbreiten und andere Staaten auf jetzige Probleme aufmerksam machen ohne sich selber in Gefahr zu bringen?
+
+Ein Messenger, welcher dezentralisiert, Ende-zu-Ende-Verschlüsselt ist und über das Tor-Netzwerk kommuniziert, könnte hier eine Lösung sein.
+
+\section{Betrachtung heutiger Messenger}
+
+\section{Asymmetrische Verschlüsselung}
+\subsection{Grundlagen}
+\subsection{Mathematischer Hintergrund}
+\subsection{Vergleich zur symmetrischen Verschlüsselung}
+\subsection{Sicherheit}
+
+\section{Tor-Netzwerk}
+\subsection{Vergleich normales Routing}
+
+\section{Dezentralisierung}
+
+\section{Sicherheitsbetrachtung}
+
+\section{programmatische Umsetzung}
+\subsection{Tor-Proxy}
+\subsection{Dezentralisierung}
+\subsection{Benutzeroberfläche}
+\subsection{Weitere Sicherheitsvorkehrungen}
+
+\section{Fazit}
+
+\nolinenumbers
+\printbibliography %Prints bibliography
+
+\end{document}
