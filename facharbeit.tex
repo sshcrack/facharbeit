@@ -4,7 +4,7 @@
 % PACKAGES  
 \usepackage[a4paper,left=3cm,right=4cm,top=2.5cm,bottom=2.5cm]{geometry}
 
-%\usepackage{fontspec}
+\usepackage{fontspec}
 \usepackage{csquotes}
 \usepackage{babel}
 \usepackage{relsize}
@@ -23,7 +23,7 @@ sorting=ynt
 ]{biblatex}
 \addbibresource{refs_facharbeit.bib}
 
-%\setmainfont{Calibri}
+\setmainfont{Calibri}
 \newcommand{\LongMinus}{–}
 \newcommand{\TwitterIcon}{X}
 
@@ -32,7 +32,7 @@ sorting=ynt
 \newcommand{\Titel}{Dezentralisierte asymmetrische \\ Verschlüsselung über Tor} % Titel für Facharbeit
 \newcommand{\SubTitel}{Die Lösung für sicheres Messaging?}
 
-\newcommand{\PageTitel}{Dezentralisierte asymmetrische Verschlüsselung \\ über Tor \LongMinus Die Lösung für sicheres Messaging?} % Seitentitel für Facharbeit
+\newcommand{\PageTitel}{Dezentralisierte asymmetrische Verschlüsselung \\ über Tor \LongMinus{} Die Lösung für sicheres Messaging?} % Seitentitel für Facharbeit
 \newcommand{\Author}{Hendrik Lind}     % Ich
 \newcommand{\Department}{Seminarfach Informatik}
 \newcommand{\School}{Windthorst-Gymnasium Meppen}
@@ -106,7 +106,7 @@ sorting=ynt
   captionpos=b, % sets the caption-position to bottom
   keepspaces=true, % keeps spaces in text
   numbers=left, numbersep=5pt, showspaces=false,showstringspaces=true,
-  showtabs=false, stepnumber=2, tabsize=2, title=\lstname
+  showtabs=false, stepnumber=2, tabsize=2, title=\lstname{}
 }
 \lstset{language=Rust}          % Set your language (you can change the language for each code-block optionally)
 \lstdefinelanguage{JavaScript}{ % JavaScript ist als einzige Sprache noch nicht vordefiniert
@@ -150,30 +150,46 @@ sorting=ynt
 \pagebreak
 
 
-\linenumbers
+\linenumbers{}
 \modulolinenumbers[5]
 % Auf 225 Millionen Euro Strafe wurde Whatsapp im Jahre 2021 verklagt \vcite{WSkand}. Bei der Social-Media Plattform Snapchat werden Direktnachrichten im Klartext auf dem Server gespeichert \vcite{}
 
 \section{Einleitung}
-Nord Korea, China, Russland. In all diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. \cite{UnPop}. % check for Russia and North Korea as well
-Meinungsfreiheit ist stark beschränkt, rund 1,6 Milliarden Menschen sind nur in diesen drei Staaten betroffen \vcite{UnPop}. Wie können Bürger dieser Staaten ihre Meinung also verbreiten und andere Staaten auf jetzige Probleme aufmerksam machen ohne sich selber in Gefahr zu bringen?
+Nord Korea, China, Russland. In all diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. % check for Russia and North Korea as well
+Rund 1,6 Milliarden Menschen sind nur in diesen drei Staaten von der Einschränkung der Meinungsfreiheit betroffen \vcite{UnPop}. Wie können Bürger dieser Staaten ihre Meinung also verbreiten und andere Staaten auf jetzige Probleme aufmerksam machen ohne sich selber in Gefahr zu bringen?
+\\
+\\
+Ein dezentralisierter Messenger, welcher Ende-zu-Ende verschlüsselt ist und über das Tor-Netzwerk kommuniziert, könnte bei diesem Problem eine Lösung sein. Die Frage, ob ein solcher Messenger die Lösung für Bürger eines totalitären Staates ist, sodass diese ihre Meinung frei äußern können, soll in dieser Arbeit geklärt werden.
 
-Ein Messenger, welcher dezentralisiert, Ende-zu-Ende-Verschlüsselt ist und über das Tor-Netzwerk kommuniziert, könnte hier eine Lösung sein.
+Um diese Frage beantworten zu können, beschäftigt sich die Arbeit mit der Anonymität und der Sicherheit eines solchen Messengers. Jedoch könnte der Messenger durch Anonymität und Sicherheit organisierte Kriminalität fördern. Deshalb wird auch dieser Aspekt in der Arbeit betrachtet.
 
-\section{Betrachtung heutiger Messenger}
+
+\section{Problemerfassung}
+Damit die Außenwelt mit Bürgern und Reportern in totalitären Staaten kommunizieren kann, braucht der Empfänger bei den meisten Messengern (wie WhatsApp, Signal und co) eine Telefonnummer um jenen zu kontaktieren \vcite{WhatsappContacts, SignalSend}. Allerdings könnte ein Staat, welcher die Meinungsfreiheit beschränkt und Maßnahmen ergreift, sich als dieser Empfänger ausgeben, sodass Bürger/Reporter ihre private Nummer an den Staat überreichen und somit dieser die Nummer rückverfolgen kann \vcite{LocPolice}. % Hier nochmal nach einer anderen Quelle suchen, die passt nicht 100%ig
+Und genau hier liegt das Problem: Bürger und Reporter können nicht durch alltägliche Messenger mit der Außenwelt kommunizieren, da der Staat deren Nummer zurückverfolgen kann und somit weiter die Meinungsfreiheit einschränkt und unterbindet.
+
+Durch die zentrale Infrastruktur, welche die meisten Messenger, wie zum Beispiel WhatsApp und Signal verwenden, ist es für totalitäre Staaten, wie China, möglich, die IP-Adressen jener Server zu blockieren und somit unzugänglich zu machen \vcite{ChinaFirewall}.
+
+
+\section{Tor-Netzwerk}
+Eine mögliche Lösung für dieses Problem
+\subsection{Vergleich normales Routing}
+
+\section{Dezentralisierung}
 
 \section{Asymmetrische Verschlüsselung}
 \subsection{Grundlagen}
 \subsection{Mathematischer Hintergrund}
 \subsection{Vergleich zur symmetrischen Verschlüsselung}
-\subsection{Sicherheit}
 
-\section{Tor-Netzwerk}
-\subsection{Vergleich normales Routing}
-
-\section{Dezentralisierung}
 
 \section{Sicherheitsbetrachtung}
+\subsection{Asymmetrische Verschlüsselung}
+\subsection{Tor-Netzwerk}
+\subsection{Dezentralisierung}
+
+
+\section{Vor- und Nachteile}
 
 \section{programmatische Umsetzung}
 \subsection{Tor-Proxy}
@@ -183,7 +199,8 @@ Ein Messenger, welcher dezentralisiert, Ende-zu-Ende-Verschlüsselt ist und übe
 
 \section{Fazit}
 
-\nolinenumbers
-\printbibliography %Prints bibliography
+\pagebreak
+\nolinenumbers{}
+\printbibliography{} %Prints bibliography
 
 \end{document}
