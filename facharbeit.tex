@@ -19,7 +19,8 @@
 \usepackage[
 backend=biber,
 style=alphabetic,
-sorting=ynt
+sorting=ynt,
+maxbibnames=99,
 ]{biblatex}
 \addbibresource{refs_facharbeit.bib}
 
@@ -153,44 +154,60 @@ sorting=ynt
 \linenumbers{}
 \modulolinenumbers[5]
 \section{Einleitung}
+%//SECTION Einleitung
 Nord Korea, China, Russland. In all diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. % check for Russia and North Korea as well
 Rund 1,6 Milliarden Menschen sind nur in diesen drei Staaten von der Einschränkung der Meinungsfreiheit betroffen \vcite{UnPop}. Wie können Bürger dieser Staaten ihre Meinung also verbreiten und andere Staaten auf jetzige Probleme aufmerksam machen ohne sich selber in Gefahr zu bringen?
+%//!SECTION
 \\
-Ein dezentralisierter Messenger, welcher Ende-zu-Ende verschlüsselt ist und über das Tor-Netzwerk kommuniziert, könnte bei diesem Problem eine Lösung sein. Die Frage, ob ein solcher Messenger die Lösung für Bürger eines totalitären Staates ist, sodass diese ihre Meinung frei äußern können, soll in dieser Arbeit geklärt werden.
+%//SECTION Problemstellung
 \\
-Um diese Frage beantworten zu können, beschäftigt sich die Arbeit mit der Anonymität und der Sicherheit eines solchen Messengers. Jedoch könnte der Messenger durch Anonymität und Sicherheit organisierte Kriminalität fördern. Deshalb wird auch dieser Aspekt in der Arbeit betrachtet.
-\\
-Damit die Außenwelt mit Bürgern und Reportern in totalitären Staaten kommunizieren kann, braucht der Empfänger bei den meisten Messengern (wie WhatsApp, Signal und co) eine Telefonnummer um jenen zu kontaktieren \vcite{WhatsappContacts, SignalSend}. Allerdings könnte ein Staat, welcher die Meinungsfreiheit beschränkt und Maßnahmen ergreift, sich als dieser Empfänger ausgeben, sodass Bürger/Reporter ihre private Nummer an den Staat überreichen und somit dieser die Nummer rückverfolgen kann \vcite{LocPolice}. % Hier nochmal nach einer anderen Quelle suchen, die passt nicht 100%ig
+Damit die Außenwelt mit Bürgern und Reportern in totalitären Staaten kommunizieren kann, braucht der Empfänger bei den meisten Messengern (wie WhatsApp, Signal und co) eine Telefonnummer um jenen zu kontaktieren. Allerdings könnte ein Staat, welcher die Meinungsfreiheit beschränkt und Maßnahmen ergreift, sich als dieser Empfänger ausgeben, sodass Bürger/Reporter ihre private Nummer an den Staat überreichen und somit dieser die Nummer rückverfolgen kann \vcite{LocPolice}.
+%//TODO Hier nochmal nach einer anderen Quelle suchen, die passt nicht 100%ig
 Und genau hier liegt das Problem: Bürger und Reporter können nicht durch alltägliche Messenger mit der Außenwelt kommunizieren, da der Staat deren Nummer zurückverfolgen kann und somit weiter die Meinungsfreiheit einschränkt und unterbindet.
 \\
 Durch die zentrale Infrastruktur, welche die meisten Messenger, wie zum Beispiel WhatsApp und Signal verwenden, ist es für totalitäre Staaten, wie China, möglich, die IP-Adressen jener Server zu blockieren und somit für Bürger und Reporter unzugänglich zu machen \vcite{ChinaFirewall}.
+\\
+%//!SECTION
+%//SECTION Lösungsvorschlag / Ziel
+Ein dezentralisierter Messenger, welcher Ende-zu-Ende verschlüsselt ist und über das Tor-Netzwerk kommuniziert, könnte bei diesem Problem eine Lösung sein. Die Frage, ob ein solcher Messenger die Lösung für Bürger eines totalitären Staates ist, sodass diese ihre Meinung frei äußern können, soll in dieser Arbeit geklärt werden.
+%//!SECTION
+\\
+%//SECTION Kapitel
+%//TODO besser die Kapitel und so beschreiben, ist bis jetzt quatsch
+Um diese Frage beantworten zu können, beschäftigt sich diese Arbeit in dem zweiten Kapitel mit der Ende-zu-Ende-Verschlüsselung, welche durch asymmetrische Verschlüsselung umgesetzt werden kann, und dessen Definition.
+Das dritte Kapitel beinhaltet eine mögliche Lösung, um eine Anonymität über das Internet zu gewährleisten, wobei das Tor-Netzwerk eine wichtige Rolle spielt.
+Das vierte Kapitel befasst sich mit einer Dezentralisierung der Infrastruktur, um eine weitere Sicherheitsebene zu schaffen.
+Zuletzt werden im fünften Kapitel die Vor- und Nachteile eines solchen Messengers betrachtet, im sechsten Kapitel wird eine mögliche Umsetzung des Messengers beschrieben und im siebten Kapitel wird ein Fazit gezogen.
+%//!SECTION
 
 
-\section{Tor-Netzwerk}
-Eine mögliche Lösung für dieses Problem
-\subsection{Vergleich normales Routing}
 
-\section{Dezentralisierung}
-
-\section{Asymmetrische Verschlüsselung}
+\section{Ende-zu-Ende-Verschlüsselung}
+%//SECTION Definition von E2EE
+%//TODO Erklärung etwas deutlicher. Mehr Quellen? Eigentlich gute Quelle
+Ende-zu-Ende-Verschlüsselung (E2EE) bedeutet im Kern, dass nur die Kommunikationspartner die Nachrichten, welche sie senden lesen können und kein dazwischenliegender Knotenpunkt, wie zum Beispiel ein Server \vcite{E2EE}. Die Nachrichten werden also bereits bei dem Sender der Nachricht verschlüsselt, über den Server an den Empfänger gesendet, und schließlich entschlüsselt der Empfänger die Nachricht \vcite{E2EE}. Der Server konnte aber, da die Nachricht verschlüsselt ist, und der dementsprechende Schlüssel nicht auf dem Server abgespeichert ist, die Nachricht nicht entschlüsseln bzw. mitlesen \vcite{E2EE}.
+\\
+Für die Ende-zu-Ende-Verschlüsselung eignet sich die asymmetrische Verschlüsselung \vcite{E2EE-Method}
+%//!SECTION
 \subsection{Grundlagen}
 \subsection{Mathematischer Hintergrund}
 \subsection{Vergleich zur symmetrischen Verschlüsselung}
+\subsection{Sicherheit}
 
 
-\section{Sicherheitsbetrachtung}
-\subsection{Asymmetrische Verschlüsselung}
-\subsection{Tor-Netzwerk}
-\subsection{Dezentralisierung}
+\section{Anonymität mit dem Tor-Netzwerk}
+\subsection{Sicherheit}
+
+
+\section{Dezentralisierung}
+\subsection{Sicherheit}
 
 
 \section{Vor- und Nachteile}
+\subsection{Kriminalität}
+\subsection{freie Meinungsäußerung}
 
 \section{programmatische Umsetzung}
-\subsection{Tor-Proxy}
-\subsection{Dezentralisierung}
-\subsection{Benutzeroberfläche}
-\subsection{Weitere Sicherheitsvorkehrungen}
 
 \section{Fazit}
 
