@@ -210,13 +210,40 @@ Grundsätzlich gibt es bei der asymmetrischen Verschlüsselung ein Schlüsselpaa
 
 %//REVIEW - Fragen ob die Abbildung so okay ist
 \begin{figure}[h]
-    \centering
-    \includegraphics[width=0.75\textwidth]{Briefkasten-asymm.png}
-    \caption{Jeder Sender kann mit dem öffentlichen Schlüssel die Nachricht "verschlüsseln" (also in den Briefkasten eine Nachricht werfen), aber nur der Empfänger kann den Briefkasten mit seinem privaten Schlüssel öffnen \vcite{Rsa-Cryptography}}
+  \centering
+  \includegraphics[width=0.75\textwidth]{Briefkasten-asymm.png}
+  \caption{Jeder Sender kann mit dem öffentlichen Schlüssel die Nachricht "verschlüsseln" (also in den Briefkasten eine Nachricht werfen), aber nur der Empfänger kann den Briefkasten mit seinem privaten Schlüssel öffnen \vcite{Rsa-Cryptography}}
 \end{figure}
 %//!SECTION
 
-\subsection{Mathematischer Hintergrund}
+\subsection{Schlüsselpaargenerierung}
+Wie bereits erwähnt, besteht das Schlüsselpaar aus einem privaten und einem öffentlichen Schlüssel. Der private Schlüssel besteht dabei aus den Variablen $(n, d)$ und der öffentliche Schlüssel aus $(n, e)$.
+%//REVIEW - Nachfragen ob ich auch noch \prod und die Gleichung an sich erklären muss
+%//TODO - Gleichung und Stuff erklären
+\begin{equation*}
+  \begin{aligned}
+    P, Q    & = \text{zufällige Primzahl, wobei $P \neq Q$}   \\
+    n       & = P \cdot Q                                     \\
+    \phi(P) &= P -1 & \phi(Q) = Q -1 \\
+    \phi(n) & = \phi(P) \cdot \phi(Q) \\
+    \phi(n) & = \left(P - 1 \right) \cdot \left( Q - 1\right) \\
+    e =& \begin{cases}
+      1 < e < \phi(n) \\
+      e \in \mathbb{N} \\
+      \text{$e$ kein Teiler von $\phi(n)$}
+    \end{cases}
+  \end{aligned}
+\end{equation*}
+
+Ganzzahlige Zahl $e$, darf kein Faktor von $\phi(n)$ sein und $1 < e < \phi(n)$ \\
+PublicKey besteht aus $n$ und $e$ \\
+privater Schlüssel:
+\begin{equation*}
+  \begin{aligned}
+    \phi(n) & = (P-1)(Q-1)                                                    \\
+    d       & = (k \cdot \phi(n) +1) &  & \text{mit $k$ als ganzzahlige Zahl} \\
+  \end{aligned}
+\end{equation*}
 
 \subsection{Vergleich zur symmetrischen Verschlüsselung}
 \subsection{Sicherheit}
