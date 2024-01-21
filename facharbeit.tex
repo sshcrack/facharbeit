@@ -272,7 +272,7 @@ Um den privaten Schlüssel zu berechnen benötigen wir die Komponente $d$, welch
 \subsection{Sicherheit}
 %//NOTE - Maybe brauche ich das noch aber eig nicht oder?
 %\subsection{Vergleich zur symmetrischen Verschlüsselung}
-Das RSA-Verfahren macht sich die Trapdoor-Einwegfunktion zu Nutze. Das bedeutet, dass eine Funktion mit modernen Computern unmöglich ist, zu invertieren, wenn eine Komponente fehlt (in diesem Fall $d$). Wenn diese jedoch gegeben ist, ist die Umkehroperation leicht. Zu sehen ist dies bei der Ver-/Entschlüsselung von Nachrichten mit dem öffentlichen und privaten Schlüssel.
+Das RSA-Verfahren macht sich die Trapdoor-Einwegfunktion zu Nutze. Das bedeutet, dass eine Funktion mit modernen Computern unmöglich ist, zu invertieren, wenn eine Komponente fehlt (in diesem Fall $d$). Wenn diese jedoch gegeben ist, ist die Umkehroperation leicht. Zu sehen ist dies bei der Ver-/Entschlüsselung von Nachrichten mit dem öffentlichen und privaten Schlüssel \vcite{RsaTrapdoor}.
 \begin{equation*}
   \begin{aligned}
     c &= m^e \mod n & \text{Verschlüsselung zu $c$ mit $m$ als Nachricht} \\
