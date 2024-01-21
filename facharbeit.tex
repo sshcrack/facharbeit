@@ -40,6 +40,7 @@ backend=biber,
 style=alphabetic,
 sorting=ynt,
 maxbibnames=99,
+maxalphanames=2
 ]{biblatex}
 \addbibresource{refs_facharbeit.bib}
 
@@ -212,16 +213,16 @@ Grundsätzlich gibt es bei der asymmetrischen Verschlüsselung ein Schlüsselpaa
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.75\textwidth]{Briefkasten-asymm.png}
-  \caption{Jeder Sender kann mit dem öffentlichen Schlüssel die Nachricht "verschlüsseln" (also in den Briefkasten eine Nachricht werfen), aber nur der Empfänger kann den Briefkasten mit seinem privaten Schlüssel öffnen \vcite{Rsa-Cryptography} \label{fig:E2EE}}
+  \caption{Jeder Sender kann mit dem öffentlichen Schlüssel die Nachricht "verschlüsseln" (also in den Briefkasten eine Nachricht werfen), aber nur der Empfänger kann den Briefkasten mit seinem privaten Schlüssel öffnen \vcite{fig:Rsa-Cryptography} \label{fig:E2EE}}
 \end{figure}
 %//!SECTION
 
 %//TODO insgesamt noch mehr Quellen finden, habe die ganze Rechnung aus 1 bis 2 Quellen
 \subsection{Mathematische Betrachtung}
 Alle Variablen der folgenden Berechnungen liegen im Bereich $\mathbb{N}$. \\
-Für die Generierung des Schlüsselpaares benötigen wir zuerst zwei große zufällige Primzahlen, $P$ und $Q$, wobei $P \neq Q$. Der private Schlüssel besteht aus den Komponenten $\{ n, d \}$ währenddessen der öffentliche Schlüssel aus $\{ n, e \}$ besteht.
+Für die Generierung des Schlüsselpaares benötigen wir zuerst zwei große zufällige Primzahlen, $P$ und $Q$. Daraus ergibt sich $n = P * Q$, wobei $P \neq Q$, sodass $P$ bzw. $Q$ nicht durch $\sqrt{n}$ ermittelt werden kann \vcite{RsaGenCond}. Der private Schlüssel besteht aus den Komponenten $\{ n, d \}$ währenddessen der öffentliche Schlüssel aus $\{ n, e \}$ besteht \vcite{RsaVariables}.
 \subsubsection{Eulersche Phi-Funktion}
-Die Eulersche Phi-Funktion spielt eine wichtige Rolle in dem RSA-Verfahren. Grundsätzlich gibt $\phi(x)$ an, wie viele positive teilerfremde Zahlen bis $x$ existieren (wo also der größte gemeinsamer Teiler ($\gcd$) $1$ ist) \vcite{EulersTotientFunction}. Somit ergibt $\phi(6) = 2$  oder bei einer Primzahl $\phi(7) = 7 - 1 = 6$ somit $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss.
+Die Eulersche Phi-Funktion spielt eine wichtige Rolle in dem RSA-Verfahren \vcite{TotientFuncMultiplicative}. Grundsätzlich gibt $\phi(x)$ an, wie viele positive teilerfremde Zahlen bis $x$ existieren (wo also der größte gemeinsamer Teiler ($\gcd$) $1$ ist) \vcite{EulersTotientFunction}. Somit ergibt $\phi(6) = 2$  oder bei einer Primzahl $\phi(7) = 7 - 1 = 6$ somit $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss.
 %//REVIEW - Nachfragen ob ich auch noch \prod und die Gleichung an sich erklären muss
 %//TODO - Gleichung und Stuff erklären
 \begin{equation*}
@@ -232,9 +233,8 @@ Die Eulersche Phi-Funktion spielt eine wichtige Rolle in dem RSA-Verfahren. Grun
     \phi(n) & = \left(P - 1 \right) \cdot \left( Q - 1\right)
   \end{aligned}
 \end{equation*}
-Wenn $\{P, Q\}$ bekannt sind, ist es demnach $\phi(n)$ leicht zu berechnen. Falls $\{P, Q\}$ bzw. $\phi(n)$ jedoch unbekannt sind, wie es bei dem öffentlichen Schlüssel der Fall ist, ist $\phi(n)$ mit moderen Computern nahezu unmöglich zu berechnen, wenn $n$ eine große Zahl ist. Die Bits der Zahl $n$ geben somit die Länge des Schlüsselpaares an.
-%//TODO - Das hier ist richtig arsch
-Theoretisch wäre $\phi(n)$ berechenbar durch eine Primfaktorzerlegung oder durch Zählen der Zahlen ($a$), wo $\gcd(a, n) = 1$ gilt, jedoch brauchen moderne Computer für beide Methoden mehrere Millionen Jahre um die Berechnungen dafür durchzuführen, wenn $n$ eine große Zahl ist. \\
+%//REVIEW - Wie zitieren von mathematischem Kram?
+\vcite{TotientFuncMultiplicative}
 \subsubsection{Generierung des Schlüsselpaares}
 Sowohl der private als auch der öffentliche Schlüssel besteht unter anderem aus folgender Komponente: $n = P \cdot Q$.
 Für den öffentlichen Schlüssel benötigen wir die Komponente $e$, welche zur Verschlüsselung einer Nachricht benötigt wird. $e$ ist hierbei eine zufällige Zahl, bei welcher folgende Bedingungen gelten \vcite{RsaMaths1}:
@@ -245,21 +245,30 @@ Für den öffentlichen Schlüssel benötigen wir die Komponente $e$, welche zur 
     \text{$e$ kein Teiler von $\phi(n)$}
   \end{cases}
 \end{equation*}
-Der PublicKey besteht folglich aus $n$ und $e$, welcher nun an den Sender übermittelt werden kann.\\
-Die Komponente $d$ des privaten Schlüssels wird wie folgt berechnet
-\vcite{RsaEncryptionDecryption}:
+Mit der errechneten Komponente $e$, welche Nachrichten verschlüsselt, kann der öffentliche Schlüssel nun an den Sender übermittelt werden.
+
+Um den privaten Schlüssel zu berechnen benötigen wir die Komponente $d$, welche zur Entschlüsselung verwendet wird \vcite{RsaEncryptionDecryption}.
 %//REVIEW - explain what mod is as well?
 \begin{equation*}
   \begin{aligned}
     \phi(n) & = (P-1)(Q-1)     \\
-    e * d   & = 1 \mod \phi(n) \\
-    c &= m^e \mod n & \text{Verschlüsselung zu $c$ mit $m$ als Nachricht} \\
-    m &= c^d \mod n & \text{Umkehroperation (Entschlüselung) von $c$ zu $m$}
+    e * d   & = 1 \mod \phi(n)
   \end{aligned}
 \end{equation*}
-%//REVIEW - Wie zitiere ich hier?
+%//REVIEW - Wie zitiere ich hier und nen vernünftiges Ende hierfür finden
 
-\subsection{Vergleich zur symmetrischen Verschlüsselung}
+\subsection{Sicherheit}
+%//NOTE - Maybe brauche ich das noch aber eig nicht oder?
+%\subsection{Vergleich zur symmetrischen Verschlüsselung}
+Das RSA-Verfahren macht sich die Trapdoor-Einwegfunktion zu Nutze. Das bedeutet, dass eine Funktion mit modernen Computern unmöglich ist, zu invertieren, wenn eine Komponente fehlt (in diesem Fall $d$). Wenn diese jedoch gegeben ist, ist die Umkehroperation leicht. Zu sehen ist dies bei der Ver-/Entschlüsselung von Nachrichten mit dem öffentlichen und privaten Schlüssel.
+\begin{equation*}
+  \begin{aligned}
+    c &= m^e \mod n & \text{Verschlüsselung zu $c$ mit $m$ als Nachricht} \\
+    m &= c^d \mod n & \text{Umkehroperation (Entschlüsslung) von $c$ zu $m$}
+  \end{aligned}
+\end{equation*}
+Um die verschlüsselte Nachricht $c$ zu entschlüsseln, bräuchte ein möglicher Angreifer die Komponente des privaten Schlüssels $d$. Diese ist allerdings schwer zu berechnen, da, wie schon vorher bereits gezeigt, dafür $\phi(n)$ benötigt wird. Auch $\phi(n)$ ist rechenaufwendig, da dafür eine Primfaktorzerlegung von $n$ benötigt wird. Wichtig hierbei ist aber, dass die Länge von $n$ (Schlüssellänge) mindestens 3000 Bit betragen sollte, da sonst die Primfaktorzerlegung von $n$ mit modernen Computern möglich sein könnte \vcite{RsaKeyLength}.
+%//REVIEW - Zitierweise hier richtig? Weil is so von BSI und so
 \subsection{Sicherheit}
 
 
@@ -281,6 +290,7 @@ Die Komponente $d$ des privaten Schlüssels wird wie folgt berechnet
 
 \pagebreak
 \nolinenumbers{}
-\printbibliography{} %Prints bibliography
+\printbibliography[notkeyword=figure]
+\printbibliography[heading=subbibliography,title={Anhang},keyword=figure]
 
 \end{document}
