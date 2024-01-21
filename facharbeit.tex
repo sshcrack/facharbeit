@@ -27,6 +27,11 @@
   afterindent=false,
   beforeskip=.25\baselineskip,
   afterskip=.125\baselineskip]{subsection}
+\RedeclareSectionCommand[
+  %runin=false,
+  afterindent=false,
+  beforeskip=.175\baselineskip,
+  afterskip=.0625\baselineskip]{subsubsection}
 
 
 % Literaturverzeichnis
@@ -125,14 +130,6 @@ maxbibnames=99,
   showtabs=false, stepnumber=2, tabsize=2, title=\lstname{}
 }
 \lstset{language=Rust}          % Set your language (you can change the language for each code-block optionally)
-\lstdefinelanguage{JavaScript}{ % JavaScript ist als einzige Sprache noch nicht vordefiniert
-  keywords={break, case, catch, continue, debugger, default, delete, do, else, finally, for, function, if, in, instanceof, new, return, switch, this, throw, try, typeof, var, void, while, with},
-  morecomment=[l]{//},
-  morecomment=[s]{/*}{*/},
-  morestring=[b]',
-  morestring=[b]",
-  sensitive=true
-}
 
 % Diese beiden Pakete müssen zuletzt geladen werden
 \usepackage[hidelinks]{hyperref} % Anklickbare Links im Dokument
@@ -171,12 +168,15 @@ maxbibnames=99,
 \section{Einleitung}
 %//SECTION Einleitung
 Russland, China, Iran. In all diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. % check for Russia and North Korea as well
-Rund 1,7 Milliarden Menschen sind nur in diesen drei Staaten von der Einschränkung der Meinungsfreiheit betroffen \vcite{UnPop}. Wie können Bürger dieser Staaten ihre Meinung also verbreiten und andere Staaten auf jetzige Probleme aufmerksam machen ohne sich selber in Gefahr zu bringen?
+Rund 1,7 Milliarden Menschen sind allein nur in diesen drei Staaten von der Einschränkung der Meinungsfreiheit betroffen \vcite{UnPop}. Wie können Bürger
+dieser Staaten ihre Meinung also verbreiten und andere Staaten auf
+%//TODO hier staatskritisch ist falsches wort mir fällt aber das richtige nicht ein
+staatskritische Probleme aufmerksam machen ohne sich selber in Gefahr zu bringen?
 %//!SECTION
 %//SECTION Problemstellung
 \\
 %//TODO Hier nochmal nach einer anderen Quelle suchen, die passt nicht 100%ig
-Bei herkömmlichen Messengern, wie Whatsapp, Signal und co. braucht die Außenwelt, die Telefonnummern der im totalitären Staat wohnenden Bürgern und Reportern um diese zu kontaktieren. Allerdings könnte ein Staat, welcher die Meinungsfreiheit beschränkt und folglich Maßnahmen gegen den Bürger ergreift, sich als dieser Empfänger ausgeben, sodass Bürger/Reporter ihre private Nummer an den Staat überreichen und somit dieser die Nummer rückverfolgen kann \vcite{LocPolice}.
+Bei herkömmlichen Messengern, wie Whatsapp, Signal und co., braucht die Außenwelt die Telefonnummern der im totalitären Staat wohnenden Bürgern und Reportern, um diese zu kontaktieren. Allerdings könnte ein totalitärer Staat, sich als Empfänger ausgeben, sodass Bürger/Reporter ihre private Nummer an den Staat überreichen und dieser somit jene Nummer rückverfolgen kann \vcite{LocPolice}.
 Und genau hier liegt das Problem: Bürger und Reporter können nicht durch alltägliche Messenger mit der Außenwelt kommunizieren, da der Staat deren Nummer zurückverfolgen kann und somit weiter die Meinungsfreiheit einschränkt und unterbindet.
 \\
 Durch die zentrale Infrastruktur, welche die meisten Messenger, wie zum Beispiel WhatsApp und Signal verwenden, ist es für totalitäre Staaten, wie China, möglich, die IP-Adressen jener Server zu blockieren und somit für Bürger und Reporter unzugänglich zu machen \vcite{ChinaFirewall}.
@@ -191,7 +191,7 @@ Ein dezentralisierter Messenger, welcher Ende-zu-Ende verschlüsselt ist und üb
 %//REVIEW - Wirklich nur asymmetrische Verschlüsselung?
 Um diese Frage beantworten zu können, beschäftigt sich diese Arbeit in dem zweiten Kapitel mit der asymmetrischen Verschlüsselung, welche benötigt wird um die Ende-zu-Ende-Verschlüsselung (E2EE) umzusetzen und die Definition der E2EE und asymmetrischen Verschlüsselung \vcite{E2EE-Method}.
 Das dritte Kapitel beinhaltet eine mögliche Lösung, um eine Anonymität über das Internet zu gewährleisten, wobei das Tor-Netzwerk eine wichtige Rolle spielt.
-Das vierte Kapitel befasst sich mit einer Dezentralisierung der Infrastruktur, um eine weitere Sicherheitsebene zu schaffen.
+Im vierte Kapitel befasst sich diese Arbeit mit einer Dezentralisierung der Infrastruktur, um eine weitere Sicherheitsebene zu schaffen.
 Zuletzt werden im fünften Kapitel die Vor- und Nachteile eines solchen Messengers betrachtet, im sechsten Kapitel wird eine mögliche Umsetzung des Messengers beschrieben und im siebten Kapitel wird ein Fazit gezogen.
 %//!SECTION
 
@@ -206,44 +206,58 @@ Für diese Arbeit werde ich die gängigste asymmetrische Verschlüsselung, das R
 \subsection{Grundlagen}
 %//SECTION Grundlagen
 %//REVIEW - Kann ich hier auch einfach nur einmal zitieren? Eigentlich ist in der Literatur alles gleich hierzu oder muss ich jedes mal ne neue Quelle für jeden Satz finden?
-Grundsätzlich gibt es bei der asymmetrischen Verschlüsselung ein Schlüsselpaar (Keypair), welches aus einem privaten Schlüssel (private key) und einem öffentlichen Schlüssel (public key) besteht \vcite{Rsa-Basics}. Diese beiden Schlüssel hängen mathematisch zusammen, sodass der öffentliche Schlüssel Nachrichten \textbf{nur} verschlüsseln und nicht entschlüsseln kann. \textbf{Nur} der zum Schlüsselpaar dazugehörige private Schlüssel ist in der Lage, die verschlüsselte Nachricht wieder zu entschlüsseln. Die asymmetrische Verschlüsselung lässt sich gut als Briefkasten visualisieren:
+Grundsätzlich gibt es bei der asymmetrischen Verschlüsselung ein Schlüsselpaar (Keypair), welches aus einem privaten Schlüssel (private key) und einem öffentlichen Schlüssel (public key) besteht \vcite{Rsa-Basics}. Diese beiden Schlüssel hängen mathematisch zusammen, sodass der öffentliche Schlüssel Nachrichten \textbf{nur} verschlüsseln und nicht entschlüsseln kann. \textbf{Nur} der zum Schlüsselpaar dazugehörige private Schlüssel ist in der Lage, die verschlüsselte Nachricht wieder zu entschlüsseln (siehe \cref{fig:E2EE}).
 
-%//REVIEW - Fragen ob die Abbildung so okay ist
+%//REVIEW - Wie Anhang mit Bildern und so?
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.75\textwidth]{Briefkasten-asymm.png}
-  \caption{Jeder Sender kann mit dem öffentlichen Schlüssel die Nachricht "verschlüsseln" (also in den Briefkasten eine Nachricht werfen), aber nur der Empfänger kann den Briefkasten mit seinem privaten Schlüssel öffnen \vcite{Rsa-Cryptography}}
+  \caption{Jeder Sender kann mit dem öffentlichen Schlüssel die Nachricht "verschlüsseln" (also in den Briefkasten eine Nachricht werfen), aber nur der Empfänger kann den Briefkasten mit seinem privaten Schlüssel öffnen \vcite{Rsa-Cryptography} \label{fig:E2EE}}
 \end{figure}
 %//!SECTION
 
-\subsection{Schlüsselpaargenerierung}
-Wie bereits erwähnt, besteht das Schlüsselpaar aus einem privaten und einem öffentlichen Schlüssel. Der private Schlüssel besteht dabei aus den Variablen $(n, d)$ und der öffentliche Schlüssel aus $(n, e)$.
+%//TODO insgesamt noch mehr Quellen finden, habe die ganze Rechnung aus 1 bis 2 Quellen
+\subsection{Mathematische Betrachtung}
+Alle Variablen der folgenden Berechnungen liegen im Bereich $\mathbb{N}$. \\
+Für die Generierung des Schlüsselpaares benötigen wir zuerst zwei große zufällige Primzahlen, $P$ und $Q$, wobei $P \neq Q$. Der private Schlüssel besteht aus den Komponenten $\{ n, d \}$ währenddessen der öffentliche Schlüssel aus $\{ n, e \}$ besteht.
+\subsubsection{Eulersche Phi-Funktion}
+Die Eulersche Phi-Funktion spielt eine wichtige Rolle in dem RSA-Verfahren. Grundsätzlich gibt $\phi(x)$ an, wie viele positive teilerfremde Zahlen bis $x$ existieren (wo also der größte gemeinsamer Teiler ($\gcd$) $1$ ist) \vcite{EulersTotientFunction}. Somit ergibt $\phi(6) = 2$  oder bei einer Primzahl $\phi(7) = 7 - 1 = 6$ somit $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss.
 %//REVIEW - Nachfragen ob ich auch noch \prod und die Gleichung an sich erklären muss
 %//TODO - Gleichung und Stuff erklären
 \begin{equation*}
   \begin{aligned}
-    P, Q    & = \text{zufällige Primzahl, wobei $P \neq Q$}   \\
-    n       & = P \cdot Q                                     \\
-    \phi(P) &= P -1 & \phi(Q) = Q -1 \\
-    \phi(n) & = \phi(P) \cdot \phi(Q) \\
-    \phi(n) & = \left(P - 1 \right) \cdot \left( Q - 1\right) \\
-    e =& \begin{cases}
-      1 < e < \phi(n) \\
-      e \in \mathbb{N} \\
-      \text{$e$ kein Teiler von $\phi(n)$}
-    \end{cases}
+    \phi(n) & = \phi(P \cdot Q)                                                \\
+    \phi(n) & = \phi(P) \cdot \phi(Q)                                          \\
+    \phi(P) & = P -1                                          & \phi(Q) = Q -1 \\
+    \phi(n) & = \left(P - 1 \right) \cdot \left( Q - 1\right)
   \end{aligned}
 \end{equation*}
-
-Ganzzahlige Zahl $e$, darf kein Faktor von $\phi(n)$ sein und $1 < e < \phi(n)$ \\
-PublicKey besteht aus $n$ und $e$ \\
-privater Schlüssel:
+Wenn $\{P, Q\}$ bekannt sind, ist es demnach $\phi(n)$ leicht zu berechnen. Falls $\{P, Q\}$ bzw. $\phi(n)$ jedoch unbekannt sind, wie es bei dem öffentlichen Schlüssel der Fall ist, ist $\phi(n)$ mit moderen Computern nahezu unmöglich zu berechnen, wenn $n$ eine große Zahl ist. Die Bits der Zahl $n$ geben somit die Länge des Schlüsselpaares an.
+%//TODO - Das hier ist richtig arsch
+Theoretisch wäre $\phi(n)$ berechenbar durch eine Primfaktorzerlegung oder durch Zählen der Zahlen ($a$), wo $\gcd(a, n) = 1$ gilt, jedoch brauchen moderne Computer für beide Methoden mehrere Millionen Jahre um die Berechnungen dafür durchzuführen, wenn $n$ eine große Zahl ist. \\
+\subsubsection{Generierung des Schlüsselpaares}
+Sowohl der private als auch der öffentliche Schlüssel besteht unter anderem aus folgender Komponente: $n = P \cdot Q$.
+Für den öffentlichen Schlüssel benötigen wir die Komponente $e$, welche zur Verschlüsselung einer Nachricht benötigt wird. $e$ ist hierbei eine zufällige Zahl, bei welcher folgende Bedingungen gelten \vcite{RsaMaths1}:
+\begin{equation*}
+  e = \begin{cases}
+    1 < e < \phi(n)  \\
+    \gcd(e, \phi(n)) = 1 \\
+    \text{$e$ kein Teiler von $\phi(n)$}
+  \end{cases}
+\end{equation*}
+Der PublicKey besteht folglich aus $n$ und $e$, welcher nun an den Sender übermittelt werden kann.\\
+Die Komponente $d$ des privaten Schlüssels wird wie folgt berechnet
+\vcite{RsaEncryptionDecryption}:
+%//REVIEW - explain what mod is as well?
 \begin{equation*}
   \begin{aligned}
-    \phi(n) & = (P-1)(Q-1)                                                    \\
-    d       & = (k \cdot \phi(n) +1) &  & \text{mit $k$ als ganzzahlige Zahl} \\
+    \phi(n) & = (P-1)(Q-1)     \\
+    e * d   & = 1 \mod \phi(n) \\
+    c &= m^e \mod n & \text{Verschlüsselung zu $c$ mit $m$ als Nachricht} \\
+    m &= c^d \mod n & \text{Umkehroperation (Entschlüselung) von $c$ zu $m$}
   \end{aligned}
 \end{equation*}
+%//REVIEW - Wie zitiere ich hier?
 
 \subsection{Vergleich zur symmetrischen Verschlüsselung}
 \subsection{Sicherheit}
