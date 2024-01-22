@@ -1,7 +1,7 @@
 \documentclass[a4paper,ngerman, headheight=28pt,12pt]{scrartcl}
-  
-  
-% PACKAGES  
+
+
+% PACKAGES
 \usepackage[a4paper,left=3cm,right=4cm,top=2.5cm,bottom=2.5cm]{geometry}
 
 \usepackage{fontspec}
@@ -78,6 +78,7 @@ maxbibnames=99
 \newcommand{\thesisPlaceDate}{\today}
 
 \newcommand{\vcite}[1]{\cite[vgl.][]{#1}}
+\newcommand{\vebd}{[vgl. ebd.]}
 
 
 % Kopf- und Fußzeilen
@@ -189,7 +190,7 @@ staatskritische Probleme aufmerksam machen ohne sich selber in Gefahr zu bringen
 %//SECTION Problemstellung
 \\
 %//TODO Hier nochmal nach einer anderen Quelle suchen, die passt nicht 100%ig
-Bei herkömmlichen Messengern, wie Whatsapp, Signal und co., braucht die Außenwelt die Telefonnummern der im totalitären Staat wohnenden Bürgern und Reportern, um diese zu kontaktieren. Allerdings könnte ein totalitärer Staat, sich als Empfänger ausgeben, sodass Bürger/Reporter ihre private Nummer an den Staat überreichen und dieser somit jene Nummer rückverfolgen kann \vcite{LocPolice}.
+Bei herkömmlichen Messengern, wie WhatsApp, Signal und co., braucht die Außenwelt die Telefonnummern der im totalitären Staat wohnenden Bürgern und Reportern, um diese zu kontaktieren. Allerdings könnte ein totalitärer Staat, sich als Empfänger ausgeben, sodass Bürger/Reporter ihre private Nummer an den Staat überreichen und dieser somit jene Nummer rückverfolgen kann \vcite{LocPolice}.
 Und genau hier liegt das Problem: Bürger und Reporter können nicht durch alltägliche Messenger mit der Außenwelt kommunizieren, da der Staat deren Nummer zurückverfolgen kann und somit weiter die Meinungsfreiheit einschränkt und unterbindet.
 \\
 Durch die zentrale Infrastruktur, welche die meisten Messenger, wie zum Beispiel WhatsApp und Signal verwenden, ist es für totalitäre Staaten, wie China, möglich, die IP-Adressen jener Server zu blockieren und somit für Bürger und Reporter unzugänglich zu machen \vcite{ChinaFirewall}.
@@ -212,16 +213,14 @@ Zuletzt werden im fünften Kapitel die Vor- und Nachteile eines solchen Messenge
 
 \section{Asymmetrische Verschlüsselung}
 %//SECTION E2EE und asymmetrische Verschlüsselung
-Um einen sicheren Nachrichtenaustausch zu gewährleisten, wird in dieser Arbeit die E2EE implementiert. Bei der E2EE wird von dem Sender die Nachricht, bevor sie an den Empfänger geschickt wird, verschlüsselt \vcite{E2EE}. Dazwischenliegende Akteure, wie zum Beispiel Server oder mögliche Angreifer, können demzufolge die Nachricht nicht lesen. \textbf{Nur} der Empfänger der Nachricht kann diese auch entschlüsseln. Als Ent- und Verschlüsselungsverfahren der Nachrichten wird die asymmetrische Verschlüsselung verwendet.
-%//REVIEW - RSA-Verfahren überprüfen bzw. jetzt schon erwähnen? und okay dass ich sage gängigste Verfahren?
+Um einen sicheren Nachrichtenaustausch zu gewährleisten, wird in dieser Arbeit die E2EE implementiert. Bei der E2EE wird von dem Sender die Nachricht, bevor sie an den Empfänger geschickt wird, verschlüsselt \vcite{E2EE}. Dazwischenliegende Akteure, wie zum Beispiel Server oder mögliche Angreifer, können demzufolge die Nachricht nicht lesen \vebd. \textbf{Nur} der Empfänger der Nachricht kann diese auch entschlüsseln. Als Ent- und Verschlüsselungsverfahren der Nachrichten wird die asymmetrische Verschlüsselung verwendet \vebd.
 Für diese Arbeit werde ich die gängigste asymmetrische Verschlüsselung, das RSA-Verfahren, verwenden.
 %//!SECTION
 \subsection{Grundlagen}
 %//SECTION Grundlagen
-%//REVIEW - Kann ich hier auch einfach nur einmal zitieren? Eigentlich ist in der Literatur alles gleich hierzu oder muss ich jedes mal ne neue Quelle für jeden Satz finden?
-Grundsätzlich gibt es bei der asymmetrischen Verschlüsselung ein Schlüsselpaar (Keypair), welches aus einem privaten Schlüssel (private key) und einem öffentlichen Schlüssel (public key) besteht \vcite{Rsa-Basics}. Diese beiden Schlüssel hängen mathematisch zusammen, sodass der öffentliche Schlüssel Nachrichten \textbf{nur} verschlüsseln und nicht entschlüsseln kann. \textbf{Nur} der zum Schlüsselpaar dazugehörige private Schlüssel ist in der Lage, die verschlüsselte Nachricht wieder zu entschlüsseln (siehe \cref{fig:E2EE}).
+%// vgl. ebd.
+Grundsätzlich gibt es bei der asymmetrischen Verschlüsselung ein Schlüsselpaar (Keypair), welches aus einem privaten Schlüssel (private key) und einem öffentlichen Schlüssel (public key) besteht \vcite{Rsa-Basics}. Diese beiden Schlüssel hängen mathematisch zusammen, sodass der öffentliche Schlüssel Nachrichten \textbf{nur} verschlüsseln und nicht entschlüsseln kann \vebd. \textbf{Nur} der zum Schlüsselpaar dazugehörige private Schlüssel ist in der Lage, die verschlüsselte Nachricht wieder zu entschlüsseln (siehe \cref{fig:E2EE}) \vebd.
 
-%//REVIEW - Wie Anhang mit Bildern und so?
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.75\textwidth]{Briefkasten-asymm.png}
@@ -231,12 +230,10 @@ Grundsätzlich gibt es bei der asymmetrischen Verschlüsselung ein Schlüsselpaa
 
 %//TODO insgesamt noch mehr Quellen finden, habe die ganze Rechnung aus 1 bis 2 Quellen
 \subsection{Mathematische Betrachtung}
-Alle Variablen der folgenden Berechnungen liegen im Bereich $\mathbb{N}$. \\
-Für die Generierung des Schlüsselpaares benötigen wir zuerst zwei große zufällige Primzahlen, $P$ und $Q$. Daraus ergibt sich $n = P * Q$, wobei $P \neq Q$, sodass $P$ bzw. $Q$ nicht durch $\sqrt{n}$ ermittelt werden kann \vcite{RsaGenCond}. Der private Schlüssel besteht aus den Komponenten $\{ n, d \}$ währenddessen der öffentliche Schlüssel aus $\{ n, e \}$ besteht \vcite{RsaVariables}.
+Alle Variablen der folgenden Berechnungen liegen im Bereich $\mathbb{N}$ \vcite{RsaGenCond}. \\
+Für die Generierung des Schlüsselpaares benötigen wir zuerst zwei große zufällige Primzahlen, $P$ und $Q$ \vebd. Daraus ergibt sich $n = P * Q$, wobei $P \neq Q$, sodass $P$ bzw. $Q$ nicht durch $\sqrt{n}$ ermittelt werden kann \vebd. Der private Schlüssel besteht aus den Komponenten $\{ n, d \}$ währenddessen der öffentliche Schlüssel aus $\{ n, e \}$ besteht \vcite{RsaVariables}.
 \subsubsection{Eulersche Phi-Funktion}
-Die Eulersche Phi-Funktion spielt eine wichtige Rolle in dem RSA-Verfahren \vcite{TotientFuncMultiplicative}. Grundsätzlich gibt $\phi(x)$ an, wie viele positive teilerfremde Zahlen bis $x$ existieren (wo also der größte gemeinsamer Teiler ($\gcd$) $1$ ist) \vcite{EulersTotientFunction}. Somit ergibt $\phi(6) = 2$  oder bei einer Primzahl $\phi(7) = 7 - 1 = 6$ somit $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss.
-%//REVIEW - Nachfragen ob ich auch noch \prod und die Gleichung an sich erklären muss
-%//TODO - Gleichung und Stuff erklären
+Die Eulersche Phi-Funktion spielt eine wichtige Rolle in dem RSA-Verfahren \vcite{TotientFuncMultiplicative}. Grundsätzlich gibt $\phi(x)$ an, wie viele positive teilerfremde Zahlen bis $x$ existieren (wo also der größte gemeinsamer Teiler ($\gcd$) $1$ ist) \vcite{EulersTotientFunction}. Somit ergibt $\phi(6) = 2$  oder bei einer Primzahl $\phi(7) = 7 - 1 = 6$ somit $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss \vcite{TotientFuncMultiplicative}.
 \begin{equation*}
   \begin{aligned}
     \phi(n) & = \phi(P \cdot Q)                                                \\
@@ -245,11 +242,9 @@ Die Eulersche Phi-Funktion spielt eine wichtige Rolle in dem RSA-Verfahren \vcit
     \phi(n) & = \left(P - 1 \right) \cdot \left( Q - 1\right)
   \end{aligned}
 \end{equation*}
-%//REVIEW - Wie zitieren von mathematischem Kram?
-\vcite{TotientFuncMultiplicative}
 \subsubsection{Generierung des Schlüsselpaares}
-Sowohl der private als auch der öffentliche Schlüssel besteht unter anderem aus folgender Komponente: $n = P \cdot Q$.
-Für den öffentlichen Schlüssel benötigen wir die Komponente $e$, welche zur Verschlüsselung einer Nachricht benötigt wird. $e$ ist hierbei eine zufällige Zahl, bei welcher folgende Bedingungen gelten \vcite{RsaMaths1}:
+Sowohl der private als auch der öffentliche Schlüssel besteht unter anderem aus folgender Komponente: $n = P \cdot Q$ \vcite{RsaMaths1}.
+Für den öffentlichen Schlüssel benötigen wir die Komponente $e$, welche zur Verschlüsselung einer Nachricht benötigt wird \vebd. $e$ ist hierbei eine zufällige Zahl, bei welcher folgende Bedingungen gelten \vebd:
 \begin{equation*}
   e = \begin{cases}
     1 < e < \phi(n)  \\
@@ -260,28 +255,24 @@ Für den öffentlichen Schlüssel benötigen wir die Komponente $e$, welche zur 
 Mit der errechneten Komponente $e$, welche Nachrichten verschlüsselt, kann der öffentliche Schlüssel nun an den Sender übermittelt werden.
 
 Um den privaten Schlüssel zu berechnen benötigen wir die Komponente $d$, welche zur Entschlüsselung verwendet wird \vcite{RsaEncryptionDecryption}.
-%//REVIEW - explain what mod is as well?
 \begin{equation*}
   \begin{aligned}
     \phi(n) & = (P-1)(Q-1)     \\
-    e * d   & = 1 \mod \phi(n)
+    e \cdot d   & = 1 \mod \phi(n)
   \end{aligned}
 \end{equation*}
-%//REVIEW - Wie zitiere ich hier und nen vernünftiges Ende hierfür finden
 
 \subsection{Sicherheit}
 %//NOTE - Maybe brauche ich das noch aber eig nicht oder?
 %\subsection{Vergleich zur symmetrischen Verschlüsselung}
-Das RSA-Verfahren macht sich die Trapdoor-Einwegfunktion zu Nutze. Das bedeutet, dass eine Funktion mit modernen Computern unmöglich ist, zu invertieren, wenn eine Komponente fehlt (in diesem Fall $d$). Wenn diese jedoch gegeben ist, ist die Umkehroperation leicht. Zu sehen ist dies bei der Ver-/Entschlüsselung von Nachrichten mit dem öffentlichen und privaten Schlüssel \vcite{RsaTrapdoor}.
+Das RSA-Verfahren macht sich die Trapdoor-Einwegfunktion zu Nutze \vcite{RsaTrapdoor}. Das bedeutet, dass eine Funktion mit modernen Computern unmöglich ist, zu invertieren, wenn eine Komponente fehlt (in diesem Fall $d$). Wenn diese jedoch gegeben ist, ist die Umkehroperation leicht \vebd. Zu sehen ist dies bei der Ver-/Entschlüsselung von Nachrichten mit dem öffentlichen und privaten Schlüssel \vebd.
 \begin{equation*}
   \begin{aligned}
     c &= m^e \mod n & \text{Verschlüsselung zu $c$ mit $m$ als Nachricht} \\
     m &= c^d \mod n & \text{Umkehroperation (Entschlüsslung) von $c$ zu $m$}
   \end{aligned}
 \end{equation*}
-Um die verschlüsselte Nachricht $c$ zu entschlüsseln, bräuchte ein möglicher Angreifer die Komponente des privaten Schlüssels $d$. Diese ist allerdings schwer zu berechnen, da, wie schon vorher bereits gezeigt, dafür $\phi(n)$ benötigt wird. Auch $\phi(n)$ ist rechenaufwendig, da dafür eine Primfaktorzerlegung von $n$ benötigt wird. Wichtig hierbei ist aber, dass die Länge von $n$ (Schlüssellänge) mindestens 3000 Bit betragen sollte, da sonst die Primfaktorzerlegung von $n$ mit modernen Computern möglich sein könnte \vcite{RsaKeyLength}.
-%//REVIEW - Zitierweise hier richtig? Weil is so von BSI und so
-
+Um die verschlüsselte Nachricht $c$ zu entschlüsseln, bräuchte ein möglicher Angreifer die Komponente des privaten Schlüssels $d$. Diese ist allerdings schwer zu berechnen, da, wie schon vorher bereits gezeigt, dafür $\phi(n)$ benötigt wird. Auch $\phi(n)$ ist rechenaufwendig, da dafür eine Primfaktorzerlegung von $n$ benötigt wird \vcite{EulersTotientFunction}. Wichtig hierbei ist aber, dass die Länge von $n$ (Schlüssellänge) mindestens 3000 Bit betragen sollte, da sonst die Primfaktorzerlegung von $n$ mit modernen Computern möglich sein könnte \vcite{RsaKeyLength}.
 
 \section{Anonymität mit dem Tor-Netzwerk}
 \subsection{Sicherheit}
