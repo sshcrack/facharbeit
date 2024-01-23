@@ -80,6 +80,13 @@ maxbibnames=99
 \newcommand{\vcite}[1]{\cite[vgl.][]{#1}}
 \newcommand{\vebd}{[vgl. ebd.]}
 
+\newcommand{\entryn}{\textit{Entry Node}}
+\newcommand{\relayn}{\textit{Relay Node}}
+\newcommand{\exitn}{\textit{Exit Node}}
+\newcommand{\nodes}{\textit{Nodes}}
+\newcommand{\node}{\textit{Node}}
+\newcommand{\onion}{\textit{Onion}}
+
 
 % Kopf- und Fußzeilen
 \usepackage{scrlayer-scrpage, lastpage}
@@ -181,8 +188,7 @@ maxbibnames=99
 \modulolinenumbers[5]
 \section{Einleitung}
 %//SECTION Einleitung
-Russland, China, Iran. In all diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. % check for Russia and North Korea as well
-Rund 1,7 Milliarden Menschen sind allein nur in diesen drei Staaten von der Einschränkung der Meinungsfreiheit betroffen \vcite{UnPop}. Wie können Bürger
+Russland, China, Iran. In all diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. Rund 1,7 Milliarden Menschen sind allein nur in diesen drei Staaten von der Einschränkung der Meinungsfreiheit betroffen \vcite{UnPop}. Wie können Bürger
 dieser Staaten ihre Meinung also verbreiten und andere Staaten auf
 %//TODO hier staatskritisch ist falsches wort mir fällt aber das richtige nicht ein
 staatskritische Probleme aufmerksam machen ohne sich selber in Gefahr zu bringen?
@@ -191,21 +197,19 @@ staatskritische Probleme aufmerksam machen ohne sich selber in Gefahr zu bringen
 \\
 %//TODO Hier nochmal nach einer anderen Quelle suchen, die passt nicht 100%ig
 Bei herkömmlichen Messengern, wie WhatsApp, Signal und co., braucht die Außenwelt die Telefonnummern der im totalitären Staat wohnenden Bürgern und Reportern, um diese zu kontaktieren. Allerdings könnte ein totalitärer Staat, sich als Empfänger ausgeben, sodass Bürger/Reporter ihre private Nummer an den Staat überreichen und dieser somit jene Nummer rückverfolgen kann \vcite{LocPolice}.
-Und genau hier liegt das Problem: Bürger und Reporter können nicht durch alltägliche Messenger mit der Außenwelt kommunizieren, da der Staat deren Nummer zurückverfolgen kann und somit weiter die Meinungsfreiheit einschränkt und unterbindet.
+Und genau hier liegt das Problem: Bürger und Reporter können nicht durch alltägliche Messenger mit der Außenwelt kommunizieren, da der Staat deren Nummer zurückverfolgen kann und somit weiter die Meinungsfreiheit einschränkt und unterbindet \vebd.
 \\
-Durch die zentrale Infrastruktur, welche die meisten Messenger, wie zum Beispiel WhatsApp und Signal verwenden, ist es für totalitäre Staaten, wie China, möglich, die IP-Adressen jener Server zu blockieren und somit für Bürger und Reporter unzugänglich zu machen \vcite{ChinaFirewall}.
+Durch die zentrale Infrastruktur, welche die meisten Messenger, wie zum Beispiel WhatsApp und Signal verwenden, ist es für totalitäre Staaten, wie China, möglich, die IP-Adressen jener Server zu blockieren und somit für Bürger und Reporter unzugänglich zu machen \vcite{ChinaFirewall,CentralizedWhatsapp}.
 \\
 %//!SECTION
 %//SECTION Lösungsvorschlag / Ziel
 Ein dezentralisierter Messenger, welcher Ende-zu-Ende verschlüsselt ist und über das Tor-Netzwerk kommuniziert, könnte bei diesen Problemen eine Lösung sein. Die Frage, ob ein solcher Messenger die Lösung für Bürger eines totalitären Staates ist, soll in dieser Arbeit geklärt werden.
 %//!SECTION
 \\
-%//SECTION Kapitel
-%//TODO besser die Kapitel und so beschreiben, ist bis jetzt quatsch
-%//REVIEW - Wirklich nur asymmetrische Verschlüsselung?
-Um diese Frage beantworten zu können, beschäftigt sich diese Arbeit in dem zweiten Kapitel mit der asymmetrischen Verschlüsselung, welche benötigt wird um die Ende-zu-Ende-Verschlüsselung (E2EE) umzusetzen und die Definition der E2EE und asymmetrischen Verschlüsselung \vcite{E2EE-Method}.
-Das dritte Kapitel beinhaltet eine mögliche Lösung, um eine Anonymität über das Internet zu gewährleisten, wobei das Tor-Netzwerk eine wichtige Rolle spielt.
-Im vierte Kapitel befasst sich diese Arbeit mit einer Dezentralisierung der Infrastruktur, um eine weitere Sicherheitsebene zu schaffen.
+%//SECTION E2EE Überleitung zu Kapitel-Auflistung
+Um diese Frage beantworten zu können, beschäftigt sich diese Arbeit in dem zweiten Kapitel mit der asymmetrischen Verschlüsselung, welche benötigt wird um die Ende-zu-Ende-Verschlüsselung (E2EE) umzusetzen und die Definition der E2EE, sowie der Sicherheitsbetrachtung der asymmetrischen Verschlüsselung \vcite{E2EE-Method}.
+Eine mögliche Lösung, um eine Anonymität über das Internet zu gewährleisten wird in Kapitel drei vorgeschlagen, wobei das Tor-Netzwerk eine wichtige Rolle spielt.
+Diese Arbeit befasst sich im vierten Kapitel mit einer Dezentralisierung der Infrastruktur, um eine weitere Sicherheitsebene zu schaffen.
 Zuletzt werden im fünften Kapitel die Vor- und Nachteile eines solchen Messengers betrachtet, im sechsten Kapitel wird eine mögliche Umsetzung des Messengers beschrieben und im siebten Kapitel wird ein Fazit gezogen.
 %//!SECTION
 
@@ -218,7 +222,6 @@ Für diese Arbeit werde ich die gängigste asymmetrische Verschlüsselung, das R
 %//!SECTION
 \subsection{Grundlagen}
 %//SECTION Grundlagen
-%// vgl. ebd.
 Grundsätzlich gibt es bei der asymmetrischen Verschlüsselung ein Schlüsselpaar (Keypair), welches aus einem privaten Schlüssel (private key) und einem öffentlichen Schlüssel (public key) besteht \vcite{Rsa-Basics}. Diese beiden Schlüssel hängen mathematisch zusammen, sodass der öffentliche Schlüssel Nachrichten \textbf{nur} verschlüsseln und nicht entschlüsseln kann \vebd. \textbf{Nur} der zum Schlüsselpaar dazugehörige private Schlüssel ist in der Lage, die verschlüsselte Nachricht wieder zu entschlüsseln (siehe \cref{fig:E2EE}) \vebd.
 
 \begin{figure}[h]
@@ -228,10 +231,12 @@ Grundsätzlich gibt es bei der asymmetrischen Verschlüsselung ein Schlüsselpaa
 \end{figure}
 %//!SECTION
 
-%//TODO insgesamt noch mehr Quellen finden, habe die ganze Rechnung aus 1 bis 2 Quellen
+%//SECTION - Mathematische Betrachtung zu RSA
 \subsection{Mathematische Betrachtung}
 Alle Variablen der folgenden Berechnungen liegen im Bereich $\mathbb{N}$ \vcite{RsaGenCond}. \\
 Für die Generierung des Schlüsselpaares benötigen wir zuerst zwei große zufällige Primzahlen, $P$ und $Q$ \vebd. Daraus ergibt sich $n = P * Q$, wobei $P \neq Q$, sodass $P$ bzw. $Q$ nicht durch $\sqrt{n}$ ermittelt werden kann \vebd. Der private Schlüssel besteht aus den Komponenten $\{ n, d \}$ währenddessen der öffentliche Schlüssel aus $\{ n, e \}$ besteht \vcite{RsaVariables}.
+%//!SECTION
+%//SECTION - Eulersche Phi-Funktion
 \subsubsection{Eulersche Phi-Funktion}
 Die Eulersche Phi-Funktion spielt eine wichtige Rolle in dem RSA-Verfahren \vcite{TotientFuncMultiplicative}. Grundsätzlich gibt $\phi(x)$ an, wie viele positive teilerfremde Zahlen bis $x$ existieren (wo also der größte gemeinsamer Teiler ($\gcd$) $1$ ist) \vcite{EulersTotientFunction}. Somit ergibt $\phi(6) = 2$  oder bei einer Primzahl $\phi(7) = 7 - 1 = 6$ somit $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss \vcite{TotientFuncMultiplicative}.
 \begin{equation*}
@@ -242,12 +247,13 @@ Die Eulersche Phi-Funktion spielt eine wichtige Rolle in dem RSA-Verfahren \vcit
     \phi(n) & = \left(P - 1 \right) \cdot \left( Q - 1\right)
   \end{aligned}
 \end{equation*}
+%//!SECTION
 \subsubsection{Generierung des Schlüsselpaares}
 Sowohl der private als auch der öffentliche Schlüssel besteht unter anderem aus folgender Komponente: $n = P \cdot Q$ \vcite{RsaMaths1}.
 Für den öffentlichen Schlüssel benötigen wir die Komponente $e$, welche zur Verschlüsselung einer Nachricht benötigt wird \vebd. $e$ ist hierbei eine zufällige Zahl, bei welcher folgende Bedingungen gelten \vebd:
 \begin{equation*}
   e = \begin{cases}
-    1 < e < \phi(n)  \\
+    1 < e < \phi(n)      \\
     \gcd(e, \phi(n)) = 1 \\
     \text{$e$ kein Teiler von $\phi(n)$}
   \end{cases}
@@ -257,24 +263,29 @@ Mit der errechneten Komponente $e$, welche Nachrichten verschlüsselt, kann der 
 Um den privaten Schlüssel zu berechnen benötigen wir die Komponente $d$, welche zur Entschlüsselung verwendet wird \vcite{RsaEncryptionDecryption}.
 \begin{equation*}
   \begin{aligned}
-    \phi(n) & = (P-1)(Q-1)     \\
-    e \cdot d   & = 1 \mod \phi(n)
+    \phi(n)   & = (P-1)(Q-1)     \\
+    e \cdot d & = 1 \mod \phi(n)
   \end{aligned}
 \end{equation*}
 
 \subsection{Sicherheit}
-%//NOTE - Maybe brauche ich das noch aber eig nicht oder?
-%\subsection{Vergleich zur symmetrischen Verschlüsselung}
 Das RSA-Verfahren macht sich die Trapdoor-Einwegfunktion zu Nutze \vcite{RsaTrapdoor}. Das bedeutet, dass eine Funktion mit modernen Computern unmöglich ist, zu invertieren, wenn eine Komponente fehlt (in diesem Fall $d$). Wenn diese jedoch gegeben ist, ist die Umkehroperation leicht \vebd. Zu sehen ist dies bei der Ver-/Entschlüsselung von Nachrichten mit dem öffentlichen und privaten Schlüssel \vebd.
 \begin{equation*}
   \begin{aligned}
-    c &= m^e \mod n & \text{Verschlüsselung zu $c$ mit $m$ als Nachricht} \\
-    m &= c^d \mod n & \text{Umkehroperation (Entschlüsslung) von $c$ zu $m$}
+    c & = m^e \mod n & \text{Verschlüsselung zu $c$ mit $m$ als Nachricht}    \\
+    m & = c^d \mod n & \text{Umkehroperation (Entschlüsslung) von $c$ zu $m$}
   \end{aligned}
 \end{equation*}
 Um die verschlüsselte Nachricht $c$ zu entschlüsseln, bräuchte ein möglicher Angreifer die Komponente des privaten Schlüssels $d$. Diese ist allerdings schwer zu berechnen, da, wie schon vorher bereits gezeigt, dafür $\phi(n)$ benötigt wird. Auch $\phi(n)$ ist rechenaufwendig, da dafür eine Primfaktorzerlegung von $n$ benötigt wird \vcite{EulersTotientFunction}. Wichtig hierbei ist aber, dass die Länge von $n$ (Schlüssellänge) mindestens 3000 Bit betragen sollte, da sonst die Primfaktorzerlegung von $n$ mit modernen Computern möglich sein könnte \vcite{RsaKeyLength}.
 
+%//REVIEW - Ist das wirklich nötig? Oder kann ich mir das sparen?
+\subsection{Vergleich zur symmetrischen Verschlüsselung}
+Im Gegensatz zu der asymmetrischen Verschlüsselung, bei welcher sowohl der privaten als auch der öffentlichen Schlüssel verwendet werden, wird bei der symmetrischen Verschlüsselung nur ein Schlüssel verwendet, um Nachrichten zu verschlüsseln\vcite{GeneralSymmetricCryptography}. Mit dem selben Schlüssel können Nachrichten auch wieder entschlüsselt werden \vebd.
+Im Vergleich zu der symmetrischen Verschlüsselung ist die asymmetrische Verschlüsselung langsamer, jedoch muss kein Schlüssel zur Entschlüsselung der Nachricht übermittelt werden \vcite{RsaAESAnalysis}.
+
 \section{Anonymität mit dem Tor-Netzwerk}
+%//REVIEW - Noch belegen, dass Verbindungen von Client direkt zu Zielserver gehen?
+Der zweite zentrale Aspekt dieser Arbeit ist die Anonymität über das Internet. Mit einem normalen Routing, wie wir es tagtäglich benutzen, kommuniziert der Client direkt mit dem Zielserver. Der Zielserver kann hierbei die IP-Adresse des Clients auslesen, somit ist eine Rückverfolgung möglich \vcite{LocPolice,TCP_IP}. Und genau bei diesem Problem setzt das Tor-Netzwerk an. Das Tor-Netzwerk besteht aus vielen Servern, genannt \nodes \vcite{TorStructure}. Die eigentliche Anonymität entsteht dadurch, dass der Client die eigentliche Anfrage mehrmals verschlüsselt, er erstellt also die \onion. Die \onion wird nun über mehrere \nodes geleitet, wobei jede \node die \onion einmal entschlüsselt und somit eine weitere Verschlüsselungsebene "schält" \vcite{TorStructure2}. Durch das Entschlüsseln kennt jene \node zwar das nächste Ziel, jedoch nicht die finale Destination der Onion (die Ausnahme ist bei der \exitn) \vebd.
 \subsection{Sicherheit}
 
 
@@ -294,5 +305,6 @@ Um die verschlüsselte Nachricht $c$ zu entschlüsseln, bräuchte ein möglicher
 \nolinenumbers{}
 \printbibliography[notkeyword={figure}]
 \printbibliography[heading=subbibliography,title={Anhang},keyword={figure}]
+Quellcode: \href{https://github.com/sshcrack/enkrypton}{https://github.com/sshcrack/enkrypton}
 
 \end{document}
