@@ -286,6 +286,13 @@ Im Vergleich zu der symmetrischen Verschlüsselung ist die asymmetrische Verschl
 \section{Anonymität mit dem Tor-Netzwerk}
 %//REVIEW - Noch belegen, dass Verbindungen von Client direkt zu Zielserver gehen?
 Der zweite zentrale Aspekt dieser Arbeit ist die Anonymität über das Internet. Mit einem normalen Routing, wie wir es tagtäglich benutzen, kommuniziert der Client direkt mit dem Zielserver. Der Zielserver kann hierbei die IP-Adresse des Clients auslesen, somit ist eine Rückverfolgung möglich \vcite{LocPolice,TCP_IP}. Und genau bei diesem Problem setzt das Tor-Netzwerk an. Das Tor-Netzwerk besteht aus vielen Servern, genannt \nodes \vcite{TorStructure}. Die eigentliche Anonymität entsteht dadurch, dass der Client die eigentliche Anfrage mehrmals verschlüsselt, er erstellt also die \onion. Die \onion wird nun über mehrere \nodes geleitet, wobei jede \node die \onion einmal entschlüsselt und somit eine weitere Verschlüsselungsebene "schält" \vcite{TorStructure2}. Durch das Entschlüsseln kennt jene \node zwar das nächste Ziel, jedoch nicht die finale Destination der Onion (die Ausnahme ist bei der \exitn) \vebd.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{tor structure.png}
+  \caption{Tor Struktur und so \vcite{fig:Tor-Structure} \label{fig:TorStructure}}
+
+\end{figure}
 \subsection{Sicherheit}
 
 
