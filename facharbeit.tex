@@ -87,6 +87,7 @@ maxbibnames=99
 \newcommand{\nodes}{\textit{Nodes\,}}
 \newcommand{\node}{\textit{Node\,}}
 \newcommand{\onion}{\textit{Onion\,}}
+\newcommand{\circuit}{\textit{Circuit\,}}
 
 
 % Kopf- und Fußzeilen
@@ -286,7 +287,10 @@ Im Vergleich zu der symmetrischen Verschlüsselung ist die asymmetrische Verschl
 
 \section{Anonymität mit dem Tor-Netzwerk}
 %//REVIEW - Noch belegen, dass Verbindungen von Client direkt zu Zielserver gehen?
-Der zweite zentrale Aspekt dieser Arbeit ist die Anonymität über das Internet. Bei dem normalen Routing, wie wir es tagtäglich nutzen, kommuniziert der Client direkt mit dem Zielserver. Der Zielserver kann hierbei die IP-Adresse des Clients sehen, somit ist eine Rückverfolgung möglich \vcite{LocPolice,TCP_IP}. Und genau bei diesem Problem setzt das Tor-Netzwerk an. Das Tor-Netzwerk besteht aus vielen Servern, genannt \nodes \vcite{TorStructure}. Der Client verschlüsselt die eigentliche Anfrage mehrmals, hüllt sie in ein mehrere "Schalen" ein, welche eine \onion bilden, und leitet diese über drei \nodes an den Zielserver \vebd. Anfangs wird diese \onion zu der \entryn geschickt \vebd. Bei jeder \node, also auch der \entryn, wird eine Schale der \onion "geschält" (die Nachricht einmal entschlüsselt), welche den nächsten Knotenpunkt enthält, zu welchem die Anfrage zunächst geschickt wird \vcite{TorStructure2}. Nur die \entryn weiß somit die reale IP-Adresse des Clients und \textbf{nur} die letzte Node (\exitn) weiß, an welchen Zielserver die Anfrage geschickt wurde \vebd. Wichtig hierbei ist allerdings, dass die \entryn nicht weiß, was der Zielserver der Anfrage ist \vebd. Die \exitn weiß im Gegenzug die reale IP-Adresse des Clients nicht.
+Der zweite zentrale Aspekt dieser Arbeit ist die Anonymität über das Internet. Bei normalen Routing, wie wir es tagtäglich nutzen, kommuniziert der Client direkt mit dem Zielserver. Der Zielserver kann hierbei die IP-Adresse des Clients sehen, somit ist eine Rückverfolgung möglich \vcite{LocPolice,TCP_IP}. Und genau bei diesem Problem setzt das Tor-Netzwerk an. Das Tor-Netzwerk besteht aus vielen Servern, genannt \nodes \vcite{TorStructure}. Damit ein Client eine Anfrage über das Netzwerk verschicken kann, sucht er sich zunächst einen Pfad durch das Netzwerk, genannt \circuit \vcite{TorCircuits}. Dieser \circuit besteht dabei meist aus drei \nodes. Der \entryn, einer \relayn und einer \exitn, worüber später Anfragen an die Zielserver geschickt werden können \vebd.
+Dabei verschlüsselt der Client verschlüsselt die eigentliche Anfrage mehrmals, hüllt sie also in ein mehrere "Schalen" ein, welche eine \onion bilden, und leitet diese über den \circuit an den Zielserver weiter\vcite{TorStructure}. Anfangs wird die \onion von dem Tor-Client an die \entryn geschickt \vebd. Bei jeder \node, also auch der \entryn, wird eine Schale der \onion "geschält" (die Nachricht also einmal entschlüsselt), welche Informationen zu dem nächsten Knotenpunkt enthält, somit schickt jene Node, die Anfrage an den nächsten Knotenpunkt weiter\vcite{TorStructure2}.
+%//TODO Checken ob das wirklich in der quelle so steht, sollte eig
+Sobald die Anfrage bei der \exitn angekommen ist, entfernt diese die letzte "Schale" der Anfrage, welche nun vollständig entschlüsselt ist (wenn die eigentliche Anfrage nicht mit HTTPS verschlüsselt wurde), und schickt diese an den Zielserver \vebd. Nur die \entryn weiß somit die reale IP-Adresse des Clients und \textbf{nur} die letzte Node (\exitn) weiß, an welchen Zielserver die Anfrage geschickt wurde \vebd. Wichtig hierbei ist allerdings, dass die \entryn nicht weiß, was der Zielserver der Anfrage ist \vebd. Die \exitn weiß im Gegenzug die reale IP-Adresse des Clients nicht. Allerdings könnte die \exitn die IP-Adressen der Zielserver sehen oder möglicherweise Informationen der Nutzer auslesen (wenn die Anfrage nicht mit HTTPS verschlüsselt wurde) \vcite{TorExitNodeVulnerability}. Hier herrscht also eine Schwachstelle des Tor-Netzwerkes, welche Onion-Services (größtenteils) gelöst wird, da diese nicht auf die \exitn angewiesen sind \vcite{TorOnionService}.
 %//TODO Überleitung zu Onion-Services
 % Die IP-Adresse des Zielservers ist jedoch nicht im Tor-Netzwerk "versteckt" und kann somit leicht durch den Staat rückverfolgt werden.
 
@@ -296,7 +300,8 @@ Der zweite zentrale Aspekt dieser Arbeit ist die Anonymität über das Internet.
   \caption{Tor Struktur und so \vcite{fig:Tor-Structure} \label{fig:TorStructure}}
 \end{figure}
 \subsection{Onion-Services}
-% Onion-Services beheben genau dieses Problem. 
+
+% Onion-Services beheben genau dieses Problem.
 % Gute Quelle: https://community.torproject.org/onion-services/talk/
 % Die Prozentzahl an Exit-Nodes ist im Tor-Netzwerk gering. Aber auch, wenn der Messenger dieser Arbeit einen Server etablieren sollten, ohne dass dieser ein Onion-Service ist, besteht ein erhöhtes Risiko für denjenigen, der den Server hostet. Folglich ist ein Onion-Service eine gute Lösung, um die Anonymität der jeweiligen Kommunikationspartner zu verstärken. Ein Onion-Service ist ein Server, welcher nur über das Tor-Netzwerk erreichbar ist. Um solch einen Onion-Service zu hosten, finden also folgende Schritte statt:
 % Der Onion-Service agiert ähnlich zu einem normalen Tor-Client, jedoch findet er nun drei Punkte im Netzwerk, mit welchen er sich verbindet
