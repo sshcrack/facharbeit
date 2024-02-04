@@ -8,6 +8,7 @@
 \usepackage{fontspec}
 \usepackage{babel}
 \usepackage{csquotes}
+\usepackage{svg}
 \usepackage{relsize}
 \usepackage{setspace}
 
@@ -216,7 +217,7 @@ Ein dezentralisierter Messenger, welcher Ende-zu-Ende verschlüsselt ist und üb
 %//!SECTION
 \\
 %//SECTION E2EE Überleitung zu Kapitel-Auflistung
-Um diese Frage beantworten zu können, beschäftigt sich diese Arbeit in dem zweiten Kapitel mit der asymmetrischen Verschlüsselung, welche benötigt wird um die Ende-zu-Ende-Verschlüsselung (E2EE) umzusetzen und die Definition der E2EE, sowie der Sicherheitsbetrachtung der asymmetrischen Verschlüsselung \vcite{E2EE-Method}.
+Um diese Frage beantworten zu können, beschäftigt sich diese Arbeit in dem zweiten Kapitel mit der asymmetrischen Verschlüsselung, welche benötigt wird um die Ende-zu-Ende-Verschlüsselung (E2EE) umzusetzen und die Definition der E2EE, sowie der Sicherheitsbetrachtung der asymmetrischen Verschlüsselung \vcite{E2EE-Method}. Die Arbeit geht dabei nicht auf weitere Padding-Verfahren ein.
 Eine mögliche Lösung, um eine Anonymität über das Internet zu gewährleisten wird in Kapitel drei vorgeschlagen, wobei das Tor-Netzwerk eine wichtige Rolle spielt.
 Diese Arbeit befasst sich im vierten Kapitel mit einer Dezentralisierung der Infrastruktur, um eine weitere Sicherheitsebene zu schaffen.
 Zuletzt werden im fünften Kapitel die Vor- und Nachteile eines solchen Messengers betrachtet, im sechsten Kapitel wird eine mögliche Umsetzung des Messengers beschrieben und im siebten Kapitel wird ein Fazit gezogen.
@@ -226,17 +227,16 @@ Zuletzt werden im fünften Kapitel die Vor- und Nachteile eines solchen Messenge
 
 \section{Asymmetrische Verschlüsselung}
 %//SECTION E2EE und asymmetrische Verschlüsselung
-Um einen sicheren Nachrichtenaustausch zu gewährleisten, wird in dieser Arbeit die E2EE implementiert. Bei der E2EE wird von dem Sender die Nachricht, bevor sie an den Empfänger geschickt wird, verschlüsselt \vcite{E2EE}. Dazwischenliegende Akteure, wie zum Beispiel Server oder mögliche Angreifer, können demzufolge die Nachricht nicht lesen \vebd. \textbf{Nur} der Empfänger der Nachricht kann diese auch entschlüsseln. Als Ent- und Verschlüsselungsverfahren der Nachrichten wird die asymmetrische Verschlüsselung verwendet \vebd.
-Für diese Arbeit werde ich die gängigste asymmetrische Verschlüsselung, das RSA-Verfahren, verwenden.
+Um einen sicheren Nachrichtenaustausch zu gewährleisten, wird in dieser Arbeit die E2EE implementiert. Bei der E2EE wird von dem Sender die Nachricht, bevor sie an den Empfänger geschickt wird, verschlüsselt \vcite{E2EE}. Dazwischenliegende Akteure, wie zum Beispiel Server oder mögliche Angreifer, können demzufolge die Nachricht nicht lesen \vebd. \textbf{Nur} der Empfänger der Nachricht kann diese auch entschlüsseln. Als Ent- und Verschlüsselungsverfahren der Nachrichten wird die asymmetrische Verschlüsselung verwendet \vebd. Diese Arbeit beschränkt sich bei der asymmetrischen Verschlüsselung auf das RSA-Verfahren.
 %//!SECTION
 \subsection{Grundlagen}
 %//SECTION Grundlagen
-Grundsätzlich gibt es bei der asymmetrischen Verschlüsselung ein Schlüsselpaar (Keypair), welches aus einem privaten Schlüssel (private key) und einem öffentlichen Schlüssel (public key) besteht \vcite{Rsa-Basics}. Diese beiden Schlüssel hängen mathematisch zusammen, sodass der öffentliche Schlüssel Nachrichten \textbf{nur} verschlüsseln und nicht entschlüsseln kann \vebd. \textbf{Nur} der zum Schlüsselpaar dazugehörige private Schlüssel ist in der Lage, die verschlüsselte Nachricht wieder zu entschlüsseln (siehe \cref{fig:E2EE}) \vebd.
+Grundsätzlich gibt es bei der asymmetrischen Verschlüsselung ein Schlüsselpaar (Keypair), welches aus einem privaten Schlüssel (private key) und einem öffentlichen Schlüssel (public key) besteht \vcite{Rsa-Basics}. Diese beiden Schlüssel hängen mathematisch zusammen, sodass der öffentliche Schlüssel Nachrichten \textbf{nur} verschlüsseln aber nicht entschlüsseln kann \vebd. \textbf{Nur} der zum Schlüsselpaar dazugehörige private Schlüssel ist in der Lage, die verschlüsselte Nachricht wieder zu entschlüsseln (siehe \cref{fig:E2EE}) \vebd.
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.75\textwidth]{Briefkasten-asymm.png}
-  \caption{Jeder Sender kann mit dem öffentlichen Schlüssel die Nachricht "verschlüsseln" (also in den Briefkasten eine Nachricht werfen), aber nur der Empfänger kann den Briefkasten mit seinem privaten Schlüssel öffnen \vcite{fig:Rsa-Cryptography} \label{fig:E2EE}}
+  \caption{Jeder Sender kann mit dem öffentlichen Schlüssel die Nachricht "verschlüsseln" (also eine Nachricht in den Briefkasten werfen), aber nur der Empfänger kann den Briefkasten mit seinem privaten Schlüssel öffnen und somit die Nachricht herausnehmen\vcite{fig:Rsa-Cryptography} \label{fig:E2EE}}
 \end{figure}
 %//!SECTION
 
@@ -247,7 +247,7 @@ Für die Generierung des Schlüsselpaares benötigen wir zuerst zwei große zuf�
 %//!SECTION
 %//SECTION - Eulersche Phi-Funktion
 \subsubsection{Eulersche Phi-Funktion}
-Die Eulersche Phi-Funktion spielt eine wichtige Rolle in dem RSA-Verfahren \vcite{TotientFuncMultiplicative}. Grundsätzlich gibt $\phi(x)$ an, wie viele positive teilerfremde Zahlen bis $x$ existieren (wo also der größte gemeinsamer Teiler ($\gcd$) $1$ ist) \vcite{EulersTotientFunction}. Somit ergibt $\phi(6) = 2$  oder bei einer Primzahl $\phi(7) = 7 - 1 = 6$ somit $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss \vcite{TotientFuncMultiplicative}.
+Die Eulersche Phi-Funktion spielt eine wichtige Rolle in dem RSA-Verfahren \vcite{TotientFuncMultiplicative}. Grundsätzlich gibt $\phi(x)$ an, wie viele positive teilerfremde Zahlen bis $x$ existieren (bei wie vielen Zahlen der größte gemeinsamer Teiler ($\gcd$) $1$ ist) \vcite{EulersTotientFunction}. Somit ergibt $\phi(6) = 2$  oder bei einer Primzahl $\phi(7) = 7 - 1 = 6$ somit $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss \vcite{TotientFuncMultiplicative}.
 \begin{equation*}
   \begin{aligned}
     \phi(n) & = \phi(P \cdot Q)                                                \\
@@ -259,7 +259,7 @@ Die Eulersche Phi-Funktion spielt eine wichtige Rolle in dem RSA-Verfahren \vcit
 %//!SECTION
 \subsubsection{Generierung des Schlüsselpaares}
 Sowohl der private als auch der öffentliche Schlüssel besteht unter anderem aus folgender Komponente: $n = P \cdot Q$ \vcite{RsaMaths1}.
-Für den öffentlichen Schlüssel benötigen wir die Komponente $e$, welche zur Verschlüsselung einer Nachricht benötigt wird \vebd. $e$ ist hierbei eine zufällige Zahl, bei welcher folgende Bedingungen gelten \vebd:
+Für den öffentlichen Schlüssel benötigen wir die Komponente $e$, die zur Verschlüsselung einer Nachricht verwendet wird \vebd. $e$ ist hierbei eine zufällige Zahl, bei welcher folgende Bedingungen gelten \vebd:
 \begin{equation*}
   e = \begin{cases}
     1 < e < \phi(n)      \\
@@ -278,19 +278,28 @@ Um den privaten Schlüssel zu berechnen benötigen wir die Komponente $d$, welch
 \end{equation*}
 
 \subsection{Sicherheit}
-Das RSA-Verfahren macht sich die Trapdoor-Einwegfunktion zu Nutze \vcite{RsaTrapdoor}. Das bedeutet, dass eine Funktion mit modernen Computern unmöglich ist, zu invertieren, wenn eine Komponente fehlt (in diesem Fall $d$). Wenn diese jedoch gegeben ist, ist die Umkehroperation leicht \vebd. Zu sehen ist dies bei der Ver-/Entschlüsselung von Nachrichten mit dem öffentlichen und privaten Schlüssel \vebd.
+Um die Sicherheit des RSA-Verfahrens betrachten zu können, müssen wir nun den Ver/-Entschlüsselungsvorgang betrachten.
 \begin{equation*}
   \begin{aligned}
     c & = m^e \mod n & \text{Verschlüsselung zu $c$ mit $m$ als Nachricht}    \\
     m & = c^d \mod n & \text{Umkehroperation (Entschlüsslung) von $c$ zu $m$}
   \end{aligned}
 \end{equation*}
-Um die verschlüsselte Nachricht $c$ zu entschlüsseln, bräuchte ein möglicher Angreifer die Komponente des privaten Schlüssels $d$. Diese ist allerdings schwer zu berechnen, da, wie schon vorher bereits gezeigt, dafür $\phi(n)$ benötigt wird. Auch $\phi(n)$ ist rechenaufwendig, da dafür eine Primfaktorzerlegung von $n$ benötigt wird \vcite{EulersTotientFunction}. Wichtig hierbei ist aber, dass die Länge von $n$ (Schlüssellänge) mindestens 3000 Bit betragen sollte, da sonst die Primfaktorzerlegung von $n$ mit modernen Computern möglich sein könnte \vcite{RsaKeyLength}.
+%//TODO rewrite trapdoor one way function
+Um die verschlüsselte Nachricht $c$ zu entschlüsseln, bräuchte ein Angreifer die Komponente des privaten Schlüssels $d$. $d$ ist allerdings mit einem starken Rechenaufwand verbunden, da, wie schon vorher bereits gezeigt, dafür $\phi(n)$ kalkuliert werden müsste. Somit also eine Primfaktorzerlegung von $n$ benötigt wird \vcite{EulersTotientFunction}. Bei der Verschlüsselung von $m$ zu $c$ liegt eine Trapdoor-Einwegfunktion vor \vcite{RsaTrapdoor}. Das bedeutet, dass es zwar leicht ist $f(x) = i$ zu berechnen (bei RSA: Verschlüsselung), es jedoch unmöglich ist von $i$ auf den Ursprungswert $x$ zu schließen, ohne dass weitere dafür notwendigen Komponente bekannt sind (bei RSA wäre die benötigte Komponente $d$) \vebd.
+\begin{figure}[h]
+  \centering
+  \includesvg[width=0.5\textwidth]{img/Trapdoor_permutation.svg}
+  \caption{Die Trapdoor-Einwegfunktion bildlich dargestellt\vcite{fig:TrapdoorPermutation} \label{fig:TrapdoorFunc}}
+\end{figure}
+
+Wichtig bei dem RSA-Verfahren ist, dass die Länge von $n$ (die Schlüssellänge) mindestens 3000 Bit betragen sollte, da sonst die Primfaktorzerlegung von $n$ mit modernen Computern möglich sein könnte \vcite{RsaKeyLength}.
 
 %//REVIEW - Ist das wirklich nötig? Oder kann ich mir das sparen?
 \subsection{Vergleich zur symmetrischen Verschlüsselung}
-Im Gegensatz zu der asymmetrischen Verschlüsselung, bei welcher sowohl der privaten als auch der öffentlichen Schlüssel verwendet werden, wird bei der symmetrischen Verschlüsselung nur ein Schlüssel verwendet, um Nachrichten zu verschlüsseln\vcite{GeneralSymmetricCryptography}. Mit dem selben Schlüssel können Nachrichten auch wieder entschlüsselt werden \vebd.
-Im Vergleich zu der symmetrischen Verschlüsselung ist die asymmetrische Verschlüsselung langsamer, jedoch muss kein Schlüssel zur Entschlüsselung der Nachricht übermittelt werden \vcite{RsaAESAnalysis}.
+Bei der symmetrischen Verschlüsselung wird der gleiche Schlüssel sowohl für die Verschlüsselung als auch für die Entschlüsselung verwendet \vcite{GeneralSymmetricCryptography}.
+%//REVIEW - Wirklich padding mit einbeziehen?
+Im Vergleich zu der asymmetrischen Verschlüsselung, ist die symmetrische Verschlüsselung schneller und keine Beschränkung des Chiffretextes \vcite{RsaAESAnalysis, OpensslRsaMaxLength}. Jedoch muss der Schlüssel der symmetrischen Verschlüsselung sicher an den jeweils anderen Kommunikationspartner übermittelt werden, um Nachrichten zu entschlüsseln \vebd.
 
 \section{Anonymität mit dem Tor-Netzwerk}
 %//REVIEW - Noch belegen, dass Verbindungen von Client direkt zu Zielserver gehen?
@@ -306,7 +315,7 @@ Sobald die Anfrage bei der \exitn angekommen ist, entfernt diese die letzte "Sch
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.65\textwidth]{tor_vertical.png}
-  \caption{Tor Struktur und so \vcite{fig:Tor-Structure} \label{fig:TorStructure}}
+  \caption{Tor Entschlüsselungslayer \vcite{fig:Tor-Structure} \label{fig:TorStructure}}
 \end{figure}
 \subsection{Onion Services}
 Onion Services lösen dieses Problem, da diese nicht auf die \exitn angewiesen sind und nur innerhalb des Tor-Netzwerkes mit anderen Tor-Clients kommunizieren \vcite{TorOnionServiceTalk}. Sie nicht über das normale Internet erreichbar, wie die Zielserver im vorherigen Beispiel, sondern nur über das Tor-Netzwerk \vcite{TorOnionService}. Bei dem Onion Service müssen im Kontrast zu normalen öffentlichen Servern keine Ports geöffnet werden, damit ein Client sich mit dem Server verbinden kann, da der Onion Service direkt mit dem Tor-Netzwerk über ausgehende Verbindungen kommuniziert (auch bekannt als \textit{NAT punching}) und darüber sämtliche Daten geleitet werden \vebd. Für Außenstehende sieht der Onion Service also aus, wie als wäre er ein normaler Tor-Client \vebd.
