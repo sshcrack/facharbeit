@@ -17,6 +17,9 @@
 \usepackage{tabularray}
 \usepackage{float}
 
+% Appendix
+\usepackage{appendix}
+
 % Title Spacing
 
 \RedeclareSectionCommand[
@@ -98,13 +101,12 @@ maxbibnames=99
 \newcommand{\renp}{\textit{Rendezvous Point\,}}
 %//cSpell:disable
 
-
 % Kopf- und Fußzeilen
 \usepackage{scrlayer-scrpage, lastpage}
 \setkomafont{pageheadfoot}{\large\textrm}
 \lohead{\PageTitel}
 \rohead{\Author}
-\cfoot*{\thepage{}/\pageref{LastPage}}
+\cfoot*{\thepage{}/\pageref{LastPageDoc}}
 
 % Position des Titels
 \usepackage{titling}
@@ -353,8 +355,12 @@ Mit den vorgeschlagenen Konzepten ist der Messenger imstande anonym (durch das T
 \pagebreak
 \nolinenumbers{}
 \printbibliography[notkeyword={figure}]
+\label{LastPageDoc}
 
 \pagebreak
+\pagenumbering{arabic}% resets `page` counter to 1
+\cfoot*{\roman{page}}
+\appendix
 \printbibliography[heading=subbibliography,title={Anhang},keyword={figure}]
 Quellcode: \href{https://github.com/sshcrack/enkrypton}{https://github.com/sshcrack/enkrypton}
 
