@@ -326,7 +326,7 @@ Der Onion Service sich nun mit dem Tor-Netzwerk wie ein normaler Client über ei
 \subsection{Vor- und Nachteile}
 %//TODO Nochmal Studio durchlesen, ist noch nicht schlüssig
 %//TODO Angriff wurde schon von Tor gefixt, benutze OnionServiceFingerprinting
-Vorteile des Tor-Netzwerkes (bezogen auf Onion Services) sind zum Beispiel, wie bereits genannt, die Anonymität. Das Routing über das Tor-Netzwerk ist im Vergleich zum normalen Routing um das 120-fache langsamer \vcite{TorPerformance}. Ein möglicher Angriff gegen die Anonymität des Onion Services ist die des "SignalCookies", welcher auf einen Fehler im Protokoll des Tor-Netzwerkes zurückzuführen ist \vcite{OnionServiceDiscovery}. Hierbei wird ein zufälliger Cookie, bestehend aus 20 Bytes generiert und zwischengespeichert \vebd. Der Client sendet nun eine Anfrage in das Tor-Netzwerk, dass der Client mit dem Onion Service eine Verbindung aufbauen will und hängt den Cookie an die Anfrage an. Der Onion Service baut nun, wie bereits beschrieben eine Verbindung über einen \circuit auf und einigt sich auf einen \renp mit dem Client, jedoch schickt er während der Anfrage an den \renp aufgrund eines Protokollfehlers des Tor-Netzwerk den vorher gegebenen Cookie des Clients mit \vebd. Wenn der \renp nun von einem Angreifer kontrolliert wird, kann dieser den Cookie des Clients mit dem Cookie des Onion Services vergleichen und somit den Onion Service identifizieren, wodurch sich von hieraus vorgearbeitet werden kann, sodass die \entryn des Onion Services identifiziert wird und kompromittiert werden kann \vebd.
+Vorteile des Tor-Netzwerkes (bezogen auf Onion Services) sind zum Beispiel, wie bereits genannt, die Anonymität. Das Routing über das Tor-Netzwerk ist im Vergleich zum normalen Routing um das 120-fache langsamer \vcite{TorPerformance}. Ein möglicher Angriff gegen die Anonymität des Onion Services ist die des "SignalCookies", welcher auf einen Fehler im Protokoll des Tor-Netzwerkes zurückzuführen ist \vcite{OnionServiceDiscovery}. Hierbei wird ein zufälliger Cookie, bestehend aus 20 Bytes generiert und zwischengespeichert \vebd. Der Client sendet nun eine Anfrage in das Tor-Netzwerk, dass der Client mit dem Onion Service eine Verbindung aufbauen will und hängt den Cookie an die Anfrage an. Der Onion Service baut nun, wie bereits beschrieben eine Verbindung über einen \circuit auf und einigt sich auf einen \renp mit dem Client, jedoch schickt er während der Anfrage an den \renp aufgrund eines Protokollfehlers des Tor-Netzwerkes den vorher gegebenen Cookie des Clients mit \vebd. Wenn der \renp nun von einem Angreifer kontrolliert wird, kann dieser den Cookie des Clients mit dem Cookie des Onion Services vergleichen und somit den Onion Service identifizieren, wodurch sich von hieraus vorgearbeitet werden kann, sodass die \entryn des Onion Services identifiziert wird und kompromittiert werden kann \vebd.
 
 \section{Dezentralisierung}
 \subsection{Sicherheit}
@@ -334,7 +334,7 @@ Vorteile des Tor-Netzwerkes (bezogen auf Onion Services) sind zum Beispiel, wie 
 
 \section{Vor- und Nachteile}
 \subsection{Kriminalität}
-\subsection{freie Meinungsäußerung}
+\subsection{Freie Meinungsäußerung}
 
 \section{Umsetzung des Messengers}
 
