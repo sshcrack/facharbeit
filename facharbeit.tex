@@ -43,7 +43,7 @@
 \usepackage[
 backend=biber,
 style=alphabetic,
-sorting=ynt,
+sorting=nty,
 maxbibnames=99
 ]{biblatex}
 
@@ -300,13 +300,13 @@ Wichtig bei dem RSA-Verfahren ist, dass die Länge von $n$ (die Schlüssellänge
 %/REVIEW - Ist das wirklich nötig? Oder kann ich mir das sparen? (ja schon)
 \subsection{Vergleich zur symmetrischen Verschlüsselung}
 Bei der symmetrischen Verschlüsselung wird der gleiche Schlüssel sowohl für die Verschlüsselung als auch für die Entschlüsselung verwendet \vcite{GeneralSymmetricCryptography}.
-%/REVIEW - Wirklich padding mit einbeziehen? (meinte er brauch ich nich)
+%/REVIEW - Wirklich padding mit einbeziehen? (meinte er brauch ich nicht)
 Im Vergleich zu der asymmetrischen Verschlüsselung, ist die symmetrische Verschlüsselung schneller und keine Beschränkung des Chiffretextes \vcite{RsaAESAnalysis, OpensslRsaMaxLength}. Jedoch muss der Schlüssel der symmetrischen Verschlüsselung sicher an den jeweils anderen Kommunikationspartner übermittelt werden, um Nachrichten zu entschlüsseln \vebd.
 
 \section{Das Tor-Netzwerk}
 Die Anonymität des Messengers ist ein weiterer zentraler Aspekt, um die jeweiligen Kommunikationspartner zu schützen. Das Tor-Netzwerk ist hierbei ein möglicher Lösungsansatz, da normalen Routing, wie wir es tagtäglich nutzen, der Client kommuniziert  direkt mit dem Zielserver, somit der Zielserver die IP-Adresse des Clients einsehen kann \vcite{TCP_IP}.
 %//REVIEW für den Satz danach Quelle?
-Eine Rückverfolgung der IP-Adresse ist somit möglich \vcite{LocPolice}. Und genau bei diesem Problem setzt das Tor-Netzwerk an. Das Tor-Netzwerk besteht hierbei aus vielen \nodes, welche eingehende Tor-Verbindungen akzeptieren und weiterverarbeiten. Damit ein Client eine Anfrage über das Netzwerk verschicken kann, sucht er zunächst einen Pfad durch das Netzwerk, genannt \circuit \vcite{TorCircuits}. Der \circuit besteht dabei meist aus drei \nodes und ist für 10 Minuten gültig, bis der Client das Circuit erneuert (also einen neuen Pfad "sucht")  \vcite{FAQCircuitLifetime}. Die drei \nodes werden klassifiziert in einer \entryn, einer \relayn und einer \exitn, worüber später Anfragen an die Zielserver geschickt werden können \vebd.
+Eine Rückverfolgung der IP-Adresse ist somit möglich \vcite{LocPolice}. Und genau bei diesem Problem setzt das Tor-Netzwerk an. Das Tor-Netzwerk besteht hierbei aus vielen \nodes, welche eingehende Tor-Verbindungen akzeptieren und weiterverarbeiten. Damit ein Client eine Anfrage über das Netzwerk verschicken kann, sucht er zunächst einen Pfad durch das Netzwerk, genannt \circuit \vcite{TorCircuits}. Der \circuit besteht dabei meist aus drei \nodes und ist für 10 Minuten gültig, bis der Client das \circuit erneuert (also einen neuen Pfad "sucht")  \vcite{FAQCircuitLifetime}. Die drei \nodes werden klassifiziert in einer \entryn, einer \relayn und einer \exitn, worüber später Anfragen an die Zielserver geschickt werden können \vebd.
 Dabei verschlüsselt der Client verschlüsselt die eigentliche Anfrage mehrmals, hüllt sie also in ein mehrere "Schalen" ein, welche eine \onion bilden, und leitet diese über den \circuit an den Zielserver weiter\vcite{TorDesign}. Anfangs wird die \onion von dem Tor-Client an die \entryn geschickt \vebd. Bei jeder \node, wie der \entryn, wird eine Schale der \onion "geschält" (die \onion also einmal entschlüsselt), welche Informationen zu dem nächsten Knotenpunkt enthält \vcite{TorStructure2}. Die Node leitet nun die um eine Schale "geschälte" \onion an den nächsten Knotenpunkt weiter \vebd.
 Sobald die Anfrage bei der \exitn angekommen ist, entfernt diese die letzte "Schale" der Anfrage, welche nun vollständig entschlüsselt ist und an den Zielserver geschickt werden kann \vebd. Dieses Routing-Verfahren ist auch als \textit{Onion-Routing} bekannt \vcite{TorDesign}.
 
@@ -354,7 +354,8 @@ Der Client muss bei dieser Netzwerkstruktur dem Hauptserver "vertrauen" und kann
 
 \subsection{Sicherheit}
 %//REVIEW - Muss ich hier wirklich noch sagen warum durch Kompromittierung Daten ausgelesen werden können? Bzw. die zentrale Angriffsfläche ist doch logisch oder?
-Im Beispiel eines Messengers bietet ein zentrales Netzwerk den Hauptserver als mögliche Angriffsfläche an, sodass diese entweder durch DDoS-Angriffe außer Betrieb gesetzt werden kann oder durch Kompromittierung des Servers sowohl der Empfänger als auch der Sender der Nachrichten ausgelesen werden kann \vcite{BSI-DDoS}.
+Im Beispiel eines Messengers bietet ein zentrales Netzwerk den Hauptserver als mögliche Angriffsfläche an, sodass diese entweder durch DDoS-Angriffe außer Betrieb gesetzt werden kann oder durch Kompromittierung des Servers sowohl der Empfänger als auch der Sender der Nachrichten ausgelesen werden kann (in Form von Onion-Adressen)\vcite{BSI-DDoS}.
+Ein dezentrales Netzwerk besteht jedoch aus mehreren Servern bzw. Clients, wodurch die Angriffsfläche vergrößert wird und es sich als schwieriger erweist, das gesamte Netzwerk zu kompromittieren bzw. außer Gefecht zu setzen \vcite{GeeksCenralizeDecentralized}. Da Clients bzw. die Server eines dezentralen Netzwerk sich gegenseitig nicht vertrauen, herrscht eine kleine Angriffsfläche für Angreifer, da ein Angreifer mehrere Server angreifen müsste, um Daten der Nutzer auslesen zu können \vebd.
 %//STUB - Ab hier sind Notizen
 Ein zentrales Netzwerk hat ein Angriffspunkt, der Hauptserver, welcher durch Angriffe, wie einem DDoS-Angriff, außer Gefecht gesetzt werden kann, sodass alle Clients des Messengers nicht mehr miteinander untereinander Nachrichten verschicken können. Durch eine Kompromittierung des Hauptservers wäre es zudem möglich, einzusehen, welche Nutzer (in Form von Onion-Adressen) Nachrichten untereinander austauschen und somit die Anonymität jener gefährden.
 
