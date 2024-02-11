@@ -173,7 +173,7 @@ maxbibnames=99
 \usepackage{cleveref}
 
 % Für Code
-\usepackage{minted}
+\usepackage[outputdir=build]{minted}
 
 
 % Titlepage required things
@@ -388,37 +388,15 @@ In einem zentralen Netzwerk existiert ein Angriffspunkt, der Server, welcher dur
 
 
 \section{Umsetzung des Messengers}
-\begin{minted}{python}
-  import numpy as np
-      
-  def incmatrix(genl1,genl2):
-      m = len(genl1)
-      n = len(genl2)
-      M = None #to become the incidence matrix
-      VT = np.zeros((n*m,1), int)  #dummy variable
-      
-      #compute the bitwise xor matrix
-      M1 = bitxormatrix(genl1)
-      M2 = np.triu(bitxormatrix(genl2),1) 
-  
-      for i in range(m-1):
-          for j in range(i+1, m):
-              [r,c] = np.where(M2 == M1[i,j])
-              for k in range(len(r)):
-                  VT[(i)*n + r[k]] = 1;
-                  VT[(i)*n + c[k]] = 1;
-                  VT[(j)*n + r[k]] = 1;
-                  VT[(j)*n + c[k]] = 1;
-                  
-                  if M is None:
-                      M = np.copy(VT)
-                  else:
-                      M = np.concatenate((M, VT), 1)
-                  
-                  VT = np.zeros((n*m,1), int)
-      
-      return M
-  \end{minted}
+Für die Umsetzung des Messengers habe ich mich für die Programmiersprache Rust entschieden, da Rust Memory Safe ist und zusätzlich eine hohe Performance bietet \vcite{RustSecurity}. Ein weiterer Vorteil der Programmiersprache Rust ist, dass sie in eine ausführbare Datei kompiliert werden kann, sodass keine weiteren Binaries, wie zum Beispiel bei Python, benötigt werden \vcite{RustCompile}. Zudem benutze ich das Framework Tauri, welches mir ermöglicht eine Benutzeroberfläche für den Messenger zu erstellen \vcite{RustTauri}. Tauri verbindet hierbei die Weboberfläche eines Browsers mit einem Rust-Backend, wobei Weboberfläche und das Backend miteinander kommunizieren können \vebd. Als Frontend des Messenger verwende ich React.
+
+\subsection{Tor-Proxy}
+\begin{minted}{rust}
+\end{minted}
+
+\subsection{Verschlüsselung}
+\subsection{Messaging}
+\subsection{Datenspeicherung}
 
 \section{Verbesserungsmöglichkeiten}
 
