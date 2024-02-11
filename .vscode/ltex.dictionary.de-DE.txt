@@ -8,3 +8,16 @@ Node
 Onion
 Relay
 Secret
+Peer-to-Peer
+Peer-to-Peer-Verbindung
+
+deanonymisieren
+Deanonymisierungsangriff
+Deanonymisierung
+
+Descriptor
+Descriptors
+
+Pluggable
+
+Entschlüsselungsvorgang

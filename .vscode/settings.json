@@ -5,5 +5,11 @@
         "Messengern",
         "Schlüsselpaargenerierung"
     ],
-    "ltex.language": "de-DE"
+    "ltex.language": "de-DE",
+    "ltex.latex.commands": {
+        "\\cite{}": "dummy",
+        "\\vcite{}": "dummy",
+        "\\cite[]{}": "dummy"
+    },
+    "cSpell.enabled": false
 }
