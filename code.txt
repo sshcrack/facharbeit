@@ -1,0 +1,164 @@
+
+\subsection{Tor-Proxy}
+Anfangs wird der Tor-Client in das Verzeichnis \textit{enkrypton\_root/tor} installiert bzw. die Integrität wird überprüft:
+\begin{minted}{rust}
+/// Extracts the tor binary from the assets into the `TOR_BINARY_PATH`
+fn extract_tor() -> Result<()> {
+
+#[cfg(all(target_os ="windows", target_arch = "x86_64"))]
+let tor_zip = include_bytes!("../../assets/windows/x86_64/tor.zip");
+//[weitere Tor Binaries werden benutzt je nach Betriebsystem]
+
+let target_dir = get_root_dir();
+zip_extract::extract(Cursor::new(tor_zip),&target_dir, true)?;
+
+Ok(())
+}
+
+/// Checks if the tor binary is valid by comparing the hash of the binary to the hash in `TOR_BINARY_HASH`
+/// 
+/// # Returns
+/// 
+/// a boolean indicating whether the tor binary is valid or not (has a valid hash)
+fn is_tor_binary_valid() -> Result<bool> {
+    let mut file = File::open(TOR_BINARY_PATH.clone())?;
+
+    // create a Sha256 object
+    let mut hasher = Sha256::new();
+
+    io::copy(&mut file, &mut hasher)?;
+
+    // read hash digest and consume hasher
+    let result = hasher.finalize();
+    let result_hex = hex::encode(result);
+
+    Ok(result_hex == TOR_BINARY_HASH.clone())
+}
+\end{minted}
+
+Um den Tor-Client zu starten, muss zuerst eine $torrc$ Config-Datei erstellt werden, welche später an den Tor-Proxy überreicht wird:
+\begin{minted}{rust}
+/// Converts the configuration to a `torrc` file format
+///
+/// # Returns
+///
+/// The `torrc` file as a string
+async fn to_text(&self) -> Result<String> {
+  let data = PathBuf::from(self.data_dir());
+
+  let geo_ip = data.clone().join("geoip");
+  let geo_ip6 = data.clone().join("geoip6");
+
+  #[allow(unused_mut)]
+  let mut config = format!(
+      "SocksPort {}
+HiddenServiceDir \"{}\"
+HiddenServicePort 80 {}
+DataDirectory \"{}\"
+GeoIPFile \"{}\"
+GeoIPv6File \"{}\"",
+      self.get_socks_host(),
+      self.service_dir().to_string_lossy().replace("\\", "/"),
+      self.get_hidden_service_host(),
+      self.data_dir().to_string_lossy().replace("\\", "/"),
+      geo_ip.to_string_lossy().replace("\\", "/"),
+      geo_ip6.to_string_lossy().replace("\\", "/"),
+  );
+
+  //[..]
+  Ok(config)
+\end{minted}
+Die $torrc$-Datei wird nun in das Verzeichnis \textit{enkrypton\_root/tor} geschrieben und Tor wird gestartet:
+\begin{minted}{rust}
+  // Starts tor
+  let mut child = Command::new(TOR_BINARY_PATH.clone());
+  child.args(["-f", &get_torrc().to_string_lossy()]);
+  child.current_dir(TOR_BINARY_PATH.parent().unwrap());
+  child.stdout(Stdio::piped());
+  child.stderr(Stdio::piped());
+\end{minted}
+Und Tor-Proxy-Statuspdates werden an den Hauptprozess über einen Channel geschickt:
+\begin{minted}{rust}
+/// Used to handle a single tor message and send updates to the bootstrap
+async fn handle_msg(msg: &str, tx: &Sender<Tor2ClientMsg>) -> Result<()> {
+  let msg = msg.to_string();
+  if msg.contains(BOOTSTRAP_MSG) {
+      // Handle bootstrap messages
+      handle_bootstrap(&msg, tx).await?;
+      return Ok(());
+  }
+
+  if msg.contains(WARN_MSG) {
+      warn!("TOR: {}", msg);
+      // Warn messages
+      tx.send(Tor2ClientMsg::WarnMsg(msg)).await?;
+      return Ok(());
+  }
+
+  if msg.contains(ERR_MSG) {
+      // Again, error messages
+      error!("TOR: {}", msg);
+      tx.send(Tor2ClientMsg::ErrorMsg(msg)).await?;
+      return Ok(());
+  }
+
+  if msg.contains(NOTICE_MSG) {
+      // And finally notice messages
+      debug!("TOR: {}", msg);
+      tx.send(Tor2ClientMsg::NoticeMsg(msg)).await?;
+      return Ok(());
+  }
+
+  Ok(())
+}
+\end{minted}
+Der Tor-Proxy wurde nun gestartet.
+
+\subsection{Messaging}
+Für das generelle Messaging zwischen Clients/Servern werde ich Websockets benutzen, da diese bidirektional sind, der Client also sowohl Nachrichten empfangen als auch senden kann. \\
+Wichtig hierbei ist, dass jeder Messenger sowohl als Client als auch als Server fungieren kann. Dafür habe ich verschiedene \textit{Payloads} bzw. Packets definiert ($u128$ ist hierbei die Zeit in Millisekunden, wann die Nachricht geschickt wurde und wird als Identifikationsnummer verwendet):
+\begin{minted}{rust}
+  /// All possible packets that can be sent from the client to the server
+#[derive(Debug, Serialize, Deserialize)]
+pub enum C2SPacket {
+    /// Sends over the identity of this client and the public key / hostname with it.
+    /// Contains a signature to verify the identity.
+    SetIdentity(Identity),
+    /// A packet to tell the client that their identity has been verified
+    IdentityVerified,
+    /// A new message from the client to the server
+    Message((u128, Vec<u8>)),
+    /// Tell the server that the message with the given date could be successfully received
+    MessageReceived(u128),
+    /// And again, tell the server that the message was failed to send
+    MessageFailed(u128)
+}
+
+/// All possible packets that can be sent from the server to the client
+#[derive(Debug, Serialize, Deserialize)]
+pub enum S2CPacket {
+    /// A packet to verify the server on client side. Again, contains the identity struct
+    VerifyIdentity(Identity),
+    /// Used to tell the client that its identity has been verified successfully
+    IdentityVerified,
+    /// A message from the server to the client
+    Message((u128, Vec<u8>)),
+    /// Tell the client that the message with the given date could be successfully received
+    MessageReceived(u128),
+    /// And again, tell the client that the message was failed to send
+    MessageFailed(u128)
+}
+
+/// The identity of a client or server used to well verify the identity of the given side
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Identity {
+    /// The hostname of the client / server
+    pub hostname: String,
+    /// The signature of that hostname, used to verify its identity (derived from the generated RSA Private Key)
+    pub signature: Vec<u8>,
+    /// And the public key that should be used when sending messages to the side
+    pub pub_key: PublicKey,
+}
+\end{minted}
+\subsection{Verschlüsselung}
+\subsection{Datenspeicherung}
