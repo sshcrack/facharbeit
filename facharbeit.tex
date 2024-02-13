@@ -374,7 +374,116 @@ Am Beispiel des Messengers, sollten nur Gesprächsteilnehmer Teil des Netzwerkes
 Für die Umsetzung des Messengers habe ich mich für die Programmiersprache Rust entschieden, da Rust Memory Safe ist und zusätzlich eine hohe Performance bietet \vcite{RustSecurity}. Ein weiterer Vorteil der Programmiersprache Rust ist, dass sie in eine ausführbare Datei kompiliert werden kann, sodass keine weiteren Binaries, wie zum Beispiel bei Python, benötigt werden \vcite{RustCompile}. Zudem benutze ich das Framework Tauri, welches mir ermöglicht eine Benutzeroberfläche für den Messenger zu erstellen \vcite{RustTauri}. Tauri verbindet hierbei die Weboberfläche eines Browsers mit einem Rust-Backend, wobei Weboberfläche und das Backend miteinander kommunizieren können \vebd. Als Frontend des Messenger verwende ich React. Auf den Quellcode des Frontends werde ich nicht eingehen, da es nur für die Benutzeroberfläche zuständig ist, somit zum Beispiel keine Verschlüsselung / Verbindung zum Tor-Netzwerk etc. stattfindet. \\
 Das Backend habe ich in 7 Bibliotheken aufgeteilt: $encryption$ für die Verschlüsselung der Nachrichten, $messaging$ für die Kommunikation zwischen Knotenpunkten, $payloads$ für die verschiedenen Netzwerkpakete, welche zwischen Knotenpunkten verschickt werden, $secure-storage$ als eine generelle Bibliothek mit Generics, sodass beliebiges Struct symmetrisch verschlüsselt / gespeichert werden kann, $storage-internal$ welches die Implementierung der $secure-storage$ Bibliothek enthält, $shared$ für gemeinsame Funktionen und Konstanten, $tor-proxy$ für die Verbindung zum Tor-Netzwerk.
 
+Da die Messenger mit einer Peer-to-Peer-Verbindung miteinander verbunden sind, muss jeder Messenger in der Lage sein sowohl als Client als auch als Server (in Form eines Onion Services) zu agieren.
+\subsection{Peer-to-Peer-Verbindung}
+Somit startet jeder Messenger einen HTTP-Server, welcher einen HTTP-Endpunkt anbietet (in diesem Messenger "/ws/"), um eine Websocket\footnote{%//TODO Hier richtig zitieren
+Ein Protokoll für bidirektionale Kommunikation zwischen Server und Client über HTTP \vcite{WebsocketDef}}-Verbindung aufzubauen. Der Server ist hierbei also in der Lage sowohl Packets %//TOOD Packets noch erklären?
+zu empfangen als auch zu senden.
+\begin{minted}{rust}
+HttpServer::new(|| {
+    return App::new()
+        // Return the default message to tell other clients that this server is actually alive
+        .service(hello)
+        // The websocket endpoint
+        .route("/ws/", web::get().to(ws_index));
+})
+// Bind just to localhost and run
+.bind(("127.0.0.1", CONFIG.service_port()))?
+.run()
+.await?;
+\end{minted}
 
+Analog dazu besitzt jeder Messenger auch einen Weboscketclient, welcher sich mit den anderen Messengern verbinden kann, sodass eine Peer-to-Peer-Verbindung entsteht. Der Client verbindet sich hierbei mit den anderen Messengern folgendermaßen:
+\begin{minted}{rust}
+/// Connects to the given server and returns the newly constructed client
+///
+/// # Arguments
+///
+/// * `onion_hostname` - The hostname to connect to
+///
+/// # Returns
+/// The constructed websocket client
+/// 
+pub async fn new(onion_hostname: &str) -> Result<Self> {
+    // [...]
+
+    // For developing purposes, one could send himself messages, obviously disabling that for production
+    //[...]
+    let connect_host = onion_hostname.to_string();
+
+    //[...]
+
+    // The address which is used to connect to the websocket
+    let onion_addr = format!("ws://{}.onion/ws/", connect_host);
+
+    debug!("[CLIENT] Creating proxy...");
+
+    // Creating the Socks5Proxy client which is used to connect to the tor network
+    let proxy = SocksProxy::new()?;
+    debug!("[CLIENT] Connecting Proxy...");
+    let mut onion_addr = Url::parse(&onion_addr)?;
+    onion_addr
+        .set_scheme("ws")
+        .or(Err(anyhow!("[CLIENT] Could not set scheme")))?;
+
+    // Connecting to the destination host using the proxyy
+    let sock = proxy.connect(&onion_addr).await?;
+
+    debug!("[CLIENT] Connecting Tungstenite...");
+
+    // And notifying the front end again about our progress
+    let _ = get_app()
+        .await
+        .emit_payload(WsClientUpdatePayload {
+            hostname: onion_hostname.to_string(),
+            status: WsClientStatus::ConnectingHost,
+        })
+        .map_err(|e| warn!("[CLIENT] Could not emit ws client update: {:?}", e));
+
+
+    // Connecting to the websocket with the client
+    let (ws_stream, _) = tokio_tungstenite::client_async(&onion_addr, sock).await?;
+
+    // Splitting the duplex stream into a read and write stream
+    let (mut write, read) = ws_stream.split();
+
+
+    // [...]
+
+    debug!("[CLIENT] Sending verify packet");
+    // And actually sending the verify packet
+    write.send(verify_packet.try_into()?).await?;
+
+    // Establishing the channel used to communicate with the common messaging manager
+    let (tx, rx) = async_channel::unbounded();
+
+    let arc_write = Arc::new(Mutex::new(write));
+
+    // Spawning the new flush thread
+    let checker = FlushChecker::new(onion_hostname, arc_write.clone()).await?;
+    let flusher_exit = checker.should_exit.clone();
+
+    // Constructing the client as the connection was successful
+    let mut c = Self {
+        write: arc_write.clone(),
+        heartbeat_thread: Arc::new(None),
+        receiver: onion_hostname.to_string(),
+
+        rx,
+        read_thread: Arc::new(None),
+        flush_checker: checker
+    };
+
+    debug!("[CLIENT] Spawning heartbeat thread");
+    // Spawning the heartbeat thread
+    c.spawn_heartbeat_thread();
+
+    // Spawning the read thread
+    c.spawn_read_thread(tx, (read, arc_write), flusher_exit);
+
+    return Ok(c);
+}
+\end{minted}
 
 \section{Verbesserungsmöglichkeiten}
 
