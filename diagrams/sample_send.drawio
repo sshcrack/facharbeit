@@ -1,0 +1,261 @@
+<mxfile host="65bd71144e">
+    <diagram name="Establishment / Send" id="-uK3i2hrdKPyG9wBFtll">
+        <mxGraphModel dx="940" dy="649" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-108" value="privater Schlüssel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-101" target="AR4ahCCjblPPomlc9IDJ-104" edge="1">
+                    <mxGeometry x="-0.1818" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="510" y="1260"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-97" value="öffentlicher Schlüssel von Node B" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="AR4ahCCjblPPomlc9IDJ-79" target="AR4ahCCjblPPomlc9IDJ-94" edge="1">
+                    <mxGeometry x="0.3094" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="50" y="1140"/>
+                            <mxPoint x="295" y="1140"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-88" value="Speichern des&lt;br&gt;öffenlichen Schlüssels&lt;br&gt;von Node A&lt;br&gt;(falls vorher nicht&lt;br&gt;vorhanden)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-66" target="AR4ahCCjblPPomlc9IDJ-86" edge="1">
+                    <mxGeometry x="0.4375" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="510" y="780"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-2" value="Sample Sending between Nodes" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="30" width="210" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-3" value="Node A" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="90" width="60" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-4" value="Node B" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="90" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-7" value="etablieren" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-5" target="AR4ahCCjblPPomlc9IDJ-6" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-5" value="Enkrypton" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="120" y="140" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-39" value="erstellen von" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="AR4ahCCjblPPomlc9IDJ-6" target="AR4ahCCjblPPomlc9IDJ-37" edge="1">
+                    <mxGeometry x="0.6924" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="300" y="310"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-6" value="Tor Proxy" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="120" y="280" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-19" value="erstellen von" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.179;exitY=0.952;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-6" target="AR4ahCCjblPPomlc9IDJ-18" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="140.0322580645161" y="390" as="sourcePoint"/>
+                        <mxPoint x="410" y="530" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-28" value="Onion Adresse" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=async;endFill=1;" parent="1" source="AR4ahCCjblPPomlc9IDJ-18" target="AR4ahCCjblPPomlc9IDJ-54" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="140" y="585" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="140" y="630"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-18" value="Onion Service&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="380" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-22" value="verbinden mit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-23" target="AR4ahCCjblPPomlc9IDJ-24" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-23" value="Enkrypton" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="140" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-24" value="Tor" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="280" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-25" value="erstellen von" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="AR4ahCCjblPPomlc9IDJ-24" target="AR4ahCCjblPPomlc9IDJ-26" edge="1">
+                    <mxGeometry x="0.3333" relative="1" as="geometry">
+                        <mxPoint x="510" y="320" as="sourcePoint"/>
+                        <mxPoint x="780" y="440" as="targetPoint"/>
+                        <Array as="points"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="AR4ahCCjblPPomlc9IDJ-26" target="AR4ahCCjblPPomlc9IDJ-42" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-26" value="Onion Service&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="380" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-40" value="RSA Schlüsselpaar" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.007;entryY=0.668;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=async;endFill=1;" parent="1" source="AR4ahCCjblPPomlc9IDJ-30" target="AR4ahCCjblPPomlc9IDJ-54" edge="1">
+                    <mxGeometry x="-0.2152" relative="1" as="geometry">
+                        <mxPoint x="80" y="630" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="50" y="645"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-30" value="Speicher" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="270" width="60" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-31" value="entschlüsseln&lt;br&gt;mit Passwort&lt;br&gt;(Nutzereingabe)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-5" target="AR4ahCCjblPPomlc9IDJ-30" edge="1">
+                    <mxGeometry x="0.3331" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-34" value="Speicher" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" parent="1" vertex="1">
+                    <mxGeometry x="650" y="260" width="60" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-35" value="entschlüsseln&lt;br&gt;mit Passwort&lt;br&gt;(Nutzereingabe)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-23" target="AR4ahCCjblPPomlc9IDJ-34" edge="1">
+                    <mxGeometry x="0.4737" relative="1" as="geometry">
+                        <mxPoint x="720" y="150" as="sourcePoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-44" value="Verbinden mit&lt;br&gt;Onion Service" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-37" target="AR4ahCCjblPPomlc9IDJ-42" edge="1">
+                    <mxGeometry x="0.2381" relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="310" y="510"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-55" value="generieren" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="AR4ahCCjblPPomlc9IDJ-37" target="AR4ahCCjblPPomlc9IDJ-54" edge="1">
+                    <mxGeometry x="0.5172" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-37" value="Tor Client" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="380" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-76" value="warten auf Identitätspaket..." style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-42" target="AR4ahCCjblPPomlc9IDJ-66" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-42" value="Websocket" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="480" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-50" value="Gespeicherter öffentlicher&lt;br&gt;Schlüssel von Node A" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=async;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-34" target="AR4ahCCjblPPomlc9IDJ-66" edge="1">
+                    <mxGeometry x="0.3332" relative="1" as="geometry">
+                        <mxPoint x="570" y="615" as="targetPoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-60" value="übersenden" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.981;entryY=0.503;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-53" target="AR4ahCCjblPPomlc9IDJ-75" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="360.0000000000002" y="915" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-53" value="Identität&lt;br&gt;(&lt;font style=&quot;font-size: 10px;&quot;&gt;Onion Adresse, öffentlicher Schlüssel,&lt;br&gt;Signatur des Schlüssels&lt;/font&gt;)" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="830" width="120" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-56" value="übersenden" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-54" target="AR4ahCCjblPPomlc9IDJ-66" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="410" y="680" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-54" value="Identität&lt;br&gt;(&lt;font style=&quot;font-size: 10px;&quot;&gt;Onion Adresse, öffentlicher Schlüssel,&lt;br&gt;Signatur des Schlüssels&lt;/font&gt;)" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="585" width="120" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-68" value="nein" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-66" target="AR4ahCCjblPPomlc9IDJ-69" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="540" y="690" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="510" y="690"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-71" value="ja" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="AR4ahCCjblPPomlc9IDJ-66" target="AR4ahCCjblPPomlc9IDJ-53" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-66" value="Identität valide?" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="455" y="590" width="110" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-69" value="Ablehnen der Verbindung" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="590" y="660" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;endArrow=async;endFill=1;" parent="1" source="AR4ahCCjblPPomlc9IDJ-86" target="AR4ahCCjblPPomlc9IDJ-53" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="680" y="875" as="sourcePoint"/>
+                        <Array as="points">
+                            <mxPoint x="710" y="870"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-73" value="RSA&lt;br&gt;Schlüsselpaar" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="AR4ahCCjblPPomlc9IDJ-72" vertex="1" connectable="0">
+                    <mxGeometry x="0.1978" y="-3" relative="1" as="geometry">
+                        <mxPoint x="12" y="3" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-82" value="nein" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-75" target="AR4ahCCjblPPomlc9IDJ-77" edge="1">
+                    <mxGeometry x="0.4483" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-91" value="ja" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="AR4ahCCjblPPomlc9IDJ-75" target="AR4ahCCjblPPomlc9IDJ-90" edge="1">
+                    <mxGeometry x="0.6296" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-75" value="Identität valide?" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="830" width="110" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-77" value="Ablehnen der Verbindung" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="115" y="950" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="Gespeicherter öffentlicher&lt;br&gt;Schlüssel von Node B" style="edgeStyle=none;hachureGap=4;html=1;fontFamily=Helvetica;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DArchitects%2BDaughter;fontSize=11;endArrow=async;rounded=0;endFill=1;" edge="1" parent="1" source="AR4ahCCjblPPomlc9IDJ-79" target="AR4ahCCjblPPomlc9IDJ-75">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-79" value="Speicher" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" parent="1" vertex="1">
+                    <mxGeometry x="20" y="830" width="60" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-86" value="Speicher" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" parent="1" vertex="1">
+                    <mxGeometry x="680" y="740" width="60" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-96" value="verschlüsseln" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-90" target="AR4ahCCjblPPomlc9IDJ-94" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-90" value="Nachricht" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="235" y="1045" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-100" value="übersenden" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-94" target="AR4ahCCjblPPomlc9IDJ-99" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-94" value="Verschlüsselte Nachricht" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="235" y="1169" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-105" value="entschlüsseln" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="AR4ahCCjblPPomlc9IDJ-99" target="AR4ahCCjblPPomlc9IDJ-104" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-99" value="Verschlüsselte Nachricht" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="1169" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-101" value="Speicher" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" parent="1" vertex="1">
+                    <mxGeometry x="710" y="1220" width="60" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-104" value="Nachricht" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="1280" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-109" value="Speichern des&lt;br&gt;öffenlichen Schlüssels&lt;br&gt;von Node B&lt;br&gt;(falls vorher nicht&lt;br&gt;vorhanden)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="AR4ahCCjblPPomlc9IDJ-75" target="AR4ahCCjblPPomlc9IDJ-110" edge="1">
+                    <mxGeometry x="0.2727" y="-5" relative="1" as="geometry">
+                        <mxPoint x="360" y="895" as="sourcePoint"/>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="AR4ahCCjblPPomlc9IDJ-110" value="Speicher" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" parent="1" vertex="1">
+                    <mxGeometry x="520" y="965" width="60" height="80" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

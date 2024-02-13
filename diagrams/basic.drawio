@@ -1,0 +1,87 @@
+<mxfile host="65bd71144e">
+    <diagram id="tS-VAweoUeq-u6kxobI9" name="Page-1">
+        <mxGraphModel dx="981" dy="677" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="8" style="edgeStyle=none;hachureGap=4;html=1;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=16;" edge="1" parent="1" target="7">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="250" y="449.9999999999999" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="9" style="edgeStyle=none;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;html=1;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=16;" edge="1" parent="1" target="6">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="429.9999999999993" y="449.9999999999999" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="10" value="Partner A&lt;br&gt;(z.B. Client)" style="text;strokeColor=none;fillColor=none;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;sketchStyle=rough;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;" vertex="1" parent="1">
+                    <mxGeometry x="110" y="50" width="100" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="Partner B&lt;br&gt;(z.B. Server)" style="text;strokeColor=none;fillColor=none;html=1;fontSize=24;fontStyle=1;verticalAlign=middle;align=center;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;sketchStyle=rough;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;" vertex="1" parent="1">
+                    <mxGeometry x="460" y="50" width="100" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="Identität wird geschickt" style="edgeStyle=none;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;html=1;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" edge="1" parent="1" source="16" target="19">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="320" y="220" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="16" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;Verbindung&lt;br&gt;hergestellt&lt;/font&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;sketchStyle=rough;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="90" y="140" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" style="edgeStyle=none;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" edge="1" parent="1" source="19" target="29">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="Überprüfen der Identität" style="rounded=1;whiteSpace=wrap;html=1;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;sketchStyle=rough;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" vertex="1" parent="1">
+                    <mxGeometry x="450" y="150" width="130" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="36" style="edgeStyle=none;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;html=1;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" edge="1" parent="1" source="26" target="35">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="Überprüfen der Identität" style="rounded=1;whiteSpace=wrap;html=1;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;sketchStyle=rough;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" vertex="1" parent="1">
+                    <mxGeometry x="85" y="267.5" width="130" height="65" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="Nein" style="edgeStyle=none;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;html=1;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="29" target="32">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="610" y="299.9999999999999" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="34" value="Ja: Übersenden der&lt;br&gt;eigenen Identität" style="edgeStyle=none;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;html=1;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" edge="1" parent="1" source="29" target="26">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="Ist valide?" style="rhombus;whiteSpace=wrap;html=1;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;sketchStyle=rough;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" vertex="1" parent="1">
+                    <mxGeometry x="455" y="270" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" value="Ablehnen der Verbindung" style="rounded=1;whiteSpace=wrap;html=1;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;sketchStyle=rough;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" vertex="1" parent="1">
+                    <mxGeometry x="650" y="270" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" value="Nein" style="edgeStyle=none;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;html=1;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" edge="1" parent="1" source="35" target="37">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="41" value="Ja" style="edgeStyle=none;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;html=1;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="35" target="40">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="154.39489066897613" y="440.6276250270621" as="sourcePoint"/>
+                        <mxPoint x="153.27999999999997" y="513.6399999999999" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="35" value="Ist valide?" style="rhombus;whiteSpace=wrap;html=1;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;sketchStyle=rough;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" vertex="1" parent="1">
+                    <mxGeometry x="85" y="360" width="130" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="37" value="Ablehnen der Verbindung" style="rounded=1;whiteSpace=wrap;html=1;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;sketchStyle=rough;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" vertex="1" parent="1">
+                    <mxGeometry x="270" y="370" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="40" value="Gesicherte Verbindung aufgebaut" style="rounded=1;whiteSpace=wrap;html=1;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;sketchStyle=rough;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" vertex="1" parent="1">
+                    <mxGeometry x="70" y="510" width="160" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="45" style="edgeStyle=none;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;html=1;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" edge="1" parent="1" source="43" target="44">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="43" value="&lt;span style=&quot;font-size: 18px;&quot;&gt;Senden einer Nachricht&lt;/span&gt;" style="shape=hexagon;perimeter=hexagonPerimeter2;whiteSpace=wrap;html=1;fixedSize=1;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;sketchStyle=rough;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=20;" vertex="1" parent="1">
+                    <mxGeometry x="85" y="700" width="120" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="44" value="Verschlüsselung mit RSA" style="rounded=1;whiteSpace=wrap;html=1;sketch=0;hachureGap=4;jiggle=2;curveFitting=1;sketchStyle=rough;fontFamily=Carlito;fontSource=https%3A%2F%2Ffonts.googleapis.com%2Fcss%3Ffamily%3DCarlito;fontSize=18;" vertex="1" parent="1">
+                    <mxGeometry x="85" y="820" width="120" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -376,7 +376,7 @@ Das Backend habe ich in 7 Bibliotheken aufgeteilt: $encryption$ für die Verschl
 
 Da die Messenger mit einer Peer-to-Peer-Verbindung miteinander verbunden sind, muss jeder Messenger in der Lage sein sowohl als Client als auch als Server (in Form eines Onion Services) zu agieren.
 \subsection{Peer-to-Peer-Verbindung}
-Somit startet jeder Messenger einen HTTP-Server, welcher einen HTTP-Endpunkt anbietet (in diesem Messenger "/ws/"), um eine Websocket\footnote{%//TODO Hier richtig zitieren
+Somit startet jeder Messenger einen HTTP-Server, welcher einen HTTP-Endpunkt anbietet (in diesem Messenger \textit{/ws/}), um eine Websocket\footnote{%//TODO Hier richtig zitieren
 Ein Protokoll für bidirektionale Kommunikation zwischen Server und Client über HTTP \vcite{WebsocketDef}}-Verbindung aufzubauen. Der Server ist hierbei also in der Lage sowohl Packets %//TOOD Packets noch erklären?
 zu empfangen als auch zu senden.
 \begin{minted}{rust}
@@ -393,22 +393,11 @@ HttpServer::new(|| {
 .await?;
 \end{minted}
 
-Analog dazu besitzt jeder Messenger auch einen Weboscketclient, welcher sich mit den anderen Messengern verbinden kann, sodass eine Peer-to-Peer-Verbindung entsteht. Der Client verbindet sich hierbei mit den anderen Messengern folgendermaßen:
+Analog dazu besitzt jeder Messenger auch einen Websocket-Client, welcher sich mit den anderen Messengern verbinden kann, sodass eine Peer-to-Peer-Verbindung entsteht. Der Client verbindet sich hierbei mit den anderen Messengern folgendermaßen:
 \begin{minted}{rust}
-/// Connects to the given server and returns the newly constructed client
-///
-/// # Arguments
-///
-/// * `onion_hostname` - The hostname to connect to
-///
-/// # Returns
-/// The constructed websocket client
-/// 
+/// `onion_hostname` is the onion address of the other messenger to connect to
 pub async fn new(onion_hostname: &str) -> Result<Self> {
     // [...]
-
-    // For developing purposes, one could send himself messages, obviously disabling that for production
-    //[...]
     let connect_host = onion_hostname.to_string();
 
     //[...]
@@ -429,62 +418,117 @@ pub async fn new(onion_hostname: &str) -> Result<Self> {
     // Connecting to the destination host using the proxyy
     let sock = proxy.connect(&onion_addr).await?;
 
-    debug!("[CLIENT] Connecting Tungstenite...");
-
-    // And notifying the front end again about our progress
-    let _ = get_app()
-        .await
-        .emit_payload(WsClientUpdatePayload {
-            hostname: onion_hostname.to_string(),
-            status: WsClientStatus::ConnectingHost,
-        })
-        .map_err(|e| warn!("[CLIENT] Could not emit ws client update: {:?}", e));
-
-
+    //[...]
     // Connecting to the websocket with the client
     let (ws_stream, _) = tokio_tungstenite::client_async(&onion_addr, sock).await?;
 
-    // Splitting the duplex stream into a read and write stream
-    let (mut write, read) = ws_stream.split();
-
-
     // [...]
-
-    debug!("[CLIENT] Sending verify packet");
-    // And actually sending the verify packet
-    write.send(verify_packet.try_into()?).await?;
-
-    // Establishing the channel used to communicate with the common messaging manager
-    let (tx, rx) = async_channel::unbounded();
-
-    let arc_write = Arc::new(Mutex::new(write));
-
-    // Spawning the new flush thread
-    let checker = FlushChecker::new(onion_hostname, arc_write.clone()).await?;
-    let flusher_exit = checker.should_exit.clone();
-
-    // Constructing the client as the connection was successful
-    let mut c = Self {
-        write: arc_write.clone(),
-        heartbeat_thread: Arc::new(None),
-        receiver: onion_hostname.to_string(),
-
-        rx,
-        read_thread: Arc::new(None),
-        flush_checker: checker
-    };
-
-    debug!("[CLIENT] Spawning heartbeat thread");
-    // Spawning the heartbeat thread
-    c.spawn_heartbeat_thread();
-
-    // Spawning the read thread
-    c.spawn_read_thread(tx, (read, arc_write), flusher_exit);
-
-    return Ok(c);
 }
 \end{minted}
 
+\subsection{Tor-Netzwerk}
+Um den HTTP-Server nun als Onion Service in das Tor-Netzwerk einzubinden, benötigt der Messenger eine Verbindung zum Tor-Netzwerk. Zudem wird der Tor-Proxy gebraucht, um eine Verbindung zu den Onion Services anderen Messengern aufzubauen. Dies setze ich in der \textit{tor-proxy} Bibliothek um.
+Um den Tor-Proxy zu konfigurieren, wird eine Tor-Konfigurationsdatei benötigt, welche unter anderem den Port des HTTP-Servers und des Tor-Proxys angibt:
+\begin{minted}{rust}
+/// Converts the configuration to a `torrc` file format
+async fn to_text(&self) -> Result<String> {
+    let data = PathBuf::from(self.data_dir());
+
+    let geo_ip = data.clone().join("geoip");
+    let geo_ip6 = data.clone().join("geoip6");
+
+    #[allow(unused_mut)]
+    let mut config = format!(
+        "SocksPort {}
+HiddenServiceDir \"{}\"
+HiddenServicePort 80 {}
+DataDirectory \"{}\"
+GeoIPFile \"{}\"
+GeoIPv6File \"{}\"",
+        self.get_socks_host(),
+        self.service_dir().to_string_lossy().replace("\\", "/"),
+        self.get_hidden_service_host(),
+        self.data_dir().to_string_lossy().replace("\\", "/"),
+        geo_ip.to_string_lossy().replace("\\", "/"),
+        geo_ip6.to_string_lossy().replace("\\", "/"),
+    );
+
+    //[...]
+
+    Ok(config)
+}
+\end{minted}
+
+Der Tor-Proxy wird folgendermaßen gestartet:
+\begin{minted}{rust}
+let mut child = Command::new(TOR_BINARY_PATH.clone());
+child.args(["-f", &get_torrc().to_string_lossy()]);
+child.current_dir(TOR_BINARY_PATH.parent().unwrap());
+child.stdout(Stdio::piped());
+child.stderr(Stdio::piped());
+//[...]
+let child = child.spawn()?;
+\end{minted}
+
+Der Messenger ist nun mit dem Tor-Netzwerk verbunden und wartet auf eingehende Verbindungen von anderen Messengern unter der Adresse des Onion Services.
+\subsection{Nachrichtenaustausch}
+Grundsätzlich liegen folgende Phasen des Nachrichtenaustausches vor:
+\begin{itemize}
+  \item \textbf{Server-Side-Identity verification}: Der Client übersendet seine Identität an den Server, welcher dieser nun überprüft, ob der Client tatsächlich der ist, für den er sich ausgibt. Danach übersendet der Server seine Identität an den Client.
+  \item \textbf{Client-Side-Identity verification}: Die Identität des Servers wird von dem Client empfangen und anschließend überprüft.
+  \item \textbf{Nachrihten versenden}: Jetzt, wo beide Seiten ihre Identität überprüft haben und sicher sind, dass keine möglichen Angreifer die Verbindung fälschen könnten, ist der Client/Server bereit Nachrichten zu versenden
+\end{itemize}
+
+Generell gilt, dass der Messenger einen gemeinsamen Datenspeicher mit dem inneren Client und Onion Service teilt. In diesem werden die Chats zwischen den Gesprächsteilnehmern gespeichert. Der Datenspeicher besteht also aus einer \textit{HashMap} an Chat-Datensturkturen, wobei der Schlüssel der Empfänger-Onionadresse entspricht.
+\begin{minted}[breaklines]{rust}
+pub struct StorageChat {
+  /// All messages sent to this receiver or received from this receiver
+  //[...]
+  pub messages: Vec<ChatMessage>,
+
+  /// The public key which is used to encrypt messages when being sent to the receiver
+  //[...]
+  pub rec_pub_key: Option<PublicKey>,
+  //[...]
+  pub receiver_onion: String,
+  /// Private key of ourselves used to decrypt the messages that are being received
+  //[...]
+  pub priv_key: PrivateKey,
+}
+\end{minted}
+Jeder Chat enthält dabei das "eigene" Schlüsselpaar (\textit{priv\_key}), welches durch RSA generiert wird und den öffentlichen Schlüssel (\textit{rec\_pub\_key}) des Empfängers, mit welchem später die Nachrichten an den Empfänger verschlüsselt werden.
+
+\subsubsection{Server-Side-Identity verification}
+Damit der Client seine eigene Identität bestätigen kann, sucht dieser zunächst in den gespeicherten Chats nach der Onion-Adresse des Empfängers. Sollte der Eintrag nicht vorhanden sein, wird ein neuer Chat generiert (somit auch ein neues Schlüsselpaar generiert). Das Identitätspacket besteht dabei aus dem Hostname dieses Messengers, der Signatur des Hostnames (durch den privaten Schlüssel signiert), und den öffentlichen Schlüssel des Schlüsselpaares dieses Chats. Das Identitätspacket wird also folgendermaßen berechnet:
+\begin{minted}{rust}
+async fn identity(receiver: &str) -> Result<Self> {
+  // Get the own hostname
+  let own_hostname = get_service_hostname(true)
+      .await?
+      .ok_or(anyhow!("Could not get own hostname"))?;
+
+  // Get the private key for the receiver (used to decrypt messages)
+  let priv_key = StorageManager::get_or_create_private_key(receiver).await?;
+  let pub_key = priv_key.clone().try_into()?;
+
+  // Creating a signature for the receiver with the hostname
+  let keypair = PKey::from_rsa(priv_key.0)?;
+  let mut signer = Signer::new(*DIGEST, &keypair)?;
+
+  signer.update(own_hostname.as_bytes())?;
+  let signature = signer.sign_to_vec()?;
+
+  // Return the identity packet
+  Ok(C2SPacket::SetIdentity(Identity {
+      hostname: own_hostname,
+      signature,
+      pub_key
+  }))
+}
+\end{minted}
+
+Der Client übersendet dieses Identitätspacket an den Server, welcher dies durch den gespeicherten öffentlichen Schlüssel (\textit{rec\_pub\_key}) des (aus seiner Sicht) Empfängers überprüft. Sollte die Signatur nicht valide sein, wird die Verbindung abgebrochen. Falls die Identität valide ist, übersendet der Server seine eigene Identität an den Client.
+%//TODO - Client-Side-Identity validation / Nachrichten verschicken
 \section{Verbesserungsmöglichkeiten}
 
 \section{Fazit}
