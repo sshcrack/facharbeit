@@ -379,7 +379,7 @@ Da die Messenger mit einer Peer-to-Peer-Verbindung miteinander verbunden sind, m
 Somit startet jeder Messenger einen HTTP-Server, welcher einen HTTP-Endpunkt anbietet (in diesem Messenger \textit{/ws/}), um eine Websocket\footnote{%//TODO Hier richtig zitieren
 Ein Protokoll für bidirektionale Kommunikation zwischen Server und Client über HTTP \vcite{WebsocketDef}}-Verbindung aufzubauen. Der Server ist hierbei also in der Lage sowohl Packets %//TOOD Packets noch erklären?
 zu empfangen als auch zu senden.
-\begin{minted}{rust}
+\begin{minted}[breaklines]{rust}
 HttpServer::new(|| {
     return App::new()
         // Return the default message to tell other clients that this server is actually alive
@@ -394,7 +394,7 @@ HttpServer::new(|| {
 \end{minted}
 
 Analog dazu besitzt jeder Messenger auch einen Websocket-Client, welcher sich mit den anderen Messengern verbinden kann, sodass eine Peer-to-Peer-Verbindung entsteht. Der Client verbindet sich hierbei mit den anderen Messengern folgendermaßen:
-\begin{minted}{rust}
+\begin{minted}[breaklines]{rust}
 /// `onion_hostname` is the onion address of the other messenger to connect to
 pub async fn new(onion_hostname: &str) -> Result<Self> {
     // [...]
@@ -474,11 +474,9 @@ Der Messenger ist nun mit dem Tor-Netzwerk verbunden und wartet auf eingehende V
 \subsection{Nachrichtenaustausch}
 Grundsätzlich liegen folgende Phasen des Nachrichtenaustausches vor:
 \begin{itemize}
-  \item \textbf{Server-Side-Identity verification}: Der Client übersendet seine Identität an den Server, welcher dieser nun überprüft, ob der Client tatsächlich der ist, für den er sich ausgibt. Danach übersendet der Server seine Identität an den Client.
-  \item \textbf{Client-Side-Identity verification}: Die Identität des Servers wird von dem Client empfangen und anschließend überprüft.
-  \item \textbf{Nachrihten versenden}: Jetzt, wo beide Seiten ihre Identität überprüft haben und sicher sind, dass keine möglichen Angreifer die Verbindung fälschen könnten, ist der Client/Server bereit Nachrichten zu versenden
+  \item \textbf{Identity verification}: Der Client übersendet seine Identität an den Server, welcher dieser nun überprüft, ob der Client tatsächlich der ist, für den er sich ausgibt. Danach übersendet der Server seine Identität an den Client. Dieser überprüft nun, ob der Server tatsächlich der ist, für den er sich ausgibt.
+  \item \textbf{Nachrichten versenden}: Jetzt, wo beide Seiten ihre Identität überprüft haben und sicher sind, dass keine möglichen Angreifer die Verbindung fälschen könnten, ist der Client/Server bereit Nachrichten zu versenden
 \end{itemize}
-
 Generell gilt, dass der Messenger einen gemeinsamen Datenspeicher mit dem inneren Client und Onion Service teilt. In diesem werden die Chats zwischen den Gesprächsteilnehmern gespeichert. Der Datenspeicher besteht also aus einer \textit{HashMap} an Chat-Datensturkturen, wobei der Schlüssel der Empfänger-Onionadresse entspricht.
 \begin{minted}[breaklines]{rust}
 pub struct StorageChat {
@@ -491,14 +489,14 @@ pub struct StorageChat {
   pub rec_pub_key: Option<PublicKey>,
   //[...]
   pub receiver_onion: String,
-  /// Private key of ourselves used to decrypt the messages that are being received
+  /// Private key of this messenger used to decrypt the messages that are being received
   //[...]
   pub priv_key: PrivateKey,
 }
 \end{minted}
 Jeder Chat enthält dabei das "eigene" Schlüsselpaar (\textit{priv\_key}), welches durch RSA generiert wird und den öffentlichen Schlüssel (\textit{rec\_pub\_key}) des Empfängers, mit welchem später die Nachrichten an den Empfänger verschlüsselt werden.
 
-\subsubsection{Server-Side-Identity verification}
+\subsubsection{Identity verification}
 Damit der Client seine eigene Identität bestätigen kann, sucht dieser zunächst in den gespeicherten Chats nach der Onion-Adresse des Empfängers. Sollte der Eintrag nicht vorhanden sein, wird ein neuer Chat generiert (somit auch ein neues Schlüsselpaar generiert). Das Identitätspacket besteht dabei aus dem Hostname dieses Messengers, der Signatur des Hostnames (durch den privaten Schlüssel signiert), und den öffentlichen Schlüssel des Schlüsselpaares dieses Chats. Das Identitätspacket wird also folgendermaßen berechnet:
 \begin{minted}{rust}
 async fn identity(receiver: &str) -> Result<Self> {
@@ -527,8 +525,97 @@ async fn identity(receiver: &str) -> Result<Self> {
 }
 \end{minted}
 
-Der Client übersendet dieses Identitätspacket an den Server, welcher dies durch den gespeicherten öffentlichen Schlüssel (\textit{rec\_pub\_key}) des (aus seiner Sicht) Empfängers überprüft. Sollte die Signatur nicht valide sein, wird die Verbindung abgebrochen. Falls die Identität valide ist, übersendet der Server seine eigene Identität an den Client.
-%//TODO - Client-Side-Identity validation / Nachrichten verschicken
+Der Client übersendet dieses Identitätspacket an den Server, welcher dies durch den gespeicherten öffentlichen Schlüssel (\textit{rec\_pub\_key}) des (aus seiner Sicht) Empfängers überprüft. Sollte die Signatur nicht valide sein, wird die Verbindung abgebrochen. Folgender Quellcode wird verwendet um die Identität zu überprüfen:
+\begin{minted}[breaklines]{rust}
+async fn verify(&self) -> Result<()> {
+  //[...]
+  // Check if there is a public key for the given receiver
+  let local_pub_key = STORAGE.read().await.get_data(|e| {
+      let key = e.chats.get(remote_host)
+          .and_then(|e| e.rec_pub_key.clone());
+
+      return Ok(key)
+  }).await?;
+
+  debug!("Done");
+
+  // If there is a public key, verify the signature
+  if let Some(local_pub_key) = local_pub_key {
+    info!("Verifying for hostname: {:?}", remote_host);
+    let keypair = PKey::from_rsa(local_pub_key.0)?;
+    let mut verifier = Verifier::new(*DIGEST, &keypair)?;
+
+    // Verify the signature with the public key
+    verifier.update(remote_host.as_bytes())?;
+    let is_valid = verifier.verify(&signature)?;
+
+    if !is_valid {
+        warn!("[INVALID_SIGNATURE] Wrong signature was given! This may be an attack!");
+        return Err(anyhow!("Wrong signature was given! This may be an attack!"));
+    }
+
+    //[...]
+  } else {
+    // Adding public key to storage because it does  not exist
+    info!("No chat with hostname '{}' yet. Adding new receiver...", remote_host);
+    STORAGE.read().await.modify_storage_data(|e| {
+        let res = e.chats.entry(remote_host.clone())
+            .or_insert_with(|| StorageChat::new(&remote_host));
+
+        res.rec_pub_key = Some(pub_key.clone());
+
+        Ok(())
+    }).await?;
+    //[...]
+  }
+}
+\end{minted}
+Falls die Identität valide ist, übersendet der Server seine eigene Identität an den Client. Der gleiche Vorgang der Validation findet nun auch auf dem Server statt. Wenn dieser die Identity als valide bestätigt, ist eine sichere Verbindung nun aufgebaut.
+\subsection{Nachrichten versenden}
+Wir gehen nun davon aus, dass der Client an den Server eine Nachricht versenden möchte. Er ruft nun zunächst den öffentlichen Schlüssel des Empfänges aus dem Datenspeicher ab und verschlüsselt die Nachricht. Anschließend übersendet er die verschlüsselte Nachricht an den Server.
+\begin{minted}[breaklines]{rust}
+/// Sends a message to the receiver with the given date and msg, internal function
+async fn inner_send(&self, msg: &str, date: u128) -> Result<()> {
+  let raw = msg.as_bytes().to_vec();
+
+  let tmp = self.receiver_host.clone();
+  debug!("Reading public key for {}...", tmp);
+
+  // Firstly we need to get the public key of the receiver
+  let pub_key = STORAGE
+    .read()
+    .await
+    .get_data(|e| {
+      e.chats
+        .get(&tmp)
+        .and_then(|e| e.rec_pub_key.clone())
+        .ok_or(anyhow!("The pub key was empty (should never happen)"))
+    })
+    .await?;
+
+  debug!("Sending");
+  // And encrypt the message
+  let bin = pub_key.encrypt(&raw)?;
+
+  // And send it to the receiver, if we are the client, send a client packet if not, server packet
+  match &*self.info.read().await {
+    ConnInfo::Client(c) => {
+      debug!("Client msg");
+      let packet = C2SPacket::Message((date, bin));
+      c.feed_packet(packet).await?;
+    }
+    ConnInfo::Server((_, s)) => {
+      debug!("Server msg");
+      let packet = S2CPacket::Message((date, bin));
+
+      s.send(packet).await?;
+    }
+  };
+
+  Ok(())
+}
+\end{minted}
+Der Server empfängt über die Websocket-Verbindung die verschlüsselte Nachricht und entschlüsselt diese anschließend mit dem privaten Schlüssel des Chats.
 \section{Verbesserungsmöglichkeiten}
 
 \section{Fazit}
