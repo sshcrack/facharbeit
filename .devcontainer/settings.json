@@ -1,0 +1,75 @@
+{
+    "latex-workshop.latex.outDir": "%DIR%/build",
+    "latex-workshop.latex.tools": [
+        {
+            "name": "lualatex",
+            "command": "lualatex",
+            "args": [
+                "--synctex=1",
+                "--interaction=nonstopmode",
+                "--shell-escape",
+                "--file-line-error",
+                "--output-directory=%OUTDIR%",
+                "%DOC%"
+            ],
+            "env": {}
+        },
+        {
+            "name": "bibtex",
+            "command": "powershell",
+            "args": [
+                "-NoProfile",
+                "-Command",
+                "cd build; bibtex -include-directory=.. \"%DOCFILE%\""
+            ],
+            "env": {}
+        },
+        {
+            "name": "biber",
+            "command": "biber",
+            "args": [
+                "--input-directory",
+                "build",
+                "--output-directory",
+                "build",
+                "%DOCFILE%"
+            ],
+            "env": {}
+        }
+    ],
+    "latex-workshop.latex.recipes": [
+        {
+            "name": "lualatex",
+            "tools": [
+                "lualatex"
+            ]
+        },
+        {
+            "name": "biber",
+            "tools": [
+                "biber"
+            ]
+        },
+        {
+            "name": "lualatex -> biber -> lualatex *2",
+            "tools": [
+                "lualatex",
+                "biber",
+                "lualatex",
+                "lualatex"
+            ]
+        }
+    ],
+    "latex-workshop.intellisense.file.base": "both",
+    "latex-workshop.intellisense.package.dirs": [
+        "%OUTDIR%"
+    ],
+    "ltex.additionalRules.motherTongue": "en-US",
+    "git.enableCommitSigning": true,
+    "git-autoconfig.configList": [
+      {
+        "user.email": "34072808+sshcrack@users.noreply.github.com",
+        "user.name": "Hendrik Lind"
+      }
+    ],
+}

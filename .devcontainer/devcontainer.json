@@ -1,0 +1,59 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/debian
+{
+	"name": "Debian",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
+	"features": {
+		"ghcr.io/prulloac/devcontainer-features/latex:1": {
+			"scheme": "basic"
+		},
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"installZsh": "true",
+			"username": "vscode",
+			"userUid": "1000",
+			"userGid": "1000",
+			"upgradePackages": "true"
+		},
+		"ghcr.io/devcontainers/features/python:1": {
+			"toolsToInstall": "Pygments"
+		},
+		"ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+			"packages": "inkscape"
+		}
+	},
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	//"features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	"remoteUser": "vscode",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ExodiusStudios.comment-anchors",
+				"karyfoundation.comment",
+				"usernamehw.errorlens",
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				"oderwat.indent-rainbow",
+				"tecosaur.latex-utilities",
+				"James-Yu.latex-workshop",
+				"valentjn.vscode-ltex",
+				"chrmarti.regex",
+				"Swellaby.rust-pack",
+				"rust-lang.rust-analyzer",
+				"spikespaz.vscode-smoothtype",
+				"shardulm94.trailing-spaces",
+				"emmanuelbeziat.vscode-great-icons"
+			]
+		}
+	},
+	"postCreateCommand": "sudo tlmgr install biber fontspec csquotes svg relsize setspace lineno tabularray float appendix biblatex lastpage titling listings minted comment koma-script trimspaces texcount transparent pgf wrapfig graphbox algorithms algorithmicx cleveref fancyvrb upquote ninecolors && sudo tlmgr option sys_bin /usr/local/bin && sudo tlmgr path add babel-german babel-english"
+}
