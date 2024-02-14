@@ -88,6 +88,7 @@ maxbibnames=99
 \newcommand{\vcite}[1]{\cite[vgl.][]{#1}}
 \newcommand{\vebd}{[vgl. ebd.]}
 
+% Tor Stuff
 \newcommand{\entryn}{\textit{Entry Node\,}}
 \newcommand{\relayn}{\textit{Relay Node\,}}
 \newcommand{\relayns}{\textit{Relay Nodes\,}}
@@ -101,6 +102,10 @@ maxbibnames=99
 \newcommand{\introp}{\textit{Introduction Point\,}}
 \newcommand{\introps}{\textit{Introduction Points\,}}
 \newcommand{\renp}{\textit{Rendezvous Point\,}}
+
+% Implementation stuff
+\newcommand{\identity}{\textit{Identity\,}}
+
 %//cSpell:disable
 % LTeX: enabled=false
 
@@ -372,8 +377,7 @@ Am Beispiel des Messengers, sollten nur Gesprächsteilnehmer Teil des Netzwerkes
 
 \section{Umsetzung des Messengers}
 Für die Umsetzung des Messengers habe ich mich für die Programmiersprache Rust entschieden, da Rust Memory Safe ist und zusätzlich eine hohe Performance bietet \vcite{RustSecurity}. Ein weiterer Vorteil der Programmiersprache Rust ist, dass sie in eine ausführbare Datei kompiliert werden kann, sodass keine weiteren Binaries, wie zum Beispiel bei Python, benötigt werden \vcite{RustCompile}. Zudem benutze ich das Framework Tauri, welches mir ermöglicht eine Benutzeroberfläche für den Messenger zu erstellen \vcite{RustTauri}. Tauri verbindet hierbei die Weboberfläche eines Browsers mit einem Rust-Backend, wobei Weboberfläche und das Backend miteinander kommunizieren können \vebd. Als Frontend des Messenger verwende ich React. Auf den Quellcode des Frontends werde ich nicht eingehen, da es nur für die Benutzeroberfläche zuständig ist, somit zum Beispiel keine Verschlüsselung / Verbindung zum Tor-Netzwerk etc. stattfindet. \\
-Das Backend habe ich in 7 Bibliotheken aufgeteilt: $encryption$ für die Verschlüsselung der Nachrichten, $messaging$ für die Kommunikation zwischen Knotenpunkten, $payloads$ für die verschiedenen Netzwerkpakete, welche zwischen Knotenpunkten verschickt werden, $secure-storage$ als eine generelle Bibliothek mit Generics, sodass beliebiges Struct symmetrisch verschlüsselt / gespeichert werden kann, $storage-internal$ welches die Implementierung der $secure-storage$ Bibliothek enthält, $shared$ für gemeinsame Funktionen und Konstanten, $tor-proxy$ für die Verbindung zum Tor-Netzwerk.
-
+Das Backend habe ich in 7 Bibliotheken aufgeteilt: \textit{encryption} für die Verschlüsselung der Nachrichten, \textit{messaging} für die Kommunikation zwischen Knotenpunkten, \textit{payloads} für die verschiedenen Netzwerkpakete, welche zwischen Knotenpunkten verschickt werden, \textit{secure-storage} als eine generelle Bibliothek mit Generics, sodass beliebiges Struct symmetrisch verschlüsselt / gespeichert werden kann, \textit{storage-internal} welches die Implementierung der \textit{secure-storage} Bibliothek enthält, \textit{shared} für gemeinsame Funktionen und Konstanten, \textit{tor-proxy} für die Verbindung zum Tor-Netzwerk. \\
 Da die Messenger mit einer Peer-to-Peer-Verbindung miteinander verbunden sind, muss jeder Messenger in der Lage sein sowohl als Client als auch als Server (in Form eines Onion Services) zu agieren.
 \subsection{Peer-to-Peer-Verbindung}
 Somit startet jeder Messenger einen HTTP-Server, welcher einen HTTP-Endpunkt anbietet (in diesem Messenger \textit{/ws/}), um eine Websocket\footnote{%//TODO Hier richtig zitieren
@@ -397,32 +401,32 @@ Analog dazu besitzt jeder Messenger auch einen Websocket-Client, welcher sich mi
 \begin{minted}[breaklines]{rust}
 /// `onion_hostname` is the onion address of the other messenger to connect to
 pub async fn new(onion_hostname: &str) -> Result<Self> {
-    // [...]
-    let connect_host = onion_hostname.to_string();
+  // [...]
+  let connect_host = onion_hostname.to_string();
 
-    //[...]
+  //[...]
 
-    // The address which is used to connect to the websocket
-    let onion_addr = format!("ws://{}.onion/ws/", connect_host);
+  // The address which is used to connect to the websocket
+  let onion_addr = format!("ws://{}.onion/ws/", connect_host);
 
-    debug!("[CLIENT] Creating proxy...");
+  debug!("[CLIENT] Creating proxy...");
 
-    // Creating the Socks5Proxy client which is used to connect to the tor network
-    let proxy = SocksProxy::new()?;
-    debug!("[CLIENT] Connecting Proxy...");
-    let mut onion_addr = Url::parse(&onion_addr)?;
-    onion_addr
-        .set_scheme("ws")
-        .or(Err(anyhow!("[CLIENT] Could not set scheme")))?;
+  // Creating the Socks5Proxy client which is used to connect to the tor network
+  let proxy = SocksProxy::new()?;
+  debug!("[CLIENT] Connecting Proxy...");
+  let mut onion_addr = Url::parse(&onion_addr)?;
+  onion_addr
+      .set_scheme("ws")
+      .or(Err(anyhow!("[CLIENT] Could not set scheme")))?;
 
-    // Connecting to the destination host using the proxyy
-    let sock = proxy.connect(&onion_addr).await?;
+  // Connecting to the destination host using the proxyy
+  let sock = proxy.connect(&onion_addr).await?;
 
-    //[...]
-    // Connecting to the websocket with the client
-    let (ws_stream, _) = tokio_tungstenite::client_async(&onion_addr, sock).await?;
+  //[...]
+  // Connecting to the websocket with the client
+  let (ws_stream, _) = tokio_tungstenite::client_async(&onion_addr, sock).await?;
 
-    // [...]
+  // [...]
 }
 \end{minted}
 
@@ -474,7 +478,7 @@ Der Messenger ist nun mit dem Tor-Netzwerk verbunden und wartet auf eingehende V
 \subsection{Nachrichtenaustausch}
 Grundsätzlich liegen folgende Phasen des Nachrichtenaustausches vor:
 \begin{itemize}
-  \item \textbf{Identity verification}: Der Client übersendet seine Identität an den Server, welcher dieser nun überprüft, ob der Client tatsächlich der ist, für den er sich ausgibt. Danach übersendet der Server seine Identität an den Client. Dieser überprüft nun, ob der Server tatsächlich der ist, für den er sich ausgibt.
+  \item \textbf{\identity verification}: Der Client übersendet seine Identität an den Server, welcher dieser nun überprüft, ob der Client tatsächlich der ist, für den er sich ausgibt. Danach übersendet der Server seine Identität an den Client. Dieser überprüft nun, ob der Server tatsächlich der ist, für den er sich ausgibt.
   \item \textbf{Nachrichten versenden}: Jetzt, wo beide Seiten ihre Identität überprüft haben und sicher sind, dass keine möglichen Angreifer die Verbindung fälschen könnten, ist der Client/Server bereit Nachrichten zu versenden
 \end{itemize}
 Generell gilt, dass der Messenger einen gemeinsamen Datenspeicher mit dem inneren Client und Onion Service teilt. In diesem werden die Chats zwischen den Gesprächsteilnehmern gespeichert. Der Datenspeicher besteht also aus einer \textit{HashMap} an Chat-Datensturkturen, wobei der Schlüssel der Empfänger-Onionadresse entspricht.
@@ -497,7 +501,7 @@ pub struct StorageChat {
 Jeder Chat enthält dabei das "eigene" Schlüsselpaar (\textit{priv\_key}), welches durch RSA generiert wird und den öffentlichen Schlüssel (\textit{rec\_pub\_key}) des Empfängers, mit welchem später die Nachrichten an den Empfänger verschlüsselt werden.
 
 \subsubsection{Identity verification}
-Damit der Client seine eigene Identität bestätigen kann, sucht dieser zunächst in den gespeicherten Chats nach der Onion-Adresse des Empfängers. Sollte der Eintrag nicht vorhanden sein, wird ein neuer Chat generiert (somit auch ein neues Schlüsselpaar generiert). Das Identitätspacket besteht dabei aus dem Hostname dieses Messengers, der Signatur des Hostnames (durch den privaten Schlüssel signiert), und den öffentlichen Schlüssel des Schlüsselpaares dieses Chats. Das Identitätspacket wird also folgendermaßen berechnet:
+Um das Konzept der E2EE umzusetzen, muss der Sender einer Nachricht sicher sein, dass der Empfänger tatsächlich der ist, für den er sich ausgibt. Um dies zu erreichen verifizieren sich Client und Server mit einem \identity-Packet, welches den Hostname des Servers/Client, die Signatur des Hostnames (durch den privaten Schlüssel des Chats signiert) und den öffentlichen Schlüssel des Schlüsselpaares (vom Chat) enthält. Am Beispiel des Clients sucht dieser zunächst in den gespeicherten Chats nach der Onion-Adresse des Empfängers. Sollte der Eintrag nicht vorhanden sein, wird ein neuer Chat generiert (somit auch ein neues Schlüsselpaar generiert). Das Identitätspacket wird also folgendermaßen generiert:
 \begin{minted}{rust}
 async fn identity(receiver: &str) -> Result<Self> {
   // Get the own hostname
@@ -525,7 +529,7 @@ async fn identity(receiver: &str) -> Result<Self> {
 }
 \end{minted}
 
-Der Client übersendet dieses Identitätspacket an den Server, welcher dies durch den gespeicherten öffentlichen Schlüssel (\textit{rec\_pub\_key}) des (aus seiner Sicht) Empfängers überprüft. Sollte die Signatur nicht valide sein, wird die Verbindung abgebrochen. Folgender Quellcode wird verwendet um die Identität zu überprüfen:
+Der Client übersendet dieses Identitätspacket an den Server, welcher jenes Packet durch den gespeicherten öffentlichen Schlüssel (\textit{rec\_pub\_key}) des (aus seiner Sicht) Empfängers überprüft. Sollte die Signatur nicht valide sein, wird die Verbindung abgebrochen. Folgender Quellcode wird verwendet, um die Identität des Clients zu überprüfen:
 \begin{minted}[breaklines]{rust}
 async fn verify(&self) -> Result<()> {
   //[...]
@@ -556,23 +560,15 @@ async fn verify(&self) -> Result<()> {
 
     //[...]
   } else {
-    // Adding public key to storage because it does  not exist
-    info!("No chat with hostname '{}' yet. Adding new receiver...", remote_host);
-    STORAGE.read().await.modify_storage_data(|e| {
-        let res = e.chats.entry(remote_host.clone())
-            .or_insert_with(|| StorageChat::new(&remote_host));
-
-        res.rec_pub_key = Some(pub_key.clone());
-
-        Ok(())
-    }).await?;
+    // Adding public key to storage because it does not exist
     //[...]
   }
+  //[...]
 }
 \end{minted}
-Falls die Identität valide ist, übersendet der Server seine eigene Identität an den Client. Der gleiche Vorgang der Validation findet nun auch auf dem Server statt. Wenn dieser die Identity als valide bestätigt, ist eine sichere Verbindung nun aufgebaut.
+Falls die Identität valide ist, übersendet der Server seine eigene Identität an den Client. Der gleiche Vorgang der Validation findet nun auch auf dem Server statt. Wenn dieser die \identity als valide bestätigt, ist eine sichere Verbindung nun aufgebaut.
 \subsection{Nachrichten versenden}
-Wir gehen nun davon aus, dass der Client an den Server eine Nachricht versenden möchte. Er ruft nun zunächst den öffentlichen Schlüssel des Empfänges aus dem Datenspeicher ab und verschlüsselt die Nachricht. Anschließend übersendet er die verschlüsselte Nachricht an den Server.
+Wir gehen nun davon aus, dass der Client an den Server eine Nachricht versenden möchte. Er ruft nun zunächst den öffentlichen Schlüssel des Empfängers aus dem Datenspeicher ab und verschlüsselt die Nachricht. Anschließend übersendet er die verschlüsselte Nachricht an den Server.
 \begin{minted}[breaklines]{rust}
 /// Sends a message to the receiver with the given date and msg, internal function
 async fn inner_send(&self, msg: &str, date: u128) -> Result<()> {
@@ -616,7 +612,7 @@ async fn inner_send(&self, msg: &str, date: u128) -> Result<()> {
 }
 \end{minted}
 Der Server empfängt über die Websocket-Verbindung die verschlüsselte Nachricht und entschlüsselt diese anschließend mit dem privaten Schlüssel des Chats.
-\section{Verbesserungsmöglichkeiten}
+\section{Nachteile und Lösungsmöglichkeiten}
 
 \section{Fazit}
 
