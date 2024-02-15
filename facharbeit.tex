@@ -62,15 +62,15 @@ maxbibnames=99
   }
 }
 %//TODO Change font back to calibri
-%\setmainfont{Calibri}
-\setmainfont{calibri}[
+\IfFileExists{/etc/motd}{\setmainfont{calibri}[
   Path=./fonts/,
   Extension=.ttf,
   UprightFont=*-Regular,
   BoldFont=*-Bold,
   ItalicFont=*-Italic,
   BoldItalicFont=*-BoldItalic,
-]
+]}{\setmainfont{Calibri}}
+
 
 \MakeOuterQuote{"}
 
@@ -152,7 +152,6 @@ maxbibnames=99
 % 1.5 Line spacing
 \setstretch{1.5}
 
-\include{RustLanguage}
 
 % Umlaute erlauben
 \lstset{literate=%
@@ -166,20 +165,6 @@ maxbibnames=99
 }
 %end
 
-
-\definecolor{mygreen}{rgb}{0,0.6,0}
-\definecolor{mygray}{rgb}{0.5,0.5,0.5}
-\definecolor{mymauve}{rgb}{0.58,0,0.82}
-\lstset{
-  keywordstyle=\color{blue},commentstyle=\color{mygreen},
-  stringstyle=\color{mymauve},rulecolor=\color{black},
-  basicstyle=\footnotesize\ttfamily,numberstyle=\tiny\color{mygray},
-  captionpos=b, % sets the caption-position to bottom
-  keepspaces=true, % keeps spaces in text
-  numbers=left, numbersep=5pt, showspaces=false,showstringspaces=true,
-  showtabs=false, stepnumber=2, tabsize=2, title=\lstname{}
-}
-\lstset{language=Rust}          % Set your language (you can change the language for each code-block optionally)
 
 % Diese beiden Pakete müssen zuletzt geladen werden
 \usepackage[hidelinks]{hyperref} % Anklickbare Links im Dokument
@@ -207,6 +192,24 @@ maxbibnames=99
 \apptocmd{\UrlBreaks}{\do\f\do\m}{}{}
 \setcounter{biburllcpenalty}{9000}% Kleinbuchstaben
 \setcounter{biburlucpenalty}{9000}% Großbuchstaben
+
+% Optionally show or hide code
+
+\newif\ifshow % toggle true or false based on if want to hide section
+\showtrue % show the sections
+%\showfalse % hide the sections
+
+\usepackage{version}
+\ifshow
+  \includeversion{minted}
+  \includeversion{wrap}
+  \includeversion{equation}
+\else
+  \excludeversion{minted}
+  \excludeversion{wrap}
+  \excludeversion{equation}
+\fi
+
 
 % Facharbeit
 
@@ -384,12 +387,41 @@ Am Beispiel des Messengers, sollten nur Gesprächsteilnehmer Teil des Netzwerkes
 
 
 \section{Umsetzung des Messengers}
-Für die Umsetzung des Messengers habe ich mich für die Programmiersprache Rust entschieden, da Rust Memory Safe ist und zusätzlich eine hohe Performance bietet \vcite{RustSecurity}. Ein weiterer Vorteil der Programmiersprache Rust ist, dass sie in eine ausführbare Datei kompiliert werden kann, sodass keine weiteren Binaries, wie zum Beispiel bei Python, benötigt werden \vcite{RustCompile}. Zudem benutze ich das Framework Tauri, welches mir ermöglicht eine Benutzeroberfläche für den Messenger zu erstellen \vcite{RustTauri}. Tauri verbindet hierbei die Weboberfläche eines Browsers mit einem Rust-Backend, wobei Weboberfläche und das Backend miteinander kommunizieren können \vebd. Als Frontend des Messenger verwende ich React. Auf den Quellcode des Frontends werde ich nicht eingehen, da es nur für die Benutzeroberfläche zuständig ist, somit zum Beispiel keine Verschlüsselung / Verbindung zum Tor-Netzwerk etc. stattfindet. \\
-Das Backend habe ich in 7 Bibliotheken aufgeteilt: \textit{encryption} für die Verschlüsselung der Nachrichten, \textit{messaging} für die Kommunikation zwischen Knotenpunkten, \textit{payloads} für die verschiedenen Netzwerkpakete, welche zwischen Knotenpunkten verschickt werden, \textit{secure-storage} als eine generelle Bibliothek mit Generics, sodass beliebiges Struct symmetrisch verschlüsselt / gespeichert werden kann, \textit{storage-internal} welches die Implementierung der \textit{secure-storage} Bibliothek enthält, \textit{shared} für gemeinsame Funktionen und Konstanten, \textit{tor-proxy} für die Verbindung zum Tor-Netzwerk. \\
+Um den Messenger umzusetzen, müssen zunächst die Anforderung des Messengers bekannt sein. Somit sollten folgende Kriterien erfüllt sein:
+\begin{description}
+  \item[Einfache Bedienung und Installation] - Möglichst wenig Kenntnisse über Computer sollten benötigt werden, um diesen Messenger zu installieren und zu benutzen
+  \item[Peer-to-Peer-Verbindung] - Nur über eine direkte Verbindung miteinander kommunizieren
+  \item[Anonymität] - Kommunikation über das Tor-Netzwerk
+  \item[Sicherheit] - Verschlüsseltes Speichern von Nachrichten und Schlüsselpaaren, um Auslesen der Daten (z.B. durch totalitäre Staaten) zu verhindern
+  \item[E2EE] - Verschlüsselung der Nachrichten und Verifikation des Kommunikationspartners
+\end{description}
+Damit der Nutzer keine Konsole verwenden muss, um den Messenger zu benutzen, habe ich eine Desktopapplikation mit Rust und Tauri entwickelt. Durch Tauri sind keine weiteren Installationen von Bibliotheken nötig, wodurch eine einfache Installation gegeben ist. %//REVIEW - Hier Quelle? Weil ich habs ja programmiert sind ja keine weiteren Installationen dafür nötig
+Zudem kann die Applikation für Windows, Linux und (theoretisch) MacOS kompiliert werden \vcite{RustCompile}. Rust bietet eine hohe Performance und ist Memory Safe, wodurch viele Sicherheitslücken, wie Buffer Overflows, verhindert werden können \vcite{RustSecurity}. Das Tauri-Framework bietet hierbei zwischen User Interface (UI), welches ich in Typescript und React programmiert habe, und Rust-Backend eine Schnittstelle, um Daten (\textit{payloads}) zwischen Frontend und Backend zu versenden \vcite{TauriPayloads}. Ich werde in dieser Umsetzung nicht auf den Quellcode des Frontends eingehen, da dieser nur für das UI zuständig ist und keine weiteren Funktionalitäten bietet.
+\begin{comment}
+\subsection{Bibliotheken - Übersicht}
+Der Messenger ist in verschiedene Bibliotheken nach ihren Funktionen aufgeteilt worden:
+\subsubsection*{encryption}
+Diese Bibliothek ermöglicht es, Nachrichten zu verschlüsseln und zu entschlüsseln, wobei das RSA-Verfahren benutzt wird. Zudem können durch diese Bibliothek Schlüsselpaare in Text umgewandelt und wieder zurückgewandelt werden.
+\subsubsection*{messaging}
+Eine Kommunikation zwischen Messengern wird durch diese Bibliothek ermöglicht. Sie führt den Client und den Server zusammen und ist für den Versand bzw. Empfang von Nachrichten zuständig
+\subsubsection*{payloads}
+Eine Kollektion an verschiedenen Netzwerkpackets und \textit{paylods}, welche unter anderem für die Kommunikation zwischen Messengern verwendet werden.
+\subsubsection*{secure-storage}
+Durch diese Bibliothek können beliebige Structs symmetrisch verschlüsselt, gespeichert und wieder geladen / entschlüsselt werden.
+\subsubsection*{shared}
+Beinhaltet gemeinsame Funktionen und Konstanten, zum Bespiel die Tor-Proxy-Konfiguration.
+\subsubsection*{storage-internal}
+Die Implementierung der \textit{secure-storage} Bibliothek.
+%//TODO gehändelt ist richtig scheiße
+\subsubsection*{tor-proxy}
+Der Tor-Proxy wird durch diese Bibliothek gestartet, sodass ein Onion Service im Tor-Netzwerk etabliert werden kann. \\
+
 Da die Messenger mit einer Peer-to-Peer-Verbindung miteinander verbunden sind, muss jeder Messenger in der Lage sein sowohl als Client als auch als Server (in Form eines Onion Services) zu agieren.
+\end{comment}
+
 \subsection{Peer-to-Peer-Verbindung}
-Somit startet jeder Messenger einen HTTP-Server, welcher einen HTTP-Endpunkt anbietet (in diesem Messenger \textit{/ws/}), um eine Websocket\footnote{%//TODO Hier richtig zitieren
-Ein Protokoll für bidirektionale Kommunikation zwischen Server und Client über HTTP \vcite{WebsocketDef}}-Verbindung aufzubauen. Der Server ist hierbei also in der Lage sowohl Packets %//TOOD Packets noch erklären?
+Damit Messenger in der Lage sind, sowohl als Client als auch als Server zu fungieren, startet jeder Messenger einen HTTP-Server, welcher einen HTTP-Endpunkt anbietet (in diesem Messenger \textit{/ws/}), mit welchem eine Websocket\footnote{%//TODO Hier richtig zitieren
+  Ein Protokoll für bidirektionale Kommunikation zwischen Server und Client über HTTP \vcite{WebsocketDef}}-Verbindung durch Clients aufgebaut werden kann. Der Server ist hierbei also in der Lage sowohl Packets %//TODO -  Packets noch erklären?
 zu empfangen als auch zu senden.
 \begin{minted}[breaklines]{rust}
 HttpServer::new(|| {
@@ -405,7 +437,7 @@ HttpServer::new(|| {
 .await?;
 \end{minted}
 
-Analog dazu besitzt jeder Messenger auch einen Websocket-Client, welcher sich mit den anderen Messengern verbinden kann, sodass eine Peer-to-Peer-Verbindung entsteht. Der Client verbindet sich hierbei mit den anderen Messengern folgendermaßen:
+Analog dazu besitzt jeder Messenger auch einen Websocket-Client, welcher sich im direkten Weg (über das Tor-Netzwerk) mit den anderen Messengern verbinden kann. Der Verbindungsaufbau zu anderen Messengern sieht wie folgt aus:
 \begin{minted}[breaklines]{rust}
 /// `onion_hostname` is the onion address of the other messenger to connect to
 pub async fn new(onion_hostname: &str) -> Result<Self> {
@@ -437,10 +469,39 @@ pub async fn new(onion_hostname: &str) -> Result<Self> {
   // [...]
 }
 \end{minted}
+Damit zwei Nutzer über den Messenger Nachrichten versenden können, muss ein Messenger die Rolle als Client und der ander als Server übernehmen. Dabei nimmt der Messenger, welcher die Verbindung zu einem anderen Messenger initiiert hat, die Rolle als Clients ein und der andere Messenger die Rolle als Server. Dadurch, dass jeder Messenger sowohl Client als auch Server sein kann, müssen empfangene Nachrichten von Client und Server zusammengeführt und an das Frontend übermittelt werden, welches in der Bibliothek \textit{messaging} implementiert ist:
+\begin{minted}{rust}
+/// A Manager which holds the connections by receiver name
+pub struct MessagingManager {
+  /// The connections by receiver name
+  pub(crate) connections: Arc<RwLock<HashMap<String, Connection>>>,
+}
+
+/// A generalized connection struct that can be used for both the client and the server
+#[derive(Debug, Clone)]
+pub struct Connection {
+    pub(super) info: Arc<RwLock<ConnInfo>>,
+    read_thread: Arc<Option<ConnectionReadThread>>,
+    pub(crate) self_verified: Arc<RwLock<bool>>,
+    pub(crate) verified: Arc<RwLock<bool>>,
+    pub(super) receiver_host: String,
+
+    notifier_ready_tx: Sender<()>,
+    notifier_ready_rx: Receiver<()>,
+}
+\end{minted}
+Der \textit{MessagingManager} hält sowohl Verbindungen von Client zu Server und Server zu Client in einem generellen Konstrukt, der \textit{Connection} fest. Diese \textit{Connection}s werden in einer \textit{HashMap} gespeichert. Der \textit{MessagingManager} bietet eine Schnittstelle für das Frontend, um Nachrichten zu senden und zu empfangen.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{diagrams/messaging_messenger.pdf}
+  \caption{Mögliches Beispiel für Messenger B, welcher eine Verbindung zu Messenger A aufgebaut hat, und Messenger C, welcher mit Messenger B verbunden ist \label{fig:MessagingMessenger}}
+\end{figure}
+Wenn in diesem Beispiel das Frontend eine Nachricht an Messenger A senden möchte, würde diese Nachricht zunächst an den \textit{MessagingManager} geschickt, welcher diese verschlüsselte Nachricht an den dazugehörigen Client leitet. Der Client leitet nun die Nachricht über den Websocket an den Server des Messengers A weiter.
+
 
 \subsection{Tor-Netzwerk}
-Um den HTTP-Server nun als Onion Service in das Tor-Netzwerk einzubinden, benötigt der Messenger eine Verbindung zum Tor-Netzwerk. Zudem wird der Tor-Proxy gebraucht, um eine Verbindung zu den Onion Services anderen Messengern aufzubauen. Dies setze ich in der \textit{tor-proxy} Bibliothek um.
-Um den Tor-Proxy zu konfigurieren, wird eine Tor-Konfigurationsdatei benötigt, welche unter anderem den Port des HTTP-Servers und des Tor-Proxys angibt:
+Eine mögliche Lösung für das Kriterium der Anonymität besteht im Tor-Netzwerk. Eine Verbindung muss also zum Tor-Netzwerk aufgebaut werden, welches durch die \textit{tor-proxy} Bibliothek geschieht.
+Der HTTP-Server wird auch durch den Tor-Proxy in das Tor-Netzwerk eingebunden. Damit der Tor-Proxy sich jedoch mit dem Tor-Netzwerk verbinden kann, wird eine Konfigurationsdatei benötigt, welche durch die \textit{tor-proxy} Bibliothek erstellt wird:
 \begin{minted}{rust}
 /// Converts the configuration to a `torrc` file format
 async fn to_text(&self) -> Result<String> {
@@ -470,8 +531,7 @@ GeoIPv6File \"{}\"",
     Ok(config)
 }
 \end{minted}
-
-Der Tor-Proxy wird folgendermaßen gestartet:
+Eingehende Verbindung zum Onion Service dieses Messengers werden also nun zum Port des HTTP-Servers weitergeleitet. Nun muss der Tor-Proxy nur noch gestartet werden:
 \begin{minted}{rust}
 let mut child = Command::new(TOR_BINARY_PATH.clone());
 child.args(["-f", &get_torrc().to_string_lossy()]);
@@ -482,34 +542,34 @@ child.stderr(Stdio::piped());
 let child = child.spawn()?;
 \end{minted}
 
-Der Messenger ist nun mit dem Tor-Netzwerk verbunden und wartet auf eingehende Verbindungen von anderen Messengern unter der Adresse des Onion Services.
-\subsection{Nachrichtenaustausch}
-Grundsätzlich liegen folgende Phasen des Nachrichtenaustausches vor:
-\begin{itemize}
-  \item \textbf{\identity verification}: Der Client übersendet seine Identität an den Server, welcher dieser nun überprüft, ob der Client tatsächlich der ist, für den er sich ausgibt. Danach übersendet der Server seine Identität an den Client. Dieser überprüft nun, ob der Server tatsächlich der ist, für den er sich ausgibt.
-  \item \textbf{Nachrichten versenden}: Jetzt, wo beide Seiten ihre Identität überprüft haben und sicher sind, dass keine möglichen Angreifer die Verbindung fälschen könnten, ist der Client/Server bereit Nachrichten zu versenden
-\end{itemize}
-Generell gilt, dass der Messenger einen gemeinsamen Datenspeicher mit dem inneren Client und Onion Service teilt. In diesem werden die Chats zwischen den Gesprächsteilnehmern gespeichert. Der Datenspeicher besteht also aus einer \textit{HashMap} an Chat-Datensturkturen, wobei der Schlüssel der Empfänger-Onionadresse entspricht.
+Der Messenger ist jetzt mit dem Tor-Netzwerk verbunden und der HTTP-Server ist über den Onion Service erreichbar. Andere Messenger können sich nun anonym über das Tor-Netzwerk mit diesem Messenger verbinden.
+\subsection{Sicherheit}
+Ein Datenspeicher, welcher symmetrisch verschlüsselt ist, wird durch die Bibliothek \textit{secure-storage} implementiert. Mit dieser Bibliothek lassen sich beliebige \textit{Structs} in Text umwandeln und verschlüsseln bzw. auslesen und entschlüsseln. Die \textit{storage-internal} Bibliothek benutzt hierbei die Methoden der \textit{secure-storage} Bibliothek und dient als Wrapper, um die Daten auf der Festplatte zu speichern und wieder auszulesen. Der Datenspeicher enthält hierbei eine \textit{HashMap}, welche als Schlüssel die Onion Adresse anderen Messengers und als Wert die Chatinformationen enthält. Die Chatinformationen sind zum Beispiel gesendete oder versendete Nachrichten, Schlüsselpaare und öffentliche Schlüssel.
 \begin{minted}[breaklines]{rust}
+#[derive(Clone, Debug, Serialize, Deserialize, Zeroize, ZeroizeOnDrop)]
 pub struct StorageChat {
   /// All messages sent to this receiver or received from this receiver
-  //[...]
   pub messages: Vec<ChatMessage>,
+  //[...]
 
-  /// The public key which is used to encrypt messages when being sent to the receiver
-  //[...]
+  /// The public key which is used to encrypt messages when being sent to the receiver [...]
+  #[zeroize(skip)]
   pub rec_pub_key: Option<PublicKey>,
-  //[...]
-  pub receiver_onion: String,
-  /// Private key of this messenger used to decrypt the messages that are being received
-  //[...]
+  /// Private key of this messenger used to decrypt the messages that are being received [...]
   pub priv_key: PrivateKey,
 }
 \end{minted}
-Jeder Chat enthält dabei das "eigene" Schlüsselpaar (\textit{priv\_key}), welches durch RSA generiert wird und den öffentlichen Schlüssel (\textit{rec\_pub\_key}) des Empfängers, mit welchem später die Nachrichten an den Empfänger verschlüsselt werden.
+Der \textit{StorageChat} enthält die Nachrichten, welche an den Empfänger gesendet oder von diesem empfangen wurden (\textit{messages}), den öffentlichen Schlüssel des Kommunikationspartner (\textit{rec\_pub\_key1}) und den privaten Schlüssel des Messengers \textit{priv\_key}.
+%//REVIEW - Kann ich das so sagen?
+Um die Daten des Nutzers vor weiteren möglichen Angriffen zu schützen, verwende ich die Bibliothek \textit{zeroize}, welche sensible Daten (wie private Schlüssel) aus dem Arbeitsspeicher löscht (Zeroisation) \vcite{Zeroization}. Zudem ist es durch die symmetrische Verschlüsselung des Datenspeichers für Angreifer nicht möglich (sofern die Applikation geschlossen ist), private Schlüssel oder Chatverläufe auszulesen, wodurch die Privatsphäre der Nutzer geschützt wird.
 
+\subsection{Ende-zu-Ende-Verschlüsselung}
+Das letzte Kriterium, welches der Messenger nun erfüllen muss, ist die Ende-zu-Ende-Verschlüsselung. Dafür muss zuerst die Identität des anderen Kommunikationspartners verifiziert werden.
 \subsubsection{Identity verification}
-Um das Konzept der E2EE umzusetzen, muss der Sender einer Nachricht sicher sein, dass der Empfänger tatsächlich der ist, für den er sich ausgibt. Um dies zu erreichen verifizieren sich Client und Server mit einem \identity-Packet, welches den Hostname des Servers/Client, die Signatur des Hostnames (durch den privaten Schlüssel des Chats signiert) und den öffentlichen Schlüssel des Schlüsselpaares (vom Chat) enthält. Am Beispiel des Clients sucht dieser zunächst in den gespeicherten Chats nach der Onion-Adresse des Empfängers. Sollte der Eintrag nicht vorhanden sein, wird ein neuer Chat generiert (somit auch ein neues Schlüsselpaar generiert). Das Identitätspacket wird also folgendermaßen generiert:
+Um das Konzept der E2EE umzusetzen, muss der Sender einer Nachricht sicher sein, dass der Empfänger tatsächlich der ist, für den er sich ausgibt, wofür die \textit{Identity verification} stattfindet. Im Rahmen der Erklärung gehen wir nun davon aus, dass Messenger A an Messenger B eine Nachricht senden möchte. Messenger A wäre in diesem Fall der Client und Messenger B der Server.
+Messenger A und Messenger B generieren anfangs (wenn noch nicht vorhanden) private Schlüssel und erstellen ein neues \textit{StorageChat}-Konstrukt, in welchem die privaten Schlüssel gespeichert werden.
+Damit sowohl Client als auch Server sicher sein können, dass der Kommunikationspartner tatsächlich der ist, für den er sich ausgibt, wird zunächst von dem Client ein \identity-Packet versendet.
+Dies besteht aus dem eigenen Hostname, der Signatur des Hostnames (durch den privaten Schlüssel des Chats signiert) und den öffentlichen Schlüssel des Schlüsselpaares (vom Chat). Das Identitätspacket wird also folgendermaßen generiert:
 \begin{minted}{rust}
 async fn identity(receiver: &str) -> Result<Self> {
   // Get the own hostname
