@@ -569,13 +569,13 @@ Das letzte Kriterium, welches der Messenger nun erfüllen muss, ist die Ende-zu-
 Um das Konzept der E2EE umzusetzen, muss der Sender einer Nachricht sicher sein, dass der Empfänger tatsächlich der ist, für den er sich ausgibt, wofür die \textit{Identity verification} stattfindet. Im Rahmen der Erklärung gehen wir nun davon aus, dass Messenger A an Messenger B eine Nachricht senden möchte. Messenger A wäre in diesem Fall der Client und Messenger B der Server.
 Messenger A und Messenger B generieren anfangs (wenn noch nicht vorhanden) private Schlüssel und erstellen ein neues \textit{StorageChat}-Konstrukt, in welchem die privaten Schlüssel gespeichert werden.
 Damit sowohl Client als auch Server sicher sein können, dass der Kommunikationspartner tatsächlich der ist, für den er sich ausgibt, wird zunächst von dem Client ein \identity-Packet versendet.
-Dies besteht aus dem eigenen Hostname, der Signatur des Hostnames (durch den privaten Schlüssel des Chats signiert) und den öffentlichen Schlüssel des Schlüsselpaares (vom Chat). Das Identitätspacket wird also folgendermaßen generiert:
+Dies besteht aus dem eigenen Hostname, der Signatur des Hostnames und dem Zielhostname (durch den privaten Schlüssel des Chats signiert) und den öffentlichen Schlüssel des Schlüsselpaares (vom Chat). Das Identitätspacket wird also folgendermaßen generiert:
 \begin{minted}{rust}
 async fn identity(receiver: &str) -> Result<Self> {
   // Get the own hostname
   let own_hostname = get_service_hostname(true)
-      .await?
-      .ok_or(anyhow!("Could not get own hostname"))?;
+  .await?
+  .ok_or(anyhow!("Could not get own hostname"))?;
 
   // Get the private key for the receiver (used to decrypt messages)
   let priv_key = StorageManager::get_or_create_private_key(receiver).await?;
@@ -585,58 +585,75 @@ async fn identity(receiver: &str) -> Result<Self> {
   let keypair = PKey::from_rsa(priv_key.0)?;
   let mut signer = Signer::new(*DIGEST, &keypair)?;
 
-  signer.update(own_hostname.as_bytes())?;
+  signer.update((own_hostname.clone() + receiver).as_bytes())?;
   let signature = signer.sign_to_vec()?;
 
   // Return the identity packet
   Ok(C2SPacket::SetIdentity(Identity {
-      hostname: own_hostname,
-      signature,
-      pub_key
+    hostname: own_hostname,
+    signature,
+    pub_key
   }))
 }
 \end{minted}
-
-Der Client übersendet dieses Identitätspacket an den Server, welcher jenes Packet durch den gespeicherten öffentlichen Schlüssel (\textit{rec\_pub\_key}) des (aus seiner Sicht) Empfängers überprüft. Sollte die Signatur nicht valide sein, wird die Verbindung abgebrochen. Folgender Quellcode wird verwendet, um die Identität des Clients zu überprüfen:
+Ein wichtiges Detail ist hierbei die Signatur des \identity-Packets. Sie besteht sowohl aus dem eigenen Hostname als auch dem Ziel des Hostnames, um zu verhindern, dass ein Angreifer das \identity-Packet abfängt und sich damit als Messenger des dazugehörigen Packets ausgibt.
+Nachdem der Server das Packet empfangen hat, überprüft er dieses. Dazu ruft dieser den öffentlichen Schlüssel des Kommunikationspartners auf, und verifiziert mit diesem die Signatur des \identity-Packets:
 \begin{minted}[breaklines]{rust}
 async fn verify(&self) -> Result<()> {
-  //[...]
+  let Identity {  hostname: remote_host, pub_key, signature} = self;
+  // Get the own hostname
+  let own_hostname = get_service_hostname(!remote_host.ends_with("-dev-client"))
+      .await?
+      .ok_or(anyhow!("Could not get own hostname"))?;
+
+
+  debug!("Reading to verify...");
   // Check if there is a public key for the given receiver
   let local_pub_key = STORAGE.read().await.get_data(|e| {
       let key = e.chats.get(remote_host)
           .and_then(|e| e.rec_pub_key.clone());
 
-      return Ok(key)
+      Ok(key)
   }).await?;
 
   debug!("Done");
 
   // If there is a public key, verify the signature
   if let Some(local_pub_key) = local_pub_key {
-    info!("Verifying for hostname: {:?}", remote_host);
-    let keypair = PKey::from_rsa(local_pub_key.0)?;
-    let mut verifier = Verifier::new(*DIGEST, &keypair)?;
+      info!("Verifying for hostname: {:?}", remote_host);
+      let keypair = PKey::from_rsa(local_pub_key.0)?;
+      let mut verifier = Verifier::new(*DIGEST, &keypair)?;
 
-    // Verify the signature with the public key
-    verifier.update(remote_host.as_bytes())?;
-    let is_valid = verifier.verify(&signature)?;
+      // Verify the signature with the public key
+      verifier.update((remote_host.to_string() + &own_hostname).as_bytes())?;
+      let is_valid = verifier.verify(&signature)?;
 
-    if !is_valid {
-        warn!("[INVALID_SIGNATURE] Wrong signature was given! This may be an attack!");
-        return Err(anyhow!("Wrong signature was given! This may be an attack!"));
-    }
+      if !is_valid {
+          warn!("[INVALID_SIGNATURE] Wrong signature was given! This may be an attack!");
+          return Err(anyhow!("Wrong signature was given! This may be an attack!"));
+      }
 
-    //[...]
+      Ok(())
   } else {
-    // Adding public key to storage because it does not exist
-    //[...]
+      // Adding public key to storage because it does  not exist
+      info!("No chat with hostname '{}' yet. Adding new receiver...", remote_host);
+      STORAGE.read().await.modify_storage_data(|e| {
+          let res = e.chats.entry(remote_host.clone())
+              .or_insert_with(|| StorageChat::new(&remote_host));
+
+          res.rec_pub_key = Some(pub_key.clone());
+
+          Ok(())
+      }).await?;
+      debug!("Done.");
+
+      Ok(())
   }
-  //[...]
 }
 \end{minted}
-Falls die Identität valide ist, übersendet der Server seine eigene Identität an den Client. Der gleiche Vorgang der Validation findet nun auch auf dem Server statt. Wenn dieser die \identity als valide bestätigt, ist eine sichere Verbindung nun aufgebaut.
+Falls die Identität valide ist, übersendet der Server seine Identität an den Client. Der gleiche Vorgang der Validation findet nun auch auf dem Client statt. Wenn dieser die \identity als valide betrachtet, ist eine sichere Verbindung zwischen Client und Server aufgebaut.
 \subsection{Nachrichten versenden}
-Wir gehen nun davon aus, dass der Client an den Server eine Nachricht versenden möchte. Er ruft nun zunächst den öffentlichen Schlüssel des Empfängers aus dem Datenspeicher ab und verschlüsselt die Nachricht. Anschließend übersendet er die verschlüsselte Nachricht an den Server.
+Gehen wir davon aus, dass der Client an den Server über die gesicherte Verbindung eine Nachricht versenden möchte. Dazu ruft er zunächst den öffentlichen Schlüssel des Empfängers aus dem Datenspeicher ab und verschlüsselt die Nachricht mit dem RSA-Verfahren. Anschließend übersendet er die verschlüsselte Nachricht an den Server.
 \begin{minted}[breaklines]{rust}
 /// Sends a message to the receiver with the given date and msg, internal function
 async fn inner_send(&self, msg: &str, date: u128) -> Result<()> {
@@ -679,10 +696,11 @@ async fn inner_send(&self, msg: &str, date: u128) -> Result<()> {
   Ok(())
 }
 \end{minted}
-Der Server empfängt über die Websocket-Verbindung die verschlüsselte Nachricht und entschlüsselt diese anschließend mit dem privaten Schlüssel des Chats.
+Der Server empfängt über die Websocket-Verbindung die verschlüsselte Nachricht des Clients und entschlüsselt diese anschließend mit dem privaten Schlüssel des Chats.
 \section{Nachteile und Lösungsmöglichkeiten}
-
-\section{Fazit}
+Der Messenger bringt jedoch auch einige Nachteile mit sich. Die Verbindung über das Tor-Netzwerk bietet zwar eine hohe Anonymität, jedoch ist das Tor-Netzwerk um das 120-fache langsamer, welches bei simplen Textnachrichten nicht auffallen mag, bei etwas größeren Datenmengen, wie zum Beispiel ein Bild, jedoch ein Problem darstellen könnte \vcite{TorPerformance}. Dadurch, dass der Client eine Websocket-Verbindung mit dem Onion Service aufbaut, herrscht hier ein \textit{long-term-circuit}, wodurch der \circuit zwischen Onion Service und Client nicht erneuert wird, somit für Angriffe anfälliger sein könnte \vcite{FAQCircuitLifetime}. Ein weiteres Problem stellt das Padding des RSA-Verfahrens da. Durch das Padding der asymmetrischen Verschlüsselung, ist die Nachrichtenlänge begrenzt und kann die Anzahl der Bits des Schlüsselpaares nicht überschreiten \vcite{OpensslRsaMaxLength}. Eine mögliche Lösung für dieses Problem wäre, die Kombination von asymmetrischen und symmetrischen Verschlüsselungsverfahren, welches als hybride Verschlüsselung bezeichnet wird \vcite{HybridEncryption}. Dabei generiert bereits bei dem Verbindungsaufbau der Server einen zufälligen symmetrischen Schlüssel \vebd. Dieser wird mit dem öffentlichen Schlüssel des Clients verschlüsselt und an den Client übermittelt, welcher diesen entschlüsselt und abspeichert \vebd.
+%//REVIEW - Nochmal zitieren warum schnell und keine Nachrichtenlängenbegrenzung?
+Somit werden die Vorteile der symmetrischen Verschlüsselung (schnell und keine Nachrichtenlängenbegrenzung) mit den Vorteilen der asymmetrischen Verschlüsselung (sicherer Austausch von Schlüsseln) kombiniert \vcite{HybridTechnopedia}.
 
 \pagebreak
 \nolinenumbers{}
