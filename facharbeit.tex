@@ -701,8 +701,12 @@ Der Server empfängt über die Websocket-Verbindung die verschlüsselte Nachrich
 Der Messenger bietet zwar hohe Anonymität und Sicherheit, jedoch ist es unerlässlich auch die Nachteile des Messengers und deren Lösungsmöglichkeiten zu betrachten. Durch die Struktur des Tor-Netzwerkes können Datenmengen um das 120-fache langsamer übermittelt werden, welches bei simplen Textnachrichten nicht auffallen mag, bei größeren Datenmengen, wie zum Beispiel Bildern, jedoch ein Problem darstellen könnte \vcite{TorPerformance}. Dadurch, dass der Client eine Websocket-Verbindung mit dem Onion Service aufbaut, herrscht hier ein \textit{long-term-circuit}, wodurch der \circuit zwischen Onion Service und Client nicht erneuert wird, somit für Angriffe anfälliger sein könnte \vcite{FAQCircuitLifetime}. Zusätzlich ist die Nachrichtenlänge durch das Padding der asymmetrischen Verschlüsselung begrenzt \vcite{OpensslRsaMaxLength}. %//REVIEW - Ich hab die Studie hierbei angewendet, ist das okay?
 Eine hybride Verschlüsselung, also eine Kombination aus asymmetrischer und symmetrischer Verschlüsselung, könnte eine mögliche Lösung für die limitierte Nachrichtenlänge sein \vcite{HybridEncryption}. Dabei generiert bereits bei dem Verbindungsaufbau der Server einen zufälligen symmetrischen Schlüssel \vebd. Dieser wird mit dem öffentlichen Schlüssel des Clients verschlüsselt und an den Client übermittelt, welcher diesen entschlüsselt und abspeichert, sodass sowohl Server als auch Client den gleichen symmetrischen Schlüssel teilen \vebd.
 %//REVIEW - Nochmal zitieren warum schnell und keine Nachrichtenlängenbegrenzung?
-Somit werden die Vorteile der symmetrischen Verschlüsselung (schnell und keine Nachrichtenlängenbegrenzung) mit den Vorteilen der asymmetrischen Verschlüsselung (sicherer Austausch von Schlüsseln) kombiniert \vcite{HybridTechnopedia}.
+Somit werden die Vorteile der symmetrischen Verschlüsselung (schnell und keine Nachrichtenlängenbegrenzung) mit den Vorteilen der asymmetrischen Verschlüsselung (sicherer Austausch von Schlüsseln) kombiniert \vcite{HybridTechnopedia}. Der Messenger muss zudem gestartet sein, damit der Onion Service im Tor-Netzwerk verfügbar ist, sodass ein Nutzer nur kontaktiert werden kann, wenn dieser auch den Messenger gestartet hat.
 
+\section{Fazit}
+In der heutigen Gesellschaft wird die Meinungsfreiheit der Bürger, welche in einem totalitären Staat leben, immer wichtiger. Das Tor-Netzwerk bietet hierbei eine Möglichkeit, anonym und sicher über Onion Services miteinander zu kommunizieren. Mit dem Messenger, welcher in dieser Arbeit umgesetzt wurde, ist es möglich, Menschen in totalitären Staaten ein Werkzeug zu geben, ihre Meinung zu äußern. Allerdings muss auch hierfür die Onion-Adresse der Person, welche den Messenger benutzt, sicher über eine andere Plattform übermittelt werden, damit zum Beispiel Reporter diese kontaktieren können. Zusätzlich müssen beide Kommunikationspartner deren Messenger gestartet haben.
+
+% LTeX: enabled=false
 \pagebreak
 \nolinenumbers{}
 \printbibliography[notkeyword={figure}]
@@ -716,3 +720,4 @@ Somit werden die Vorteile der symmetrischen Verschlüsselung (schnell und keine 
 Quellcode: \href{https://github.com/sshcrack/enkrypton}{https://github.com/sshcrack/enkrypton}
 
 \end{document}
+% LTeX: enabled=true
