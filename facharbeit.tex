@@ -216,7 +216,7 @@ maxbibnames=99
 % Facharbeit
 
 \begin{document}
-\includepdf[pages=-]{img/signed.pdf}
+\includepdf[pages=1]{img/signed.pdf}
 %\include{titlePage}
 \tableofcontents
 \setcounter{page}{0}
@@ -231,28 +231,25 @@ maxbibnames=99
 %\modulolinenumbers[5]
 \section{Einleitung}
 %//SECTION Einleitung
-Russland, China, Iran. In all diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. Rund 1,7 Milliarden Menschen sind allein nur in diesen drei Staaten von der Einschränkung der Meinungsfreiheit betroffen \vcite{UnPop}. Wie können Bürger dieser Staaten ihre Meinung also verbreiten und andere Staaten auf
 %//TODO hier staatskritisch ist falsches wort mir fällt aber das richtige nicht ein
-staatskritische Probleme aufmerksam machen, ohne sich selber in Gefahr zu bringen?
+Russland, China, Iran. In all diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. Rund 1,7 Milliarden Menschen sind allein in diesen drei Staaten von der Einschränkung der Meinungsfreiheit betroffen.
 %//!SECTION
-%//SECTION Problemstellung
+Wie können Bürger dieser Staaten ihre Meinung verbreiten und andere Staaten auf staatskritische Probleme aufmerksam machen, ohne sich selbst in Gefahr zu bringen?%//SECTION Problemstellung
 \\
 %//TODO Hier nochmal nach einer anderen Quelle suchen, die passt nicht 100%ig
-Bei herkömmlichen Messengern, wie WhatsApp, Signal und Co., braucht die Außenwelt die Telefonnummern der im totalitären Staat wohnenden Bürgern und Reportern, um mit ihnen in Kontakt zu treten. Eine mögliche Gefahr ist, dass ein totalitärer Staat sich als legitimer Empfänger ausgibt, wodurch Bürger und Reporter ihre privaten Nummern an den Staat weitergeben und dieser dann in der Lage ist, diese Nummern zurückzuverfolgen \vcite{LocPolice}.
-Genau hier liegt das Problem: Bürger und Reporter können nicht durch gewöhnliche Messenger mit der Außenwelt kommunizieren, da der Staat deren Nummer zurückverfolgen kann und somit weiter die Meinungsfreiheit einschränkt und unterbindet \vebd.
 \\
-Auch durch die zentrale Infrastruktur, welche von den meisten Messengern, wie WhatsApp und Signal verwenden wird, besteht für totalitäre Staaten wie China die Möglichkeit, die IP-Adressen der Server zu blockieren, wodurch diese für Bürger und Reporter unzugänglich werden \vcite{ChinaFirewall,CentralizedWhatsapp}.
+Bei herkömmlichen Messengern wie WhatsApp, Signal und Co. benötigt die Außenwelt die Telefonnummern von Bürgern und Journalisten in einem totalitären Staat, um mit ihnen in Kontakt treten zu können. Eine mögliche Gefahr besteht darin, dass sich ein totalitärer Staat als legitimer Empfänger ausgibt, wodurch Bürger und Reporter ihre privaten Telefonnummern an den Staat weitergeben, der dann in der Lage ist, diese Nummern zurückzuverfolgen \vcite{LocPolice}. Genau hier liegt das Problem: Bürger und Reporter können nicht über gewöhnliche Messenger mit der Außenwelt kommunizieren, da der Staat ihre Nummern zurückverfolgen kann, was die Meinungsfreiheit weiter einschränkt und verhindert \vebd.
 \\
+Die zentralisierte Infrastruktur, die von den meisten Messengern wie WhatsApp und Signal genutzt wird, ermöglicht es auch totalitären Staaten wie China, die IP-Adressen von Servern zu blockieren und sie so für Bürger und Journalisten unzugänglich zu machen \vcite{ChinaFirewall,CentralizedWhatsapp}.
 %//!SECTION
 %//SECTION Lösungsvorschlag / Ziel
-Ein dezentralisierter Messenger, welcher Ende-zu-Ende verschlüsselt ist und über das Tor-Netzwerk kommuniziert, könnte eine Lösung für diese Probleme darstellen. Die mögliche Lösung auf ihren Sicherheitsaspekt und ihre Praktikabilität zu untersuchen und umzusetzen, ist das Ziel dieser Arbeit.
 %//!SECTION
-\\
+Ein dezentraler, Ende-zu-Ende-verschlüsselter Messenger, der über das Tor-Netzwerk kommuniziert, könnte eine Lösung für diese Probleme darstellen. Ziel dieser Arbeit ist es, diese Lösung auf ihre Sicherheit und Praktikabilität hin zu untersuchen und zu implementieren.\\
 %//SECTION E2EE Überleitung zu Kapitel-Auflistung
-Um ein Verständnis über die Sicherheit dieses Messengers zu gewinnen, steigt diese Arbeit in dem zweiten Kapitel mit der asymmetrischen Verschlüsselung und der Ende-zu-Ende-Verschlüsselung (E2EE) ein und beschäftigt sich zuerst mit der mathematischen Betrachtung, um dann die Sicherheit des Verfahrens beurteilen zu können. Dabei geht die Arbeit nicht auf das Padding-Verfahren der asymmetrischen Verschlüsselung ein. Das dritte Kapitel untersucht, ob das Tor-Netzwerk eine mögliche Lösung für die Anonymität im Internet bietet und inwieweit es die Nutzer schützt. Im vierten Kapitel wird ein Blick auf die Definition und die Sicherheit der Dezentralisierung geworfen. Das fünften Kapitel beschreibt abschließend die Umsetzung des Messengers, während im sechsten Kapitel Nachteile und deren Lösungsmöglichkeiten des Messengers betrachtet werden. Das siebte Kapitel zieht schließlich ein Fazit.
 %//!SECTION
+Um ein Verständnis für die Sicherheit dieses Messengers zu erlangen, geht diese Arbeit im zweiten Kapitel auf die asymmetrische Verschlüsselung und die Ende-zu-Ende-Verschlüsselung (E2EE) ein und beschäftigt sich zunächst mit der mathematischen Betrachtung, um anschließend die Sicherheit des Verfahrens beurteilen zu können. Dabei wird nicht auf das Padding-Verfahren der asymmetrischen Verschlüsselung eingegangen. Im dritten Kapitel wird untersucht, ob das Tor-Netzwerk eine mögliche Lösung für das Problem der Anonymität im Internet darstellt und inwieweit es die Nutzer schützt. Das vierte Kapitel beschäftigt sich mit der Definition und der Sicherheit von Dezentralisierung. Im fünften Kapitel wird schließlich die Implementierung des Messengers beschrieben, während im sechsten Kapitel die Nachteile des Messengers und deren Lösungsmöglichkeiten betrachtet werden. Im siebten Kapitel wird ein Fazit gezogen.
 
-
+%CORRECT_START
 \section{Asymmetrische Verschlüsselung}
 %//SECTION E2EE und asymmetrische Verschlüsselung
 Um einen sicheren Nachrichtenaustausch zu gewährleisten, wird in dieser Arbeit die E2EE implementiert. Bei der E2EE wird von dem Sender die Nachricht, bevor sie an den Empfänger geschickt wird, verschlüsselt \vcite{E2EE}. Dazwischenliegende Akteure, wie zum Beispiel Server oder mögliche Angreifer, können demzufolge die Nachricht nicht lesen \vebd. \textbf{Nur} der Empfänger der Nachricht kann diese auch entschlüsseln. Als Ent- und Verschlüsselungsverfahren der Nachrichten wird die asymmetrische Verschlüsselung verwendet \vebd. Diese Arbeit beschränkt sich bei der asymmetrischen Verschlüsselung auf das RSA-Verfahren.
@@ -327,6 +324,7 @@ Wichtig bei dem RSA-Verfahren ist, dass die Länge von $n$ (die Schlüssellänge
 Bei der symmetrischen Verschlüsselung wird der gleiche Schlüssel sowohl für die Verschlüsselung als auch für die Entschlüsselung verwendet \vcite{GeneralSymmetricCryptography}.
 %/REVIEW - Wirklich padding mit einbeziehen? (meinte er brauch ich nicht)
 Im Vergleich zu der asymmetrischen Verschlüsselung, ist die symmetrische Verschlüsselung schneller und keine Beschränkung des Chiffretextes \vcite{RsaAESAnalysis, OpensslRsaMaxLength}. Jedoch muss der Schlüssel der symmetrischen Verschlüsselung sicher an den jeweils anderen Kommunikationspartner übermittelt werden, um Nachrichten zu entschlüsseln \vebd.
+%CORRECT_END
 
 \section{Das Tor-Netzwerk}
 Die Anonymität des Messengers ist ein weiterer zentraler Aspekt, um die jeweiligen Kommunikationspartner zu schützen. Das Tor-Netzwerk ist hierbei ein möglicher Lösungsansatz, da normalen Routing, wie wir es tagtäglich nutzen, der Client kommuniziert  direkt mit dem Zielserver, somit der Zielserver die IP-Adresse des Clients einsehen kann \vcite{TCP_IP}.
@@ -717,6 +715,6 @@ In der heutigen Gesellschaft wird die Meinungsfreiheit der Bürger, welche in ei
 \appendix
 \printbibliography[heading=subbibliography,title={Anhang},keyword={figure}]
 Quellcode: \href{https://github.com/sshcrack/enkrypton}{https://github.com/sshcrack/enkrypton}
-
+\includepdf[pages=2]{img/signed.pdf}
 \end{document}
 % LTeX: enabled=true
