@@ -145,6 +145,8 @@ maxbibnames=99
 \usepackage{listings}
 \usepackage{color}
 
+% Für PDF
+\usepackage{pdfpages}
 
 \graphicspath{ {./img/} }
 
@@ -196,8 +198,8 @@ maxbibnames=99
 % Optionally show or hide code
 
 \newif\ifshow % toggle true or false based on if want to hide section
-\showtrue % show the sections
-%\showfalse % hide the sections
+%\showtrue % show the sections
+\showfalse % hide the sections
 
 \usepackage{version}
 \ifshow
@@ -214,7 +216,8 @@ maxbibnames=99
 % Facharbeit
 
 \begin{document}
-\include{titlePage}
+\includepdf[pages=-]{img/signed.pdf}
+%\include{titlePage}
 \tableofcontents
 \setcounter{page}{0}
 \thispagestyle{empty}
@@ -224,31 +227,29 @@ maxbibnames=99
 
 %//cSpell:enable
 % LTeX: enabled=true
-\linenumbers{}
-\modulolinenumbers[5]
+%\linenumbers{}
+%\modulolinenumbers[5]
 \section{Einleitung}
 %//SECTION Einleitung
-Russland, China, Iran. In all diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. Rund 1,7 Milliarden Menschen sind allein nur in diesen drei Staaten von der Einschränkung der Meinungsfreiheit betroffen \vcite{UnPop}. Wie können Bürger
-dieser Staaten ihre Meinung also verbreiten und andere Staaten auf staatskritische Probleme aufmerksam machen, ohne sich selbst in Gefahr zu bringen?
+Russland, China, Iran. In all diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. Rund 1,7 Milliarden Menschen sind allein nur in diesen drei Staaten von der Einschränkung der Meinungsfreiheit betroffen \vcite{UnPop}. Wie können Bürger dieser Staaten ihre Meinung also verbreiten und andere Staaten auf
+%//TODO hier staatskritisch ist falsches wort mir fällt aber das richtige nicht ein
+staatskritische Probleme aufmerksam machen, ohne sich selber in Gefahr zu bringen?
 %//!SECTION
 %//SECTION Problemstellung
 \\
 %//TODO Hier nochmal nach einer anderen Quelle suchen, die passt nicht 100%ig
-Bei herkömmlichen Messengern wie WhatsApp, Signal und Co. benötigt die Außenwelt die Telefonnummern der in dem totalitären Staat lebenden Bürgern und Journalisten, um diese zu kontaktieren. Ein totalitärer Staat könnte sich jedoch als Empfänger ausgeben, sodass Bürger/Journalisten ihre private Nummer an den Staat überreichen und dieser somit jene Nummer rückverfolgen kann \vcite{LocPolice}.
-Und genau hier liegt das Problem: Bürger und Journalisten können nicht durch alltägliche Messenger mit der Außenwelt kommunizieren, da der Staat deren Nummer zurückverfolgen kann und somit weiter die Meinungsfreiheit einschränkt und unterbindet \vebd.
+Bei herkömmlichen Messengern, wie WhatsApp, Signal und Co., braucht die Außenwelt die Telefonnummern der im totalitären Staat wohnenden Bürgern und Reportern, um mit ihnen in Kontakt zu treten. Eine mögliche Gefahr ist, dass ein totalitärer Staat sich als legitimer Empfänger ausgibt, wodurch Bürger und Reporter ihre privaten Nummern an den Staat weitergeben und dieser dann in der Lage ist, diese Nummern zurückzuverfolgen \vcite{LocPolice}.
+Genau hier liegt das Problem: Bürger und Reporter können nicht durch gewöhnliche Messenger mit der Außenwelt kommunizieren, da der Staat deren Nummer zurückverfolgen kann und somit weiter die Meinungsfreiheit einschränkt und unterbindet \vebd.
 \\
-Durch die zentrale Infrastruktur, welche die meisten Messenger, wie zum Beispiel WhatsApp und Signal verwenden, ist es für totalitäre Staaten, wie China, möglich, die IP-Adressen jener Server zu blockieren und somit für Bürger und Reporter unzugänglich zu machen \vcite{ChinaFirewall,CentralizedWhatsapp}.
+Auch durch die zentrale Infrastruktur, welche von den meisten Messengern, wie WhatsApp und Signal verwenden wird, besteht für totalitäre Staaten wie China die Möglichkeit, die IP-Adressen der Server zu blockieren, wodurch diese für Bürger und Reporter unzugänglich werden \vcite{ChinaFirewall,CentralizedWhatsapp}.
 \\
 %//!SECTION
 %//SECTION Lösungsvorschlag / Ziel
-Ein dezentralisierter Messenger, welcher Ende-zu-Ende verschlüsselt ist und über das Tor-Netzwerk kommuniziert, könnte bei diesen Problemen eine Lösung sein. Die Frage, ob ein solcher Messenger die Lösung für Bürger eines totalitären Staates ist, soll in dieser Arbeit geklärt werden.
+Ein dezentralisierter Messenger, welcher Ende-zu-Ende verschlüsselt ist und über das Tor-Netzwerk kommuniziert, könnte eine Lösung für diese Probleme darstellen. Die mögliche Lösung auf ihren Sicherheitsaspekt und ihre Praktikabilität zu untersuchen und umzusetzen, ist das Ziel dieser Arbeit.
 %//!SECTION
 \\
 %//SECTION E2EE Überleitung zu Kapitel-Auflistung
-Um diese Frage beantworten zu können, beschäftigt sich diese Arbeit in dem zweiten Kapitel mit der asymmetrischen Verschlüsselung, welche benötigt wird um die Ende-zu-Ende-Verschlüsselung (E2EE) umzusetzen und die Definition der E2EE, sowie der Sicherheitsbetrachtung der asymmetrischen Verschlüsselung \vcite{E2EE-Method}. Die Arbeit geht dabei nicht auf weitere Padding-Verfahren ein.
-Eine mögliche Lösung, um eine Anonymität über das Internet zu gewährleisten wird in Kapitel drei vorgeschlagen, wobei das Tor-Netzwerk eine wichtige Rolle spielt.
-Diese Arbeit befasst sich im vierten Kapitel mit einer Dezentralisierung der Infrastruktur, um eine weitere Sicherheitsebene zu schaffen.
-Zuletzt werden im fünften Kapitel die Vor- und Nachteile eines solchen Messengers betrachtet, im sechsten Kapitel wird eine mögliche Umsetzung des Messengers beschrieben und im siebten Kapitel wird ein Fazit gezogen.
+Um ein Verständnis über die Sicherheit dieses Messengers zu gewinnen, steigt diese Arbeit in dem zweiten Kapitel mit der asymmetrischen Verschlüsselung und der Ende-zu-Ende-Verschlüsselung (E2EE) ein und beschäftigt sich zuerst mit der mathematischen Betrachtung, um dann die Sicherheit des Verfahrens beurteilen zu können. Dabei geht die Arbeit nicht auf das Padding-Verfahren der asymmetrischen Verschlüsselung ein. Das dritte Kapitel untersucht, ob das Tor-Netzwerk eine mögliche Lösung für die Anonymität im Internet bietet und inwieweit es die Nutzer schützt. Im vierten Kapitel wird ein Blick auf die Definition und die Sicherheit der Dezentralisierung geworfen. Das fünften Kapitel beschreibt abschließend die Umsetzung des Messengers, während im sechsten Kapitel Nachteile und deren Lösungsmöglichkeiten des Messengers betrachtet werden. Das siebte Kapitel zieht schließlich ein Fazit.
 %//!SECTION
 
 
@@ -381,7 +382,7 @@ Im Beispiel eines Messengers bietet ein zentrales Netzwerk den Hauptserver als m
 %//TODO - Satz bisschen scuffed, ausschalten nicht das richtige Wort.
 Ein dezentrales Netzwerk mit einer Peer-to-Peer-Architektur\footnote{Peer-to-Peer bedeutet, dass jeder Knotenpunkt im Netzwerk sowohl Client als auch Server sein kann, welche bidirektional kommunizieren \vcite{PeerToPeerDef}} hat hingegen eine größere Angriffsfläche, wodurch mehrere Knotenpunkte des Netzwerkes kompromittiert werden müssen, um das Netzwerk ausschalten zu können \vcite{GeeksCenralizeDecentralized}.
 %//REVIEW - Hier gibt es irgendwie keine Quellen, maybe einfach logisch?
-Am Beispiel des Messengers, sollten nur Gesprächsteilnehmer Teil des Netzwerkes sein, um zu verhindern, dass ein Angreifer durch simples Beitreten des Netzwerkes die Onion-Adressen der Gesprächsteilnehmer auslesen kann.
+Am Beispiel des Messengers, sollten nur Gesprächsteilnehmer Teil des Netzwerkes sein, um zu verhindern, dass ein Angreifer durch einfaches Beitreten des Netzwerkes die Onion-Adressen der Gesprächsteilnehmer auslesen kann.
 
 
 \section{Umsetzung des Messengers}
@@ -557,7 +558,7 @@ pub struct StorageChat {
   pub priv_key: PrivateKey,
 }
 \end{minted}
-Der \textit{StorageChat} enthält die Nachrichten, welche an den Empfänger gesendet oder von diesem empfangen wurden (\textit{messages}), den öffentlichen Schlüssel des Kommunikationspartner (\textit{rec\_pub\_key1}) und den privaten Schlüssel des Messengers \textit{priv\_key}.
+Der \textit{StorageChat} enthält die Nachrichten, welche an den Empfänger gesendet oder von diesem empfangen wurden (\textit{messages}), den öffentlichen Schlüssel des Kommunikationspartner (\textit{rec\_pub\_key}) und den privaten Schlüssel des Messengers \textit{priv\_key}.
 %//REVIEW - Kann ich das so sagen?
 Um die Daten des Nutzers vor weiteren möglichen Angriffen zu schützen, verwende ich die Bibliothek \textit{zeroize}, welche sensible Daten (wie private Schlüssel) aus dem Arbeitsspeicher löscht (Zeroisation) \vcite{Zeroization}. Zudem ist es durch die symmetrische Verschlüsselung des Datenspeichers für Angreifer nicht möglich (sofern die Applikation geschlossen ist), private Schlüssel oder Chatverläufe auszulesen, wodurch die Privatsphäre der Nutzer geschützt wird.
 
@@ -696,10 +697,10 @@ async fn inner_send(&self, msg: &str, date: u128) -> Result<()> {
 \end{minted}
 Der Server empfängt über die Websocket-Verbindung die verschlüsselte Nachricht des Clients und entschlüsselt diese anschließend mit dem privaten Schlüssel des Chats. Somit wurde die Nachricht empfangen, entschlüsselt und wird nun an das Frontend übermittelt, sodass diese angezeigt werden kann. Nutzer können nun sicher und anonym miteinander kommunizieren.
 \section{Nachteile und Lösungsmöglichkeiten}
-Der Messenger bietet zwar hohe Anonymität und Sicherheit, jedoch ist es unerlässlich auch die Nachteile des Messengers und deren Lösungsmöglichkeiten zu betrachten. Durch die Struktur des Tor-Netzwerkes können Datenmengen um das 120-fache langsamer übermittelt werden, welches bei simplen Textnachrichten nicht auffallen mag, bei größeren Datenmengen, wie zum Beispiel Bildern, jedoch ein Problem darstellen könnte \vcite{TorPerformance}. Dadurch, dass der Client eine Websocket-Verbindung mit dem Onion Service aufbaut, herrscht hier ein \textit{long-term-circuit}, wodurch der \circuit zwischen Onion Service und Client nicht erneuert wird, somit für Angriffe anfälliger sein könnte \vcite{FAQCircuitLifetime}. Zusätzlich ist die Nachrichtenlänge durch das Padding der asymmetrischen Verschlüsselung begrenzt \vcite{OpensslRsaMaxLength}. %//REVIEW - Ich hab die Studie hierbei angewendet, ist das okay?
+Der Messenger bietet zwar hohe Anonymität und Sicherheit, jedoch ist es unerlässlich auch die Nachteile des Messengers und deren Lösungsmöglichkeiten zu betrachten. Durch die Struktur des Tor-Netzwerkes können Datenmengen um das 120-fache langsamer übermittelt werden, welches bei einfachen Textnachrichten nicht auffallen mag, bei größeren Datenmengen, wie zum Beispiel Bildern, jedoch ein Problem darstellen könnte \vcite{TorPerformance}. Dadurch, dass der Client eine Websocket-Verbindung mit dem Onion Service aufbaut, herrscht hier ein \textit{long-term-circuit}, wodurch der \circuit zwischen Onion Service und Client nicht erneuert wird, somit für Angriffe anfälliger sein könnte \vcite{FAQCircuitLifetime}. Zusätzlich ist die Nachrichtenlänge durch das Padding der asymmetrischen Verschlüsselung begrenzt \vcite{OpensslRsaMaxLength}. %//REVIEW - Ich hab die Studie hierbei angewendet, ist das okay?
 Eine hybride Verschlüsselung, also eine Kombination aus asymmetrischer und symmetrischer Verschlüsselung, könnte eine mögliche Lösung für die limitierte Nachrichtenlänge sein \vcite{HybridEncryption}. Dabei generiert bereits bei dem Verbindungsaufbau der Server einen zufälligen symmetrischen Schlüssel \vebd. Dieser wird mit dem öffentlichen Schlüssel des Clients verschlüsselt und an den Client übermittelt, welcher diesen entschlüsselt und abspeichert, sodass sowohl Server als auch Client den gleichen symmetrischen Schlüssel teilen \vebd.
 %//REVIEW - Nochmal zitieren warum schnell und keine Nachrichtenlängenbegrenzung?
-Somit werden die Vorteile der symmetrischen Verschlüsselung (schnell und keine Nachrichtenlängenbegrenzung) mit den Vorteilen der asymmetrischen Verschlüsselung (sicherer Austausch von Schlüsseln) kombiniert \vcite{HybridTechnopedia}. Der Messenger muss zudem gestartet sein, damit der Onion Service im Tor-Netzwerk verfügbar ist, sodass ein Nutzer nur kontaktiert werden kann, wenn dieser auch den Messenger gestartet hat.
+Somit werden die Vorteile der symmetrischen Verschlüsselung (schnell und keine Nachrichtenlängenbegrenzung) mit den Vorteilen der asymmetrischen Verschlüsselung (sicherer Austausch von Schlüsseln) kombiniert \vcite{HybridTechnopedia}. Aufgrund der Infrastruktur dieses Messengers, müssen beide Kommunikationspartner den Messenger geöffnet haben, damit diese miteinander kommunizieren können (der Onion Service wird nur durch Öffnen des Messengers gestartet).
 
 \section{Fazit}
 In der heutigen Gesellschaft wird die Meinungsfreiheit der Bürger, welche in einem totalitären Staat leben, immer wichtiger. Das Tor-Netzwerk bietet hierbei eine Möglichkeit, anonym und sicher über Onion Services miteinander zu kommunizieren. Mit dem Messenger, welcher in dieser Arbeit umgesetzt wurde, ist es möglich, Menschen in totalitären Staaten ein Werkzeug zu geben, ihre Meinung zu äußern. Allerdings muss auch hierfür die Onion-Adresse der Person, welche den Messenger benutzt, sicher über eine andere Plattform übermittelt werden, damit zum Beispiel Reporter diese kontaktieren können. Zusätzlich müssen beide Kommunikationspartner deren Messenger gestartet haben.
