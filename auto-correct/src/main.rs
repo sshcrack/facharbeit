@@ -55,6 +55,7 @@ async fn main() -> Result<()> {
 
     fs::write("corrected.tex", out_str).await?;
     println!("Driver wird beendet...");
+    driver.close_window().await?;
     child.start_kill()?;
     child.wait().await?;
 
@@ -80,6 +81,8 @@ pub async fn prepare_deepl() -> Result<WebDriver> {
 
     let driver = WebDriver::new(url, caps).await?;
     driver.goto("https://www.deepl.com/write").await?;
+    driver.set_script_timeout(Duration::new(60 * 60 * 24, 0)).await?;
+
     //find_and_press_btn(
     //        &driver,
     //        By::XPath("//*[@id=\"write-text-styles-popover-button\"]"),
@@ -159,11 +162,7 @@ pub async fn correct_deepl(driver: &WebDriver, text: &str) -> Result<String> {
                     SentenceTokenizer::<Standard>::new(&curr_chunk, &data).collect();
                 let improved = improve_deepl(driver, &sentences).await?;
 
-                print!("Waiting for approval...");
-                let mut s=String::new();
-                let _=stdout().flush();
-                stdin().read_line(&mut s).expect("Did not enter a correct string");
-
+                println!("Writing {}", improved);
                 text_done.push_str(&improved);
                 text_done.push_str("\n");
                 curr_chunk = String::new();
@@ -179,6 +178,33 @@ pub async fn correct_deepl(driver: &WebDriver, text: &str) -> Result<String> {
 }
 
 async fn improve_deepl(driver: &WebDriver, sentences: &Vec<&str>) -> Result<String> {
+    let mut curr_merged = String::new();
+    let mut corrected = Vec::new();
+    for sentence in sentences {
+        if sentence.len() + curr_merged.len() > 2000 {
+            let res = improve_deepl_raw(driver, &curr_merged).await?;
+            corrected.push(res);
+
+            curr_merged = sentence.to_string();
+            continue;
+        }
+
+        if !curr_merged.is_empty() {
+            curr_merged.push(' ');
+        }
+    
+        curr_merged.push_str(&sentence);
+    }
+
+    if !curr_merged.is_empty() {
+        let res = improve_deepl_raw(driver, &curr_merged).await?;
+        corrected.push(res);
+    }
+
+    Ok(corrected.join(" "))
+}
+
+async fn improve_deepl_raw(driver: &WebDriver, raw: &str) -> Result<String> {
     let input = driver
         .query(By::Css(".min-h-0 > div:nth-child(1)"))
         .first()
@@ -191,12 +217,11 @@ async fn improve_deepl(driver: &WebDriver, sentences: &Vec<&str>) -> Result<Stri
     let mut prev = output.text().await?;
 
     loop {
-        let joined = sentences.join(" ");
-        if joined.trim().is_empty() {
+        if raw.trim().is_empty() {
             return Ok("".to_string());
         }
 
-        set_clipboard_string(&joined).expect("To set clipboard");
+        set_clipboard_string(&raw).expect("To set clipboard");
 
         input.send_keys(Key::Control + "a".to_string()).await?;
         thread::sleep(Duration::from_millis(100));
@@ -208,7 +233,20 @@ async fn improve_deepl(driver: &WebDriver, sentences: &Vec<&str>) -> Result<Stri
 
             let temp = output.text().await?;
             if &temp != &prev {
-                return Ok(temp);
+                println!("Waiting for approval...");
+                driver.execute_async(r#"
+                let done = arguments[0];
+                const func = e => {
+                    console.log("Key", e)
+                    if(e.key !== "b" || !e.ctrlKey)
+                        return
+                    window.removeEventListener("keydown", func)
+                    done()
+                }
+                window.addEventListener("keydown", func)
+                "#, Vec::new()).await?;
+
+                return Ok(output.text().await?);
             }
 
             prev = temp;

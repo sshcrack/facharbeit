@@ -251,7 +251,6 @@ Ein dezentraler, Ende-zu-Ende-verschlüsselter Messenger, der über das Tor-Netz
 Um ein Verständnis für die Sicherheit dieses Messengers zu erlangen, geht diese Arbeit im zweiten Kapitel auf die asymmetrische Verschlüsselung und die Ende-zu-Ende-Verschlüsselung (E2EE) ein und beschäftigt sich zunächst mit der mathematischen Betrachtung, um anschließend die Sicherheit des Verfahrens beurteilen zu können. Dabei wird nicht auf das Padding-Verfahren der asymmetrischen Verschlüsselung eingegangen. Im dritten Kapitel wird untersucht, ob das Tor-Netzwerk eine mögliche Lösung für das Problem der Anonymität im Internet darstellt und inwieweit es die Nutzer schützt. Das vierte Kapitel beschäftigt sich mit der Definition und der Sicherheit von Dezentralisierung. Im fünften Kapitel wird schließlich die Implementierung des Messengers beschrieben, während im sechsten Kapitel die Nachteile des Messengers und deren Lösungsmöglichkeiten betrachtet werden. Im siebten Kapitel wird ein Fazit gezogen.
 
 \section{Asymmetrische Verschlüsselung}
-%CORRECT_START
 %//SECTION E2EE und asymmetrische Verschlüsselung
 Um einen sicheren Nachrichtenaustausch zu gewährleisten, wird in dieser Arbeit E2EE implementiert. Bei E2EE wird die Nachricht vom Sender verschlüsselt, bevor sie an den Empfänger gesendet wird \vcite{E2EE}. Zwischengeschaltete Akteure wie Server oder mögliche Angreifer können die Nachricht somit nicht lesen \vebd. \textbf{Nur} der Empfänger der Nachricht kann sie entschlüsseln. Als Ver- und Entschlüsselungsverfahren der Nachrichten wird die asymmetrische Verschlüsselung verwendet \vebd. Diese Arbeit beschränkt sich bei der asymmetrischen Verschlüsselung auf das RSA-Verfahren.
 %//!SECTION
@@ -321,11 +320,10 @@ Bei der symmetrischen Verschlüsselung wird derselbe Schlüssel zum Ver- und Ent
 Im Vergleich zur asymmetrischen Verschlüsselung ist die symmetrische Verschlüsselung schneller und hat keine Beschränkung der Chiffretextlänge \vcite{RsaAESAnalysis, OpensslRsaMaxLength}. Allerdings muss der Schlüssel der symmetrischen Verschlüsselung dem anderen Kommunikationspartner sicher übermittelt werden, um die Nachrichten entschlüsseln zu können \vebd.
 
 \section{Das Tor-Netzwerk}
-Die Anonymität des Messengers ist ein weiterer zentraler Aspekt, um die jeweiligen Kommunikationspartner zu schützen. Das Tor-Netzwerk ist hierbei ein möglicher Lösungsansatz, da normalen Routing, wie wir es tagtäglich nutzen, der Client kommuniziert  direkt mit dem Zielserver, somit der Zielserver die IP-Adresse des Clients einsehen kann \vcite{TCP_IP}.
+%CORRECT_START
+Die Anonymität des Messengers ist ein weiterer zentraler Aspekt, um die jeweiligen Kommunikationspartner zu schützen. Das Tor-Netzwerk ist hier eine mögliche Lösung, da bei normalem Routing, wie wir es täglich nutzen, der Client direkt mit dem Zielserver kommuniziert, der Zielserver also die IP-Adresse des Clients sehen kann \vcite{TCP_IP}.
 %//REVIEW für den Satz danach Quelle?
-Eine Rückverfolgung der IP-Adresse ist somit möglich \vcite{LocPolice}. Und genau bei diesem Problem setzt das Tor-Netzwerk an. Das Tor-Netzwerk besteht hierbei aus vielen \nodes, welche eingehende Tor-Verbindungen akzeptieren und weiterverarbeiten. Damit ein Client eine Anfrage über das Netzwerk verschicken kann, sucht er zunächst einen Pfad durch das Netzwerk, genannt \circuit \vcite{TorCircuits}. Der \circuit besteht dabei meist aus drei \nodes und ist für 10 Minuten gültig, bis der Client das \circuit erneuert (also einen neuen Pfad "sucht")  \vcite{FAQCircuitLifetime}. Die drei \nodes werden klassifiziert in einer \entryn, einer \relayn und einer \exitn, worüber später Anfragen an die Zielserver geschickt werden können \vebd.
-Dabei verschlüsselt der Client verschlüsselt die eigentliche Anfrage mehrmals, hüllt sie also in ein mehrere "Schalen" ein, welche eine \onion bilden, und leitet diese über den \circuit an den Zielserver weiter\vcite{TorDesign}. Anfangs wird die \onion von dem Tor-Client an die \entryn geschickt \vebd. Bei jeder \node, wie der \entryn, wird eine Schale der \onion "geschält" (die \onion also einmal entschlüsselt), welche Informationen zu dem nächsten Knotenpunkt enthält \vcite{TorStructure2}. Die Node leitet nun die um eine Schale "geschälte" \onion an den nächsten Knotenpunkt weiter \vebd.
-Sobald die Anfrage bei der \exitn angekommen ist, entfernt diese die letzte "Schale" der Anfrage, welche nun vollständig entschlüsselt ist und an den Zielserver geschickt werden kann \vebd. Dieses Routing-Verfahren ist auch als \textit{Onion-Routing} bekannt \vcite{TorDesign}.
+Eine Rückverfolgung der IP-Adresse ist somit möglich \vcite{LocPolice}. Genau an diesem Punkt setzt das Tor-Netzwerk an. Das Tor-Netzwerk besteht dabei aus vielen \nodes, die eingehende Tor-Verbindungen annehmen und weiterverarbeiten. Damit ein Client eine Anfrage über das Netzwerk senden kann, sucht er sich zunächst einen Weg durch das Netzwerk, einen sogenannten \circuit \vcite{TorCircuits}. Der \circuit besteht in der Regel aus drei \nodes und ist 10 Minuten gültig, bis der Client den \circuit erneuert (also einen neuen Pfad "sucht") \vcite{FAQCircuitLifetime}. Die drei \nodes werden in eine \entryn, eine \relayn und eine \exitn gegliedert, über die später Anfragen an die Zielserver gesendet werden können \vebd. Dabei verschlüsselt der Client die eigentliche Anfrage mehrfach, verpackt sie also in mehrere "Schalen", die eine \onion bilden, und leitet diese über den \circuit an den Zielserver weiter\vcite{TorDesign}. Zunächst wird die \onion vom Tor-Client an die \entryn gesendet \vebd. An jeder \node, wie der \entryn, wird eine Schale der \onion "abgeschält" (die \onion also einmal entschlüsselt), die Informationen über die nächste Node enthält \vcite{TorStructure2}. Die Node leitet nun die um eine Schale "geschälte" \onion an den nächsten Knotenpunkt weiter \vebd. Sobald die Anfrage den \exitn erreicht hat, entfernt dieser die letzte "Schale" von der Anfrage, die nun vollständig entschlüsselt ist und an den Zielserver gesendet werden kann \vebd. Dieses Routing-Verfahren ist auch als \textit{Onion-Routing} bekannt \vcite{TorDesign}.
 
 \begin{figure}[h]
   \centering
@@ -334,31 +332,25 @@ Sobald die Anfrage bei der \exitn angekommen ist, entfernt diese die letzte "Sch
 \end{figure}
 
 %//TODO Checken ob das wirklich in der quelle so steht, sollte eig
-\textbf{Nur} die \entryn weiß somit die reale IP-Adresse des Clients und \textbf{nur} die \exitn weiß, an welchen Zielserver die Anfrage geschickt wurde \vcite{TorStructure2}. Dazwischenliegende \nodes, wie die \relayn erkennen nur eine verschlüsselte Anfrage und haben keinerlei Informationen über den eigentlichen Client oder den Zielserver. Die \exitn schickt allerdings die Anfrage ohne Verschlüsselung des Tor-Netzwerkes an den Zielserver, wodurch Informationen der Nutzer ausgelesen werden könnten (wenn die Anfrage nicht über das HTTPS-Protokoll versendet wurde) und zusätzlich die IP-Adresse des Zielservers speichern \vcite{TorExitNodeVulnerability}. Durch Etablieren von \exitns in dem Tor-Netzwerk könnten Angreifer somit die Anonymität des Netzwerkes bzw. der Nutzer gefährden \vebd.
+\textbf{Nur} die \entryn kennt also die echte IP-Adresse des Clients und \textbf{Nur} die \exitn weiß, an welchen Zielserver die Anfrage geschickt wurde \vcite{TorStructure2}. Zwischengeschaltete \nodes wie die \relayn erkennen nur eine verschlüsselte Anfrage und haben keine Informationen über den eigentlichen Client oder den Zielserver. Der \exitn hingegen sendet die Anfrage ohne Verschlüsselung des Tor-Netzwerks an den Zielserver, wodurch Informationen über den Benutzer ausgelesen werden können (wenn die Anfrage nicht über das HTTPS-Protokoll gesendet wurde) und zusätzlich die IP-Adresse des Zielservers gespeichert werden kann \vcite{TorExitNodeVulnerability}. Durch die Einrichtung von \exitns im Tor-Netzwerk könnte ein Angreifer somit die Anonymität des Netzwerks bzw. der Benutzer gefährden \vebd.
 
 \subsection{Onion Services}
-Onion Services sind eine mögliche Lösung für den \exitn-Angriff \vcite{TorOnionServiceTalk}. Diese nicht auf die \exitn angewiesen sind und agieren nur innerhalb des Tor-Netzwerkes mit anderen Tor-Clients und verhalten sich wie normale Tor-Clients \vebd. Onion Services sind nicht über das normale Internet erreichbar, wie die Zielserver im vorherigen Beispiel, sondern nur über das Tor-Netzwerk \vcite{TorOnionService}. Bei Onion Services müssen im Vergleich zu normalen öffentlichen Servern keine Ports geöffnet werden, damit ein Client sich mit dem Server verbinden kann, da der Onion Service direkt mit dem Tor-Netzwerk über ausgehende Verbindungen kommuniziert (auch bekannt als \textit{NAT punching}) und darüber sämtliche Daten geleitet werden \vebd.
+Onion Services sind eine mögliche Lösung für den \exitn-Angriff \vcite{TorOnionServiceTalk}. Sie sind nicht auf \exitn angewiesen und agieren nur innerhalb des Tor-Netzwerks mit anderen Tor-Clients und verhalten sich wie normale Tor-Clients \vebd. Onion Services sind nicht wie die Zielserver im vorherigen Beispiel über das normale Internet erreichbar, sondern nur über das Tor-Netzwerk \vcite{TorOnionService}. Im Gegensatz zu normalen öffentlichen Servern müssen bei Onion Services keine Ports geöffnet werden, damit sich ein Client mit dem Server verbinden kann, da der Onion Service direkt mit dem Tor-Netzwerk über ausgehende Verbindungen kommuniziert (auch bekannt als \textit{NAT-Punching}) und alle Daten darüber geleitet werden \vebd.
 
 %//NOTE bis hier überprüft
 
 \subsubsection{Verbindungsaufbau}
-Zunächst generiert der Onion Service ein Schlüsselpaar, bestehend aus einem öffentlichen und einem privaten Schlüssel \vcite{GeeksOnionService}. Unter anderem wird nun aus dem öffentlichen Schlüssel die Adresse des Onion Services generiert und endet mit ".onion" \vebd. Ein Beispiel für eine solche Adresse ist die der Suchmaschine DuckDuckGo: \\
+Zunächst erzeugt der Onion Service ein Schlüsselpaar, bestehend aus einem öffentlichen und einem privaten Schlüssel \vcite{GeeksOnionService}. Aus dem öffentlichen Schlüssel wird nun unter anderem die Adresse des Onion Service generiert, die mit ".onion" endet \vebd. Ein Beispiel für eine solche Adresse ist die der Suchmaschine DuckDuckGo: \\
 \textit{duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion} \vcite{DuckDuckGoLink}.
 %/REVIEW sehr oft gleiche Quelle (L meinte is okay)
-Der Onion Service sich nun mit dem Tor-Netzwerk wie ein normaler Client über einen \circuit, welcher aus drei \nodes besteht \vcite{TorOnionService}. Der Service sendet eine Anfrage an das letzte Relay im \circuit, sodass es als \introp dient und etabliert eine Langzeitverbindung jenem (der \circuit erneuert sich also nicht alle 10 Minuten wie bei dem Tor-Client) \vebd. Dieser Vorgang wiederholt sich zweimal, bis der Onion Service drei \introps auf drei verschiedenen \circuits gefunden hat \vebd. Damit andere Clients den Onion Service erreichen können, erstellt der Onion Service einen \textit{Onion Service descriptor}, welcher die Adressen der \introps und Authentifizierungsschlüssel enthält, signiert diesen mit seinem privaten Schlüssel und schickt den \textit{Descriptor} an die Directory Authority \vcite{TorSpecDerivingKeys, TorSpecDirectoryInf}. Die Directory Authority ist ein Server, welcher Informationen über das Tor-Netzwerk, wie zum Beispiel die des Onion Services, speichert und verteilt \vcite{TorDirectoryAuthority}. Im Sinne dieser Arbeit, hat der Onion Service sich nun von Person A mit dem Tor-Netzwerk verbunden, jedoch braucht es noch Person B, welche sich über ihren Tor-Client mit dem Onion Service der Person B verbindet. Damit der Tor-Client von Person A sich allerdings verbinden kann, fragt der Client nun die Directory Authority an den signierten \textit{Descriptor} des Onion Services von Person B an den Client zu schicken \vcite{TorStructure}. Der Client besitzt nun die Adressen der \introps und die Signatur des \textit{Descriptors}, sodass dieser mit dem öffentlichen Schlüssel der Onion Adresse die Signatur überprüfen kann \vebd. Der Client generiert nun 20 zufällige Bytes (Secret) und schickt diese an eine zufällig ausgewählte \relayn, welche nun als \renp dient \vcite{TorSpecRendezvous}. Das Secret wird von dem Client auch an eine von den \introps geschickt, sodass der Onion Service mit dem gleichen Secret eine Verbindung zu dem \renp aufbauen kann \vcite{TorSpecIntroP}. Der \renp leitet, wenn der Client und der Onion Service über deren \circuits miteinander verbunden sind, die Nachrichten zwischen den beiden weiter \vcite{TorSpecRendezvous}. Der Client und der Onion Service kommunizieren nun also nur über das Tor-Netzwerk miteinander und sind nicht mehr auf die \exitn angewiesen.
+Der Onion Service verbindet sich nun wie ein normaler Client mit dem Tor-Netzwerk über einen \circuit, der aus drei \nodes besteht \vcite{TorOnionService}. Der Dienst sendet eine Anfrage an das letzte Relay im \circuit, sodass dieses als \introp fungiert und eine Langzeitverbindung zu diesem aufbaut (der \circuit erneuert sich also nicht alle 10 Minuten wie beim Tor-Client) \vebd. Dieser Vorgang wird zweimal wiederholt, bis der Onion Service drei \introps auf drei verschiedenen \circuits gefunden hat \vebd. Damit andere Clients den Onion Service erreichen können, erstellt der Onion Service einen \textit{Onion Service descriptor}, der die Adressen der \introps und die Authentifizierungsschlüssel enthält, signiert diesen mit seinem privaten Schlüssel und schickt den \textit{Descriptor} an die Directory Authority \vcite{TorSpecDerivingKeys, TorSpecDirectoryInf}. Die Directory Authority ist ein Server, der Informationen über das Tor-Netzwerk speichert und verteilt, wie z.B. die des Onion Services \vcite{TorDirectoryAuthority}. Übertragen auf die Arbeit hat sich nun der Onion Service von Person A mit dem Tor-Netzwerk verbunden, aber es braucht noch Person B, die sich über ihren Tor-Client mit dem Onion Service von Person B verbindet. Damit sich der Tor-Client von Person A verbinden kann, fordert der Client nun die Directory Authority auf, den signierten \textit{Descriptor} des Onion Services von Person B an den Client zu senden \vcite{TorStructure}. Der Client besitzt nun die Adressen der \introps und die Signatur des \textit{Descriptor}, sodass er die Signatur mit dem öffentlichen Schlüssel der Onion-Adresse überprüfen kann \vebd. Der Client generiert nun 20 zufällige Bytes (Secret) und sendet diese an eine zufällig ausgewählte \relayn, die nun als \renp dient \vcite{TorSpecRendezvous}. Der Client sendet das Secret auch an einen der \introps, damit der Onion Service mit dem gleichen Secret eine Verbindung zum \renp aufbauen kann \vcite{TorSpecIntroP}. Wenn der Client und der Onion Service über ihre \circuits verbunden sind, leitet der \renp die Nachrichten zwischen den beiden weiter \vcite{TorSpecRendezvous}. Der Client und der Onion Service kommunizieren nun nur noch über das Tor-Netzwerk miteinander und sind nicht mehr auf die \exitn angewiesen.
 
 \subsection{Sicherheit}
 %//TODO Nochmal Studio durchlesen, ist noch nicht schlüssig
 %//TODO Angriff wurde schon von Tor gefixt, benutze OnionServiceFingerprinting
 %//TODO Clearnet erklären
-In der Sicherheitsbetrachtung beziehe ich mich ausschließlich auf die Verbindung zwischen Onion Services und Tor-Clients (also nicht zwischen Tor-Client und \exitn).
-
-Das Tor-Netzwerk in Verbindung mit den Onion Services liefert, wie bereits erläutert, durch \circuits und \renp eine hohe Anonymität. Im Gegenzug sorgt die hohe Anonymität, welche durch die vielen \nodes und durch mehrfache Verschlüsselungen erreicht wird, auch dazu, dass das Tor-Netzwerk um das 120-fache langsamer ist im Vergleich zum normalen Routing \vcite{TorPerformance}.
-Das Tor-Netzwerk ist praktisch unmöglich in der Praxis zu blockieren, da über 6.500 verschiedene \nodes existieren und es somit keinen zentralen Hauptserver gibt, von welchem das Tor-Netzwerk abhängig ist \footnote{Es ist zwar möglich die IP-Adressen jeglicher \relayns zu blockieren, jedoch ist dies durch Pluggable Transports umgänglich \vcite{PluggableTransports}} \vcite{DeanonymizingTorBook}.
-Theoretisch ist eine Deanonymisierung eines Onion Services möglich, wenn der ISP (Internet Service Provider, also z.B. Telekom, EWE, etc.) eingehende und ausgehende Verbindungen zwischen Client und Onion Service bzw. zu deren \relayn aufzeichnet und diese mithilfe von Machine Learning analysiert \vcite{OnionServiceFingerprinting}. Dabei war die Umsetzung der theoretischen Grundlage bis jetzt mit idealisierten Bedingungen erfolgreich, jedoch braucht es noch weiterer Studien, um die möglichen Gefahren dieses Algorithmus einzustufen \vebd. Dabei könnten, wenn die deutsche, amerikanische und die französische Regierung zusammenarbeiten, 78,34 \% der \circuits deanonymisieren \vebd.
-%//FIXME - Hier is irgend nen Kasus Fehler
-Dieses Szenario erscheint jedoch unrealistisch, da Bürger in Deutschland, in den USA und in Frankreich ein Recht auf Meinungsfreiheit besitzen und höchstwahrscheinlich keine Deanonymisierungsangriff starten, um die Privatsphäre zum Beispiel von Whistleblowern zu schützen  \vcite{AmnReport,ROG-USA}.
-%//TODO Später nochmal hier drauf eingehen, ist unrealistisch, dass die Regierungen zusammenarbeiten, um Meinungsfreiheit und Whistleblower unterdrücken.
+In der Sicherheitsbetrachtung beziehe ich mich ausschließlich auf die Verbindung zwischen den Onion Services und den Tor-Clients (also nicht zwischen Tor-Client und \exitn). Das Tor-Netzwerk in Verbindung mit den Onion Services bietet, wie bereits erläutert, durch \circuits und \renp ein hohes Maß an Anonymität. Im Gegenzug führt die hohe Anonymität, die durch die vielen \nodes und die mehrfache Verschlüsselung erreicht wird, auch dazu, dass das Tor-Netzwerk im Vergleich zum normalen Routing \vcite{TorPerformance} um den Faktor 120 langsamer ist.  \vcite{DeanonymizingTorBook}. Theoretisch ist eine Deanonymisierung eines Onion Services möglich, wenn der ISP (Internet Service Provider, also z.B. Telekom, EWE, etc.) eingehende und ausgehende Verbindungen zwischen Client und Onion Service bzw. zu deren \relayn aufzeichnet und mithilfe von Machine Learning analysiert \vcite{OnionServiceFingerprinting}. Die Umsetzung der theoretischen Grundlagen war bisher unter idealisierten Bedingungen erfolgreich, jedoch sind weitere Untersuchungen notwendig, um die potenziellen Gefahren dieses Algorithmus einordnen zu können \vebd. Bei einer Zusammenarbeit der Regierungen Deutschlands, der USA und Frankreichs könnten 78,34 \% der \circuits deanonymisiert werden \vebd.
+Dieses Szenario erscheint jedoch unrealistisch, da die Bürger in Deutschland, den USA und Frankreich das Recht auf freie Meinungsäußerung haben und daher höchstwahrscheinlich keine Deanonymisierungsangriffe starten werden, um die Privatsphäre z.B. von Whistleblowern zu schützen \vcite{AmnReport,ROG-USA}.
 %CORRECT_END
 
 \section{Dezentralisierung}
@@ -370,24 +362,25 @@ Der Client muss bei dieser Netzwerkstruktur dem Hauptserver "vertrauen" und kann
 
 \subsection{Sicherheit}
 %//REVIEW - Muss ich hier wirklich noch sagen warum durch Kompromittierung Daten ausgelesen werden können? Bzw. die zentrale Angriffsfläche ist doch logisch oder?
-Im Beispiel eines Messengers bietet ein zentrales Netzwerk den Hauptserver als mögliche Angriffsfläche an, sodass diese entweder durch DDoS-Angriffe außer Betrieb gesetzt werden kann oder durch Kompromittierung des Servers sowohl der Empfänger als auch der Sender der Nachrichten ausgelesen werden kann (in Form von Onion-Adressen)\vcite{BSI-DDoS}.
-%//TODO - Satz bisschen scuffed, ausschalten nicht das richtige Wort.
-Ein dezentrales Netzwerk mit einer Peer-to-Peer-Architektur\footnote{Peer-to-Peer bedeutet, dass jeder Knotenpunkt im Netzwerk sowohl Client als auch Server sein kann, welche bidirektional kommunizieren \vcite{PeerToPeerDef}} hat hingegen eine größere Angriffsfläche, wodurch mehrere Knotenpunkte des Netzwerkes kompromittiert werden müssen, um das Netzwerk ausschalten zu können \vcite{GeeksCenralizeDecentralized}.
-%//REVIEW - Hier gibt es irgendwie keine Quellen, maybe einfach logisch?
-Am Beispiel des Messengers, sollten nur Gesprächsteilnehmer Teil des Netzwerkes sein, um zu verhindern, dass ein Angreifer durch einfaches Beitreten des Netzwerkes die Onion-Adressen der Gesprächsteilnehmer auslesen kann.
+Durch die Abhängigkeit des zentralen Netzwerks von einem Hauptserver kann ein Angreifer gezielter, z.B. durch DDoS-Angriffe oder Kompromittierung, das gesamte Netzwerk außer Betrieb setzen oder Nutzerdaten (z.B. Telefonnummern bei Messengern) auslesen \vcite{BSI-DDoS}.
 
+%//TODO - Satz bisschen scuffed, ausschalten nicht das richtige Wort.
+Ein dezentrales Netzwerk mit einer Peer-to-Peer-Architektur\footnote{Peer-to-Peer bedeutet, dass jeder Knoten im Netzwerk sowohl Client als auch Server sein kann, die bidirektional kommunizieren \vcite{PeerToPeerDef}} bietet dagegen eine größere Angriffsfläche, sodass mehrere Knoten im Netzwerk kompromittiert oder abgeschaltet werden müssen, um das Netzwerk für deren Benutzer unzugänglich zu machen \vcite{GeeksCentralizeDecentralized}.
+%//REVIEW - Hier gibt es irgendwie keine Quellen, maybe einfach logisch?
+Es ist jedoch wichtig, dass die Knoten im Netzwerk vertrauenswürdig sind (im Beispiel des Messengers, dass nur die Gesprächsteilnehmer Teil des Netzwerks sind), um zu verhindern, dass ein Angreifer die Onion-Adressen der Gesprächsteilnehmer durch einfaches Beitreten zum Netzwerk auslesen kann.
 
 \section{Umsetzung des Messengers}
-Um den Messenger umzusetzen, müssen zunächst die Anforderung des Messengers bekannt sein. Somit sollten folgende Kriterien erfüllt sein:
+Folgende Kriterien müssen erfüllt sein, um den Messenger sicher, anonym und einfach zu gestalten:
 \begin{description}
-  \item[Einfache Bedienung und Installation] - Möglichst wenig Kenntnisse über Computer sollten benötigt werden, um diesen Messenger zu installieren und zu benutzen
-  \item[Peer-to-Peer-Verbindung] - Nur über eine direkte Verbindung miteinander kommunizieren
-  \item[Anonymität] - Kommunikation über das Tor-Netzwerk
-  \item[Sicherheit] - Verschlüsseltes Speichern von Nachrichten und Schlüsselpaaren, um Auslesen der Daten (z.B. durch totalitäre Staaten) zu verhindern
+  \item[Einfache Handhabung und Installation] - Für die Installation und Nutzung des Messengers sollten möglichst wenig technische Kenntnisse nötig sein
+  \item[Peer-to-Peer-Verbindung] - Die Kommunikation zwischen Messengern sollte nur über eine direkte Verbindung erfolgen
+  \item[Anonymität] - Verbindungen zwischen Messengern nur das Tor-Netzwerk, keine Anfragen über das normale Internet
+  \item[Sicherheit] - Verschlüsselte Speicherung von Nachrichten und Schlüsselpaaren, um Auslesen der Daten (z.B. durch totalitäre Staaten) zu verhindern
   \item[E2EE] - Verschlüsselung der Nachrichten und Verifikation des Kommunikationspartners
 \end{description}
-Damit der Nutzer keine Konsole verwenden muss, um den Messenger zu benutzen, habe ich eine Desktopapplikation mit Rust und Tauri entwickelt. Durch Tauri sind keine weiteren Installationen von Bibliotheken nötig, wodurch eine einfache Installation gegeben ist. %//REVIEW - Hier Quelle? Weil ich habs ja programmiert sind ja keine weiteren Installationen dafür nötig
-Zudem kann die Applikation für Windows, Linux und (theoretisch) MacOS kompiliert werden \vcite{RustCompile}. Rust bietet eine hohe Performance und ist Memory Safe, wodurch viele Sicherheitslücken, wie Buffer Overflows, verhindert werden können \vcite{RustSecurity}. Das Tauri-Framework bietet hierbei zwischen User Interface (UI), welches ich in Typescript und React programmiert habe, und Rust-Backend eine Schnittstelle, um Daten (\textit{payloads}) zwischen Frontend und Backend zu versenden \vcite{TauriPayloads}. Ich werde in dieser Umsetzung nicht auf den Quellcode des Frontends eingehen, da dieser nur für das UI zuständig ist und keine weiteren Funktionalitäten bietet.
+Damit der Benutzer keine Konsole verwenden muss, um den Messenger zu benutzen, habe ich eine Desktopanwendung mit Rust und Tauri entwickelt. Tauri erfordert hierbei keine zusätzlichen Interpreter oder Bibliotheken, was die Installation vereinfacht.
+%//REVIEW - Hier Quelle? Weil ich habs ja programmiert sind ja keine weiteren Installationen dafür nötig
+Außerdem kann die Anwendung für Windows, Linux und macOS kompiliert werden \vcite{RustCompile}. Rust bietet eine hohe Performance und ist Memory Safe, wodurch viele Sicherheitslücken, wie Buffer Overflows, verhindert werden können \vcite{RustSecurity}. Das Tauri Framework bietet hier zwischen dem User Interface (UI), welches ich in Typescript und React programmiert habe, und dem Rust-Backend eine Schnittstelle, um Daten (\textit{payloads}) zwischen Frontend und Backend zu versenden \vcite{TauriPayloads}. Ich werde in diesem Kapitel nicht auf die Implementierung des Frontends eingehen, da dieser nur für die Benutzeroberfläche zuständig ist und keine weiteren Funktionalitäten bietet.
 \begin{comment}
 \subsection{Bibliotheken - Übersicht}
 Der Messenger ist in verschiedene Bibliotheken nach ihren Funktionen aufgeteilt worden:
@@ -411,8 +404,8 @@ Da die Messenger mit einer Peer-to-Peer-Verbindung miteinander verbunden sind, m
 \end{comment}
 
 \subsection{Peer-to-Peer-Verbindung}
-Damit Messenger in der Lage sind, sowohl als Client als auch als Server zu fungieren, startet jeder Messenger einen HTTP-Server, welcher einen HTTP-Endpunkt anbietet (in diesem Messenger \textit{/ws/}), mit welchem eine Websocket\footnote{%//TODO Hier richtig zitieren
-  Ein Protokoll für bidirektionale Kommunikation zwischen Server und Client über HTTP \vcite{WebsocketDef}}-Verbindung durch Clients aufgebaut werden kann. Der Server ist hierbei also in der Lage sowohl Packets %//TODO -  Packets noch erklären?
+Damit Messenger sowohl als Client als auch als Server fungieren kann, startet jeder Messenger einen HTTP-Server, der einen HTTP-Endpunkt anbietet (in diesem Messenger \textit{/ws/}), mit welcher Clients eine Websocket\footnote{%//TODO Hier richtig zitieren
+  Ein Protokoll für bidirektionale Kommunikation zwischen Server und Client über HTTP \vcite{WebsocketDef}}-Verbindung aufbauen können. Der Server ist somit in der Lage, sowohl Packets %//TODO -  Packets noch erklären?
 zu empfangen als auch zu senden.
 \begin{minted}[breaklines]{rust}
 HttpServer::new(|| {
@@ -428,7 +421,7 @@ HttpServer::new(|| {
 .await?;
 \end{minted}
 
-Analog dazu besitzt jeder Messenger auch einen Websocket-Client, welcher sich im direkten Weg (über das Tor-Netzwerk) mit den anderen Messengern verbinden kann. Der Verbindungsaufbau zu anderen Messengern sieht wie folgt aus:
+Analog dazu hat jeder Messenger auch einen Websocket-Client, der sich direkt über das Tor-Netzwerk mit den anderen Messengern verbinden kann. Der Verbindungsaufbau zu anderen Messengern sieht wie folgt aus:
 \begin{minted}[breaklines]{rust}
 /// `onion_hostname` is the onion address of the other messenger to connect to
 pub async fn new(onion_hostname: &str) -> Result<Self> {
@@ -460,7 +453,7 @@ pub async fn new(onion_hostname: &str) -> Result<Self> {
   // [...]
 }
 \end{minted}
-Damit zwei Nutzer über den Messenger Nachrichten versenden können, muss ein Messenger die Rolle als Client und der ander als Server übernehmen. Dabei nimmt der Messenger, welcher die Verbindung zu einem anderen Messenger initiiert hat, die Rolle als Clients ein und der andere Messenger die Rolle als Server. Dadurch, dass jeder Messenger sowohl Client als auch Server sein kann, müssen empfangene Nachrichten von Client und Server zusammengeführt und an das Frontend übermittelt werden, welches in der Bibliothek \textit{messaging} implementiert ist:
+Damit zwei Benutzer über den Messenger Nachrichten versenden können, muss ein Messenger die Rolle des Clients und der andere die Rolle des Servers übernehmen. Dadurch, dass jeder Messenger sowohl Client als auch Server sein kann, müssen empfangene Nachrichten von Client und Server zusammengeführt und an das Frontend übermittelt werden, welches in der Bibliothek \textit{messaging} implementiert ist:
 \begin{minted}{rust}
 /// A Manager which holds the connections by receiver name
 pub struct MessagingManager {
@@ -481,18 +474,18 @@ pub struct Connection {
     notifier_ready_rx: Receiver<()>,
 }
 \end{minted}
-Der \textit{MessagingManager} hält sowohl Verbindungen von Client zu Server und Server zu Client in einem generellen Konstrukt, der \textit{Connection} fest. Diese \textit{Connection}s werden in einer \textit{HashMap} gespeichert. Der \textit{MessagingManager} bietet eine Schnittstelle für das Frontend, um Nachrichten zu senden und zu empfangen.
+Der \textit{MessagingManager} speichert sowohl Client-Server-(C2S) als auch Server-Client(S2C)-Verbindungen in einem allgemeinen Konstrukt, der \textit{Connection}. Diese \textit{Connection}s werden in einer \textit{HashMap} gespeichert. Der \textit{MessagingManager} stellt dem Frontend eine Schnittstelle zum Senden und Empfangen von Nachrichten zur Verfügung.
 \begin{figure}[h]
   \centering
   \includegraphics[width=\textwidth]{diagrams/messaging_messenger.pdf}
   \caption{Mögliches Beispiel für Messenger B, welcher eine Verbindung zu Messenger A aufgebaut hat, und Messenger C, welcher mit Messenger B verbunden ist \label{fig:MessagingMessenger}}
 \end{figure}
-Wenn in diesem Beispiel das Frontend eine Nachricht an Messenger A senden möchte, würde diese Nachricht zunächst an den \textit{MessagingManager} geschickt, welcher diese verschlüsselte Nachricht an den dazugehörigen Client leitet. Der Client leitet nun die Nachricht über den Websocket an den Server des Messengers A weiter.
+Wenn in diesem Beispiel das Frontend eine Nachricht an Messenger A senden möchte, wird diese Nachricht zunächst an den \textit{MessagingManager} gesendet, der die Nachricht verschlüsselt an den entsprechenden Client weiterleitet. Der Client sendet nun die Nachricht über den Websocket an den Server von Messengers A.
 
 
 \subsection{Tor-Netzwerk}
-Eine mögliche Lösung für das Kriterium der Anonymität besteht im Tor-Netzwerk. Eine Verbindung muss also zum Tor-Netzwerk aufgebaut werden, welches durch die \textit{tor-proxy} Bibliothek geschieht.
-Der HTTP-Server wird auch durch den Tor-Proxy in das Tor-Netzwerk eingebunden. Damit der Tor-Proxy sich jedoch mit dem Tor-Netzwerk verbinden kann, wird eine Konfigurationsdatei benötigt, welche durch die \textit{tor-proxy} Bibliothek erstellt wird:
+Eine mögliche Lösung für das Kriterium der Anonymität ist das Tor-Netzwerk. Dazu muss eine Verbindung zum Tor-Netzwerk hergestellt werden, was über die \textit{tor-proxy} Bibliothek geschieht.
+Auch der HTTP-Server wird über den Tor-Proxy in das Tor-Netzwerk als Onion Service eingebunden. Damit sich der Tor-Proxy mit dem Tor-Netzwerk verbinden kann, wird eine Konfigurationsdatei benötigt, welche durch die \textit{tor-proxy} Bibliothek erstellt wird:
 \begin{minted}{rust}
 /// Converts the configuration to a `torrc` file format
 async fn to_text(&self) -> Result<String> {
@@ -522,7 +515,7 @@ GeoIPv6File \"{}\"",
     Ok(config)
 }
 \end{minted}
-Eingehende Verbindung zum Onion Service dieses Messengers werden also nun zum Port des HTTP-Servers weitergeleitet. Nun muss der Tor-Proxy nur noch gestartet werden:
+Eingehende Verbindungen zum Onion Service dieses Messengers werden nun auf den Port des HTTP-Servers umgeleitet. Nun muss nur noch der Tor-Proxy gestartet werden:
 \begin{minted}{rust}
 let mut child = Command::new(TOR_BINARY_PATH.clone());
 child.args(["-f", &get_torrc().to_string_lossy()]);
@@ -533,9 +526,9 @@ child.stderr(Stdio::piped());
 let child = child.spawn()?;
 \end{minted}
 
-Der Messenger ist jetzt mit dem Tor-Netzwerk verbunden und der HTTP-Server ist über den Onion Service erreichbar. Andere Messenger können sich nun anonym über das Tor-Netzwerk mit diesem Messenger verbinden.
+Der Messenger ist nun mit dem Tor-Netzwerk verbunden und der HTTP-Server ist über den Onion Service erreichbar. Andere Messenger können sich nun anonym über das Tor-Netzwerk mit diesem Messenger verbinden.
 \subsection{Sicherheit}
-Ein Datenspeicher, welcher symmetrisch verschlüsselt ist, wird durch die Bibliothek \textit{secure-storage} implementiert. Mit dieser Bibliothek lassen sich beliebige \textit{Structs} in Text umwandeln und verschlüsseln bzw. auslesen und entschlüsseln. Die \textit{storage-internal} Bibliothek benutzt hierbei die Methoden der \textit{secure-storage} Bibliothek und dient als Wrapper, um die Daten auf der Festplatte zu speichern und wieder auszulesen. Der Datenspeicher enthält hierbei eine \textit{HashMap}, welche als Schlüssel die Onion Adresse anderen Messengers und als Wert die Chatinformationen enthält. Die Chatinformationen sind zum Beispiel gesendete oder versendete Nachrichten, Schlüsselpaare und öffentliche Schlüssel.
+Ein symmertisch verschlüsselter Datenspeicher wird durch die Bibliothek \textit{secure-storage} implementiert. Mit dieser Bibliothek können beliebige \textit{Structs} in Text umgewandelt und verschlüsseln bzw. ausgelesen und entschlüsselt werden. Die \textit{storage-internal} Bibliothek verwendet hierbei die Methoden der \textit{secure-storage} Bibliothek und dient als Wrapper, um die Daten auf der Festplatte zu speichern und wieder auszulesen. Der Datenspeicher enthält hierbei eine \textit{HashMap}, die als Schlüssel die Onion Adresse anderer Messengers und als Wert die Chatinformationen enthält. Chatinformationen sind zum Beispiel gesendete oder empfangene Nachrichten, Schlüsselpaare und öffentliche Schlüssel.
 \begin{minted}[breaklines]{rust}
 #[derive(Clone, Debug, Serialize, Deserialize, Zeroize, ZeroizeOnDrop)]
 pub struct StorageChat {
@@ -550,17 +543,17 @@ pub struct StorageChat {
   pub priv_key: PrivateKey,
 }
 \end{minted}
-Der \textit{StorageChat} enthält die Nachrichten, welche an den Empfänger gesendet oder von diesem empfangen wurden (\textit{messages}), den öffentlichen Schlüssel des Kommunikationspartner (\textit{rec\_pub\_key}) und den privaten Schlüssel des Messengers \textit{priv\_key}.
+Der \textit{StorageChat} enthält die an den Empfänger gesendeten die Nachrichten oder von ihm empfangenen Nachrichten (\textit{messages}), den öffentlichen Schlüssel des Kommunikationspartners (\textit{rec\_pub\_key}) und den privaten Schlüssel des Messengers \textit{priv\_key}.
 %//REVIEW - Kann ich das so sagen?
-Um die Daten des Nutzers vor weiteren möglichen Angriffen zu schützen, verwende ich die Bibliothek \textit{zeroize}, welche sensible Daten (wie private Schlüssel) aus dem Arbeitsspeicher löscht (Zeroisation) \vcite{Zeroization}. Zudem ist es durch die symmetrische Verschlüsselung des Datenspeichers für Angreifer nicht möglich (sofern die Applikation geschlossen ist), private Schlüssel oder Chatverläufe auszulesen, wodurch die Privatsphäre der Nutzer geschützt wird.
+Um die Nutzerdaten vor weiteren möglichen Angriffen zu schützen, verwende ich die Bibliothek \textit{zeroize}, die sensible Daten (wie private Schlüssel) aus dem Arbeitsspeicher löscht (Zeroization) \vcite{Zeroization}. Zudem ist es durch die symmetrische Verschlüsselung des Datenspeichers für Angreifer nicht möglich (sofern die Applikation geschlossen ist), private Schlüssel oder Chatverläufe auszulesen, wodurch die Privatsphäre der Nutzer geschützt wird.
 
 \subsection{Ende-zu-Ende-Verschlüsselung}
-Das letzte Kriterium, welches der Messenger nun erfüllen muss, ist die Ende-zu-Ende-Verschlüsselung. Dafür muss zuerst die Identität des anderen Kommunikationspartners verifiziert werden.
+Das letzte Kriterium, das der Messenger nun erfüllen muss, ist die Ende-zu-Ende-Verschlüsselung. Dazu muss zunächst die Identität des anderen Kommunikationspartners überprüft werden.
 \subsubsection{Identity verification}
-Um das Konzept der E2EE umzusetzen, muss der Sender einer Nachricht sicher sein, dass der Empfänger tatsächlich der ist, für den er sich ausgibt, wofür die \textit{Identity verification} stattfindet. Im Rahmen der Erklärung gehen wir nun davon aus, dass Messenger A an Messenger B eine Nachricht senden möchte. Messenger A wäre in diesem Fall der Client und Messenger B der Server.
-Messenger A und Messenger B generieren anfangs (wenn noch nicht vorhanden) private Schlüssel und erstellen ein neues \textit{StorageChat}-Konstrukt, in welchem die privaten Schlüssel gespeichert werden.
-Damit sowohl Client als auch Server sicher sein können, dass der Kommunikationspartner tatsächlich der ist, für den er sich ausgibt, wird zunächst von dem Client ein \identity-Packet versendet.
-Dies besteht aus dem eigenen Hostname, der Signatur des Hostnames und dem Zielhostname (durch den privaten Schlüssel des Chats signiert) und den öffentlichen Schlüssel des Schlüsselpaares (vom Chat). Das Identitätspacket wird also folgendermaßen generiert:
+Um das Konzept der E2EE umzusetzen, muss der Sender einer Nachricht sicher sein, dass der Empfänger tatsächlich derjenige ist, für den er sich ausgibt. Zum Zwecke der Erklärung gehen wir nun davon aus, dass Messenger A eine Nachricht an Messenger B senden möchte. Messenger A wäre in diesem Fall der Client und Messenger B der Server.
+Messenger A und Messenger B erzeugen zunächst (falls noch nicht vorhanden) private Schlüssel und erstellen ein neues \textit{StorageChat}-Konstrukt, in welchem die privaten Schlüssel gespeichert werden.
+Damit sowohl Client als auch Server sicher sein können, dass der Kommunikationspartner tatsächlich der ist, für den er sich ausgibt, wird vom Client zunächst ein \identity-Packet versendet.
+Dieses besteht aus dem eigenen Hostnamen, der Signatur des Hostnames und dem Zielhostname (durch den privaten Schlüssel des Chats signiert) und dem öffentlichen Schlüssel des Schlüsselpaares (vom Chat). Das \identity-Packet wird also wie folgt generiert:
 \begin{minted}{rust}
 async fn identity(receiver: &str) -> Result<Self> {
   // Get the own hostname
@@ -587,8 +580,8 @@ async fn identity(receiver: &str) -> Result<Self> {
   }))
 }
 \end{minted}
-Ein wichtiges Detail ist hierbei die Signatur des \identity-Packets. Sie besteht sowohl aus dem eigenen Hostname als auch dem Ziel des Hostnames, um zu verhindern, dass ein Angreifer das \identity-Packet abfängt und sich damit als Messenger des dazugehörigen Packets ausgibt.
-Nachdem der Server das Packet empfangen hat, überprüft er dieses. Dazu ruft dieser den öffentlichen Schlüssel des Kommunikationspartners auf, und verifiziert mit diesem die Signatur des \identity-Packets:
+Ein wichtiges Detail ist spielt hierbei die Signatur des \identity-Packets. Sie besteht sowohl aus dem eigenen Hostname als auch dem Ziel des Hostnames, um zu verhindern, dass ein Angreifer das \identity-Packet abfängt und sich damit bei anderen Messengern als dieser Messenger ausgibt.
+Nachdem der Server das Packet empfangen hat, überprüft er es. Dazu ruft er den öffentlichen Schlüssel des Kommunikationspartners ab, und überprüft damit die Signatur des \identity-Packets:
 \begin{minted}[breaklines]{rust}
 async fn verify(&self) -> Result<()> {
   let Identity {  hostname: remote_host, pub_key, signature} = self;
@@ -642,9 +635,9 @@ async fn verify(&self) -> Result<()> {
   }
 }
 \end{minted}
-Falls die Identität valide ist, übersendet der Server seine Identität an den Client. Der gleiche Vorgang der Validation findet nun auch auf dem Client statt. Wenn dieser die \identity als valide betrachtet, ist eine sichere Verbindung zwischen Client und Server aufgebaut.
+Ist die Identität gültig, sendet der Server seine Identität an den Client. Der gleiche Validierungsprozess der Validation findet nun auch auf dem Client statt. Wenn der Client die \identity als gültig betrachtet, ist eine sichere Verbindung zwischen Client und Server hergestellt.
 \subsection{Nachrichten versenden}
-Gehen wir davon aus, dass der Client an den Server über die gesicherte Verbindung eine Nachricht versenden möchte. Dazu ruft er zunächst den öffentlichen Schlüssel des Empfängers aus dem Datenspeicher ab und verschlüsselt die Nachricht mit dem RSA-Verfahren. Anschließend übersendet er die verschlüsselte Nachricht an den Server.
+Gehen wir davon aus, dass der Client an den Server über die sichere Verbindung eine Nachricht versenden möchte. Dazu ruft er zunächst den öffentlichen Schlüssel des Empfängers aus dem Datenspeicher ab und verschlüsselt die Nachricht mit dem RSA-Verfahren. Anschließend sendet er die verschlüsselte Nachricht an den Server.
 \begin{minted}[breaklines]{rust}
 /// Sends a message to the receiver with the given date and msg, internal function
 async fn inner_send(&self, msg: &str, date: u128) -> Result<()> {
@@ -687,7 +680,8 @@ async fn inner_send(&self, msg: &str, date: u128) -> Result<()> {
   Ok(())
 }
 \end{minted}
-Der Server empfängt über die Websocket-Verbindung die verschlüsselte Nachricht des Clients und entschlüsselt diese anschließend mit dem privaten Schlüssel des Chats. Somit wurde die Nachricht empfangen, entschlüsselt und wird nun an das Frontend übermittelt, sodass diese angezeigt werden kann. Nutzer können nun sicher und anonym miteinander kommunizieren.
+Der Server empfängt die verschlüsselte Nachricht vom Client über die Websocket-Verbindung und entschlüsselt sie anschließend mit dem privaten Schlüssel des Chats. Damit ist die Nachricht nun empfangen und entschlüsselt, sodass sie an das Frontend übermittelt werden kann. Benutzer können nun sicher und anonym miteinander kommunizieren.
+
 \section{Nachteile und Lösungsmöglichkeiten}
 Der Messenger bietet zwar hohe Anonymität und Sicherheit, jedoch ist es unerlässlich auch die Nachteile des Messengers und deren Lösungsmöglichkeiten zu betrachten. Durch die Struktur des Tor-Netzwerkes können Datenmengen um das 120-fache langsamer übermittelt werden, welches bei einfachen Textnachrichten nicht auffallen mag, bei größeren Datenmengen, wie zum Beispiel Bildern, jedoch ein Problem darstellen könnte \vcite{TorPerformance}. Dadurch, dass der Client eine Websocket-Verbindung mit dem Onion Service aufbaut, herrscht hier ein \textit{long-term-circuit}, wodurch der \circuit zwischen Onion Service und Client nicht erneuert wird, somit für Angriffe anfälliger sein könnte \vcite{FAQCircuitLifetime}. Zusätzlich ist die Nachrichtenlänge durch das Padding der asymmetrischen Verschlüsselung begrenzt \vcite{OpensslRsaMaxLength}. %//REVIEW - Ich hab die Studie hierbei angewendet, ist das okay?
 Eine hybride Verschlüsselung, also eine Kombination aus asymmetrischer und symmetrischer Verschlüsselung, könnte eine mögliche Lösung für die limitierte Nachrichtenlänge sein \vcite{HybridEncryption}. Dabei generiert bereits bei dem Verbindungsaufbau der Server einen zufälligen symmetrischen Schlüssel \vebd. Dieser wird mit dem öffentlichen Schlüssel des Clients verschlüsselt und an den Client übermittelt, welcher diesen entschlüsselt und abspeichert, sodass sowohl Server als auch Client den gleichen symmetrischen Schlüssel teilen \vebd.
