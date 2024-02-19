@@ -229,42 +229,41 @@ maxbibnames=99
 \linenumbers{}
 \modulolinenumbers[5]
 \section{Einleitung}
-%CORRECT_START
-%//SECTION Einleitung
-%//TODO hier staatskritisch ist falsches wort mir fällt aber das richtige nicht ein
-Russland, China, Iran. In all diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. Rund 1,7 Milliarden Menschen sind allein in diesen drei Staaten von der Einschränkung der Meinungsfreiheit betroffen.
-%//!SECTION
-Wie können Bürger dieser Staaten ihre Meinung verbreiten und andere Staaten auf staatskritische Probleme aufmerksam machen, ohne sich selbst in Gefahr zu bringen?
-%//SECTION Problemstellung
-%//TODO Hier nochmal nach einer anderen Quelle suchen, die passt nicht 100%ig
-\\
-Bei herkömmlichen Messengern wie WhatsApp, Signal und Co. benötigt die Außenwelt die Telefonnummern von Bürgern und Journalisten in einem totalitären Staat, um mit ihnen in Kontakt treten zu können. Eine mögliche Gefahr besteht darin, dass sich ein totalitärer Staat als legitimer Empfänger ausgibt, wodurch Bürger und Reporter ihre privaten Telefonnummern an den Staat weitergeben, der dann in der Lage ist, diese Nummern zurückzuverfolgen \vcite{LocPolice}. Genau hier liegt das Problem: Bürger und Reporter können nicht über gewöhnliche Messenger mit der Außenwelt kommunizieren, da der Staat ihre Nummern zurückverfolgen kann, was die Meinungsfreiheit weiter einschränkt und verhindert \vebd.
-\\
-Die zentralisierte Infrastruktur, die von den meisten Messengern wie WhatsApp und Signal genutzt wird, ermöglicht es auch totalitären Staaten wie China, die IP-Adressen von Servern zu blockieren und sie so für Bürger und Journalisten unzugänglich zu machen \vcite{ChinaFirewall,CentralizedWhatsapp}.
+Russland, China, Iran. In diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. Allein in diesen 3 Ländern sind rund 1,7 Milliarden Menschen von der Einschränkung der Meinungsfreiheit betroffen.
+Wie können Bürger aus solchen Staaten ihre Meinung verbreiten und andere Menschen, staatliche oder nicht staatliche Organisationen auf staatskritische Situationen und Probleme aufmerksam machen, ohne sich selbst in Gefahr zu bringen? \\
+Bei herkömmlichen Messengern wie WhatsApp, Signal und Co. wird zur bi- oder multiliteralen Kommunikation die Telefonnummern benötgt, um untereinander in Kontakt treten zu können. Eine mögliche Gefahr besteht darin, dass sich ein totalitärer Staat als legitimer Empfänger ausgibt, wodurch Bürger und z.B. staatskritische Journalisten ihre privaten Telefonnummern an den Staat weitergeben, der dann wiederum in der Lage ist, diese Nummern zurückzuverfolgen \vcite{LocPolice}. Genau hier liegt das Problem: oppositionelle Bürger und Reporter können nicht über gewöhnliche Messenger mit der Außenwelt kommunizieren, da der Staat ihre Nummern zurückverfolgen kann, und sie mit einer weiteren Einschränkung ihrer Meinungsfreiheit oder sogar mit ihrer Verhaftung rechnen müssen \vcite{AmnReport}. \\
+Die zentrale Infrastruktur, der meisten Messengern wie WhatsApp und Signal, ermöglicht es außerdem totalitären Staaten wie China, die IP-Adressen von Servern zu blockieren und sie so für Bürger und Journalisten unzugänglich zu machen \vcite{ChinaFirewall,CentralizedWhatsapp}.
 %//!SECTION
 %//SECTION Lösungsvorschlag / Ziel
 %//!SECTION
-Ein dezentraler, Ende-zu-Ende-verschlüsselter Messenger, der über das Tor-Netzwerk kommuniziert, könnte eine Lösung für diese Probleme darstellen. Ziel dieser Arbeit ist es, diese Lösung auf ihre Sicherheit und Praktikabilität hin zu untersuchen und zu implementieren.\\
+%//REVIEW - Ist verschlüsselt so okay aufgebrochen?
+Vor diesem Hintergrund könnte ein dezentraler, Ende-zu-Ende-ver-schlüsselter Messenger, der über das Tor-Netzwerk kommuniziert, eine Lösung für diese Probleme darstellen. Ziel dieser Arbeit ist es, diese Lösung auf ihre Sicherheit und Praktikabilität hin zu untersuchen und zu implementieren.\\
 %//SECTION E2EE Überleitung zu Kapitel-Auflistung
 %//!SECTION
-Um ein Verständnis für die Sicherheit dieses Messengers zu erlangen, geht diese Arbeit im zweiten Kapitel auf die asymmetrische Verschlüsselung und die Ende-zu-Ende-Verschlüsselung (E2EE) ein und beschäftigt sich zunächst mit der mathematischen Betrachtung, um anschließend die Sicherheit des Verfahrens beurteilen zu können. Dabei wird nicht auf das Padding-Verfahren der asymmetrischen Verschlüsselung eingegangen. Im dritten Kapitel wird untersucht, ob das Tor-Netzwerk eine mögliche Lösung für das Problem der Anonymität im Internet darstellt und inwieweit es die Nutzer schützt. Das vierte Kapitel beschäftigt sich mit der Definition und der Sicherheit von Dezentralisierung. Im fünften Kapitel wird schließlich die Implementierung des Messengers beschrieben, während im sechsten Kapitel die Nachteile des Messengers und deren Lösungsmöglichkeiten betrachtet werden. Im siebten Kapitel wird ein Fazit gezogen.
+%//NOTE - Hier habe ich den 1. Satz nicht übernommen, hat nicht ganz den Sinn getroffen
+Um ein Verständnis für die Sicherheit dieses Messengers zu erlangen, geht diese Arbeit im zweiten Kapitel auf die asymmetrische Verschlüsselung und die Ende-zu-Ende-Verschlüsselung (E2EE) ein. Hierzu werden die mathematischen Zusammenhänge näher betrachtet, um im Anschluss die Sicherheit des Verfahrens beurteilen zu können.
+%//REVIEW - Habe ich so ergänzt ist okay?
+Dabei wird auf die Erklärung des Padding-Verfahrens der asymmetrischen Verschlüsselung verzichtet, da eine Erläuterung den Rahmen dieser Facharbeit überschreiten würde. Im dritten Kapitel wird untersucht, ob das Tor-Netzwerk eine mögliche Lösung für das Problem der Anonymität im Internet darstellt und inwieweit es die Nutzer schützt.
+%//REVIEW - Wieder umformuliert
+Aufbauend auf das vierte Kapitel, in dem mit der Definition und der Sicherheit von Dezentralisierung die Grundlagen gelegt werden, wird im darauffolgenden fünften Kapitel die Implementierung des Messengers beschrieben, woraufhin sechsten Kapitel auf die Nachteile des Messengers und deren Lösungsmöglichkeiten eingegangen wird. Die Arbeit endet mit dem siebten Kapitel, in welchem ein kurzes Fazit der erarbeiteten Ergebnisse gezogen wird.
 
 \subsection{Motivation}
-Mein Interesse an Themenkomplex erstreckt sich über mehrere Ebenen. Neben der asymmetrischen Verschlüsselung und der dahinterliegenden Mathematik, ist die Programmierung selbst und die Implementierung eines sicheren Messengers im Tor-Netzwerk eine meiner Hauptmotivationen mich mit diesem komplexen Thema zu beschäftigen.
+Mein Interesse an Themenkomplex erstreckt sich über mehrere Ebenen. Neben der asymmetrischen Verschlüsselung und der dahinterliegenden Mathematik, ist die Programmierung selbst und die Implementierung eines sicheren Messengers im Tor-Netzwerk eine meiner Hauptmotivationen mich mit diesem umfangreichen Thema zu beschäftigen.
 \subsubsection{Tor-Netzwerk}
-Ich verfolge das Tor-Netzwerk und die Struktur schon seit ein paar Jahren mit großem Interesse. Das Tor-Netzwerk wird oft mit dem Begriff des Darknets in Verbindung gebracht, was bei den meisten Menschen zu negative Assoziationen führt \vcite{BsiTorDarknet}. Vor alldem die schwierige Rückverfolgung spielt eine große Rolle in dem Darknet \vebd. Sie ist der Grund für mein Interesse, die Struktur zu verstehen und darauf einen neuartigen Messenger zu programmieren.
+Ich verfolge das Tor-Netzwerk und die Struktur schon seit ein paar Jahren mit großem Interesse. Das Tor-Netzwerk wird oft mit dem Begriff des Darknets in Verbindung gebracht, was bei den meisten Menschen zu negative Assoziationen führt \vcite{BsiTorDarknet}. Die schwierige Rückverfolgung spielt eine große Rolle in der Anonymität des Tor-Netzwerkes und ist ein weiterer Aspekt, der mich an diesem Thema fasziniert \vebd.
 
 \subsubsection{Asymmetrische Verschlüsselung}
-Bei der asymmetrischen Verschlüsselung steht für mich ein mathematischer Erklärungsansatz mitunter im Vordergrund meines Interesses: "Wie schafft es der Angreifer, eine verschlüsselte Nachricht nur mit dem öffentlichen Schlüssel nicht zu entschlüsseln?".
+Ein mathematischer Erklärungsansatz der asymmetrischen Verschlüsselung steht für mich mitunter im Vordergrund meines Interesses: "Wie schafft es der Angreifer, eine verschlüsselte Nachricht nur mit dem öffentlichen Schlüssel nicht zu entschlüsseln?"
+%//REVIEW - Hier nen Punkt danach?
 
 \subsubsection{Programmatischer Aspekt}
-Aber auch zu der Programmierung habe ich ein hohes Interesse. Die vielen Facetten des Tor-Netzwerkes mit der asymmetrischen Verschlüsselung so zu verknüpfen, dass am Ende ein funktionierender Messenger entsteht. Die Dezentralisierung des Messengers tragen nochmals zu der Schwierigkeit bei, sodass fundierte Kenntnisse der Informatik erforderlich sind.
+Die vielen Facetten des Tor-Netzwerks mit der Ende-zu-Ende-Verschlüsselung und der Dezentralisierung zu verbinden, sodass am Ende ein funktionierender Messenger entsteht, ist eine weitere Herausforderung, für die ich mich begeistern kann.
 
 \subsection{Relevanz}
-Durch die steigende Anzahl von Cyberangriffen geraten  Messenger immer mehr in den Fokus von Angreifern, da durch die Kompromittierung eines Messagingdienstes viele persönliche Daten erlangt werden können \vcite{Cyberattacks}. Da China eine ausgefeilte Analyse und Überwachung des Netzes betreibt, ist die eine Anonymität und Sicherheit von Messengern umso wichtiger \vcite{GreatFirewallChina}. Durch einen solchen Messenger könnten oppositionelle Meinungen und Ansichten das autoritär geführte Land verlassen und in der Außenwelt Gehör finden. Und auch hier stellt sich wieder die Frage: "Schützt ein solcher Messenger Bürger und Journalisten in einem totalitären Staat vor möglichen Konsequenzen?".
+Durch die steigende Anzahl von Cyberangriffen geraten  Messenger immer mehr in den Fokus von Angreifern, da durch die Kompromittierung eines Messagingdienstes viele persönliche Daten erlangt werden können \vcite{Cyberattacks}. China betreibt eine ausgefeilte Analyse und Überwachung des Netzes, wodurch die eine Anonymität und Sicherheit von Messengern umso wichtiger ist \vcite{GreatFirewallChina}. Mit solch einem Messenger könnten oppositionelle Meinungen und Ansichten das autoritär geführte Land verlassen und in der Außenwelt Gehör finden. Und auch hier stellt sich wieder die Frage: "Schützt ein solcher Messenger Bürger und Journalisten in einem totalitären Staat vor möglichen Konsequenzen?".
 
 \subsection{Methodisches Vorgehen}
-Zunächst werde ich die Grundlagen der asymmetrischen Verschlüsselung, des Tor-Netzwerks und der Dezentralisierung erläutern, um dann die Sicherheit des Verfahrens zu überprüfen. Danach werde ich die Verfahren in den Messenger implementieren und die Nachteile und mögliche Lösungen betrachten. Zum Schluss werde ich ein Fazit ziehen.
+Zunächst werde ich die Grundlagen der asymmetrischen Verschlüsselung, des Tor-Netzwerks und der Dezentralisierung erläutern, um dann jeweils die Sicherheit des Verfahrens zu überprüfen. Den theoretischen Hintergrund werde ich anschließend anwenden und somit einen Messenger programmieren, auf dessen Nachteile und mögliche Lösungsmöglichkeiten hinweisen, und abschließend ein Fazit ziehen.
 
 \section{Asymmetrische Verschlüsselung}
 %//SECTION E2EE und asymmetrische Verschlüsselung
@@ -674,8 +673,8 @@ Eine hybride Verschlüsselung, also eine Kombination aus asymmetrischer und symm
 Somit werden die Vorteile der symmetrischen Verschlüsselung (schnell und keine Nachrichtenlängenbegrenzung) mit den Vorteilen der asymmetrischen Verschlüsselung (sicherer Austausch von Schlüsseln) kombiniert \vcite{HybridTechnopedia}. Aufgrund der Infrastruktur dieses Messengers, müssen beide Kommunikationspartner den Messenger geöffnet haben, damit diese miteinander kommunizieren können (der Onion Service wird nur durch Öffnen des Messengers gestartet).
 
 \section{Fazit}
-
-
+Durch das Tor-Netzwerk und die dezentrale Infrastruktur bietet der Messenger aus heutiger Sicht ein hohes Maß an Anonymität und Sicherheit. Zusätzlich schützt die Ende-zu-Ende-Verschlüsselung die Nutzer vor möglichen Angreifern. Die Plattformunabhängigkeit der Desktopanwendung und die einfache Bedienung ermöglichen es auch technisch unerfahrenen Nutzern, die in einem totalitären Staat leben, den Messenger zu nutzen und sicher mit der Außenwelt zu kommunizieren. Eine mögliche Schwachstelle dieses Messengers könnten die Onion-Dienste und das Tor-Netzwerk sein, wobei hier die Forschung zu Deanonymisierungsangriffen noch nicht abgeschlossen ist.
+Normale Messenger, wie wir sie täglich nutzen, wird dieser Messenger jedoch nicht ersetzen können, da die Geschwindigkeit des Tor-Netzwerks um den Faktor 120 langsamer ist als die des normalen Internets und beide Kommunikationspartner ständig miteinander verbunden sein müssten, um sich gegenseitig Nachrichten schicken zu können. Die hohe Anonymität des Tor-Netzwerks hat nicht nur positive Effekte, sondern könnte auch die organisierte Kriminalität fördern, was in einer weiteren Arbeit untersucht werden könnte. Der Messenger ist ein erster Schritt für eine sichere und anonyme Kommunikation, jedoch muss in diesem Bereich noch viel geforscht werden, um die Anonymität und Sicherheit weiterhin zu gewährleisten und sich vor möglichen Angriffen zu schützen. Der Messenger könnte in Zukunft durch Features wie hybride Verschlüsselung zur Umgehung der Längenbeschränkung von Nachrichten oder auch das Versenden von Bildern und Videos weiterentwickelt werden. Meiner Meinung nach ist die gemeinsame Zusammenarbeit und Weiterentwicklung, z.B. durch Open Source, dieses Clients wichtig, um die Meinungsfreiheit und die Privatsphäre der betroffenen Bürger weiterhin zu schützen.
 % LTeX: enabled=false
 \pagebreak
 \nolinenumbers{}
