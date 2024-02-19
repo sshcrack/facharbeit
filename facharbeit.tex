@@ -198,8 +198,8 @@ maxbibnames=99
 % Optionally show or hide code
 
 \newif\ifshow % toggle true or false based on if want to hide section
-\showtrue % show the sections
-%\showfalse % hide the sections
+%\showtrue % show the sections
+\showfalse % hide the sections
 
 \usepackage{version}
 \ifshow
@@ -229,6 +229,7 @@ maxbibnames=99
 \linenumbers{}
 \modulolinenumbers[5]
 \section{Einleitung}
+%CORRECT_START
 %//SECTION Einleitung
 %//TODO hier staatskritisch ist falsches wort mir fällt aber das richtige nicht ein
 Russland, China, Iran. In all diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. Rund 1,7 Milliarden Menschen sind allein in diesen drei Staaten von der Einschränkung der Meinungsfreiheit betroffen.
@@ -262,6 +263,9 @@ Aber auch zu der Programmierung habe ich ein hohes Interesse. Die vielen Facette
 \subsection{Relevanz}
 Durch die steigende Anzahl von Cyberangriffen geraten  Messenger immer mehr in den Fokus von Angreifern, da durch die Kompromittierung eines Messagingdienstes viele persönliche Daten erlangt werden können \vcite{Cyberattacks}. Da China eine ausgefeilte Analyse und Überwachung des Netzes betreibt, ist die eine Anonymität und Sicherheit von Messengern umso wichtiger \vcite{GreatFirewallChina}. Durch einen solchen Messenger könnten oppositionelle Meinungen und Ansichten das autoritär geführte Land verlassen und in der Außenwelt Gehör finden. Und auch hier stellt sich wieder die Frage: "Schützt ein solcher Messenger Bürger und Journalisten in einem totalitären Staat vor möglichen Konsequenzen?".
 
+\subsection{Methodisches Vorgehen}
+Zunächst werde ich die Grundlagen der asymmetrischen Verschlüsselung, des Tor-Netzwerks und der Dezentralisierung erläutern, um dann die Sicherheit des Verfahrens zu überprüfen. Danach werde ich die Verfahren in den Messenger implementieren und die Nachteile und mögliche Lösungen betrachten. Zum Schluss werde ich ein Fazit ziehen.
+
 \section{Asymmetrische Verschlüsselung}
 %//SECTION E2EE und asymmetrische Verschlüsselung
 Um einen sicheren Nachrichtenaustausch zu gewährleisten, wird in dieser Arbeit E2EE implementiert. Bei E2EE wird die Nachricht vom Sender verschlüsselt, bevor sie an den Empfänger gesendet wird \vcite{E2EE}. Zwischengeschaltete Akteure wie Server oder mögliche Angreifer können die Nachricht somit nicht lesen \vebd. \textbf{Nur} der Empfänger bzw. Sender der Nachricht kann sie entschlüsseln \vcite{E2EE-Method}. Als Ver- und Entschlüsselungsverfahren der Nachrichten wird (unter anderem) die asymmetrische Verschlüsselung verwendet \vebd. Diese Arbeit beschränkt sich bei der asymmetrischen Verschlüsselung auf das RSA-Verfahren.
@@ -269,7 +273,7 @@ Um einen sicheren Nachrichtenaustausch zu gewährleisten, wird in dieser Arbeit 
 \subsection{Grundlagen}
 %//SECTION Grundlagen
 Grundsätzlich wird bei der asymmetrischen Verschlüsselung ein Schlüsselpaar (Keypair) verwendet, das aus einem privaten Schlüssel (private key) und einem öffentlichen Schlüssel (public key) besteht \vcite{Rsa-Basics}. Diese beiden Schlüssel sind mathematisch so miteinander verknüpft, dass der öffentliche Schlüssel Nachrichten \textbf{nur} verschlüsseln, aber nicht \vebd. entschlüsseln kann. \textbf{Nur} der zum Schlüsselpaar gehörende private Schlüssel kann die verschlüsselte Nachricht wieder entschlüsseln (siehe \cref{fig:E2EE}) \vebd.
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.75\textwidth]{Briefkasten-asymm.png}
   \caption{Jeder Sender kann mit dem öffentlichen Schlüssel die Nachricht "verschlüsseln" (also eine Nachricht in den Briefkasten werfen), aber nur der Empfänger kann den Briefkasten mit seinem privaten Schlüssel öffnen und somit die Nachricht herausnehmen\vcite{fig:Rsa-Cryptography} \label{fig:E2EE}}
@@ -305,8 +309,8 @@ Sowohl der private als auch der öffentliche Schlüssel bestehen unter anderem a
 Mit der berechneten Komponente $e$, welche die Nachrichten verschlüsselt, kann nun der öffentliche Schlüssel an den Absender übermittelt werden. Zur Berechnung des privaten Schlüssels wird die Komponente $d$ benötigt, die zur Entschlüsselung verwendet wird \vcite{RsaMaths1}.
 \begin{equation*}
   \begin{aligned}
-    \phi(n)   & = (P-1)(Q-1)     \\
-    d & = e^{-1} \mod \phi(n)
+    \phi(n) & = (P-1)(Q-1)          \\
+    d       & = e^{-1} \mod \phi(n)
   \end{aligned}
 \end{equation*}
 \subsection{Sicherheit}
@@ -319,7 +323,7 @@ Um die Sicherheit des RSA-Verfahrens betrachten zu können, müssen wir nun den 
   \end{aligned}
 \end{equation*}
 Um die verschlüsselte Nachricht $c$ entschlüsseln zu können, bräuchte ein Angreifer die Komponente des privaten Schlüssels $d$. $d$ ist jedoch sehr rechenintensiv, da, wie bereits gezeigt, $\phi(n)$ berechnet werden müsste. Man benötigt also eine Primfaktorzerlegung von $n$ \vcite{EulersTotientFunction}. Die Verschlüsselung von $m$ nach $c$ ist eine Trapdoor-Einwegfunktion \vcite{RsaTrapdoor}. Das bedeutet, dass es zwar einfach ist, $f(x) = i$ zu berechnen (im Falle von RSA: Verschlüsselung), es aber unmöglich ist, von $i$ auf den ursprünglichen Wert $x$ zu schließen, ohne eine weitere notwendige Komponente zu kennen (im Falle von RSA wäre die notwendige Komponente $d$) \vebd.
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includesvg[width=0.5\textwidth]{img/Trapdoor_permutation.svg}
   \caption{Die Trapdoor-Einwegfunktion bildlich dargestellt\vcite{fig:TrapdoorPermutation} \label{fig:TrapdoorFunc}}
@@ -332,12 +336,11 @@ Bei der symmetrischen Verschlüsselung wird derselbe Schlüssel zum Ver- und Ent
 Im Vergleich zur asymmetrischen Verschlüsselung ist die symmetrische Verschlüsselung schneller und hat keine Beschränkung der Chiffretextlänge \vcite{RsaAESAnalysis, OpensslRsaMaxLength}. Allerdings muss der Schlüssel der symmetrischen Verschlüsselung dem anderen Kommunikationspartner sicher übermittelt werden, um die Nachrichten entschlüsseln zu können \vebd.
 
 \section{Das Tor-Netzwerk}
-%CORRECT_START
 Die Anonymität des Messengers ist ein weiterer zentraler Aspekt, um die jeweiligen Kommunikationspartner zu schützen. Das Tor-Netzwerk ist hier eine mögliche Lösung, da bei normalem Routing, wie wir es täglich nutzen, der Client direkt mit dem Zielserver kommuniziert, der Zielserver also die IP-Adresse des Clients sehen kann \vcite{TCP_IP}.
 %/REVIEW für den Satz danach Quelle?
 Eine Rückverfolgung der IP-Adresse ist somit möglich \vcite{LocPolice}. Genau an diesem Punkt setzt das Tor-Netzwerk an. Das Tor-Netzwerk besteht dabei aus vielen \nodes, die eingehende Tor-Verbindungen annehmen und weiterverarbeiten \vcite{TorStructure}. Damit ein Client eine Anfrage über das Netzwerk senden kann, sucht er sich zunächst einen Weg durch das Netzwerk, einen sogenannten \circuit \vcite{TorCircuits}. Der \circuit besteht in der Regel aus drei \nodes und ist 10 Minuten gültig, bis der Client den \circuit erneuert (also einen neuen Pfad "sucht") \vcite{FAQCircuitLifetime}. Die drei \nodes werden in eine \entryn, eine \relayn und eine \exitn gegliedert, über die später Anfragen an die Zielserver gesendet werden können \vebd. Dabei verschlüsselt der Client die eigentliche Anfrage mehrfach, verpackt sie also in mehrere "Schalen", die eine \onion bilden, und leitet diese über den \circuit an den Zielserver weiter \vcite{TorDesign}. Zunächst wird die \onion vom Tor-Client an die \entryn gesendet \vebd. An jeder \node, wie der \entryn, wird eine Schale der \onion "abgeschält" (die \onion also einmal entschlüsselt), die Informationen über die nächste Node enthält \vcite{TorStructure2}. Die Node leitet nun die um eine Schale "geschälte" \onion an den nächsten Knotenpunkt weiter \vebd. Sobald die Anfrage den \exitn erreicht hat, entfernt dieser die letzte "Schale" von der Anfrage, die nun vollständig entschlüsselt ist und an den Zielserver gesendet werden kann \vebd. Dieses Routing-Verfahren ist auch als \textit{Onion-Routing} bekannt \vcite{TorDesign}.
 
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=0.65\textwidth]{TorRoutingSimple.png}
   \caption{Das Prinzip des Onion-Routings \vcite{fig:Tor-Structure} \label{fig:TorStructure}}
@@ -459,7 +462,7 @@ pub struct Connection {
 }
 \end{minted}
 Der \textit{MessagingManager} speichert sowohl Client-Server-(C2S) als auch Server-Client(S2C)-Verbindungen in einem allgemeinen Konstrukt, der \textit{Connection}. Diese \textit{Connection}s werden in einer \textit{HashMap} gespeichert. Der \textit{MessagingManager} stellt dem Frontend eine Schnittstelle zum Senden und Empfangen von Nachrichten zur Verfügung.
-\begin{figure}[h]
+\begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{diagrams/messaging_messenger.pdf}
   \caption{Mögliches Beispiel für Messenger B, welcher eine Verbindung zu Messenger A aufgebaut hat, und Messenger C, welcher mit Messenger B verbunden ist \label{fig:MessagingMessenger}}
@@ -671,7 +674,7 @@ Eine hybride Verschlüsselung, also eine Kombination aus asymmetrischer und symm
 Somit werden die Vorteile der symmetrischen Verschlüsselung (schnell und keine Nachrichtenlängenbegrenzung) mit den Vorteilen der asymmetrischen Verschlüsselung (sicherer Austausch von Schlüsseln) kombiniert \vcite{HybridTechnopedia}. Aufgrund der Infrastruktur dieses Messengers, müssen beide Kommunikationspartner den Messenger geöffnet haben, damit diese miteinander kommunizieren können (der Onion Service wird nur durch Öffnen des Messengers gestartet).
 
 \section{Fazit}
-In der heutigen Gesellschaft wird die Meinungsfreiheit der Bürger, welche in einem totalitären Staat leben, immer wichtiger. Das Tor-Netzwerk bietet hierbei eine Möglichkeit, anonym und sicher über Onion Services miteinander zu kommunizieren. Mit dem Messenger, welcher in dieser Arbeit umgesetzt wurde, ist es möglich, Menschen in totalitären Staaten ein Werkzeug zu geben, ihre Meinung zu äußern. Allerdings muss auch hierfür die Onion-Adresse der Person, welche den Messenger benutzt, sicher über eine andere Plattform übermittelt werden, damit zum Beispiel Reporter diese kontaktieren können. Zusätzlich müssen beide Kommunikationspartner deren Messenger gestartet haben.
+
 
 % LTeX: enabled=false
 \pagebreak

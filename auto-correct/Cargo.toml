@@ -1,5 +1,5 @@
 [package]
-name = "molecule-orbitals"
+name = "auto-correct"
 version = "0.1.0"
 edition = "2021"
 
