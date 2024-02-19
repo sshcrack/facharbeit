@@ -2,3 +2,4 @@ build/*
 !build/*.pdf
 svg-inkscape
 .bak
+img/signed.pdf
