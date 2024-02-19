@@ -250,6 +250,20 @@ Ein dezentraler, Ende-zu-Ende-verschlüsselter Messenger, der über das Tor-Netz
 %//!SECTION
 Um ein Verständnis für die Sicherheit dieses Messengers zu erlangen, geht diese Arbeit im zweiten Kapitel auf die asymmetrische Verschlüsselung und die Ende-zu-Ende-Verschlüsselung (E2EE) ein und beschäftigt sich zunächst mit der mathematischen Betrachtung, um anschließend die Sicherheit des Verfahrens beurteilen zu können. Dabei wird nicht auf das Padding-Verfahren der asymmetrischen Verschlüsselung eingegangen. Im dritten Kapitel wird untersucht, ob das Tor-Netzwerk eine mögliche Lösung für das Problem der Anonymität im Internet darstellt und inwieweit es die Nutzer schützt. Das vierte Kapitel beschäftigt sich mit der Definition und der Sicherheit von Dezentralisierung. Im fünften Kapitel wird schließlich die Implementierung des Messengers beschrieben, während im sechsten Kapitel die Nachteile des Messengers und deren Lösungsmöglichkeiten betrachtet werden. Im siebten Kapitel wird ein Fazit gezogen.
 
+\subsection{Motivation}
+Mein Interesse an Themenkomplex erstreckt sich über mehrere Ebenen. Neben der asymmetrischen Verschlüsselung und der dahinterliegenden Mathematik, ist die Programmierung selbst und die Implementierung eines sicheren Messengers im Tor-Netzwerk eine meiner Hauptmotivationen mich mit diesem komplexen Thema zu beschäftigen.
+\subsubsection{Tor-Netzwerk}
+Ich verfolge das Tor-Netzwerk und die Struktur schon seit ein paar Jahren mit großem Interesse. Das Tor-Netzwerk wird oft mit dem Begriff des Darknets in Verbindung gebracht, was bei den meisten Menschen zu negative Assoziationen führt \vcite{BsiTorDarknet}. Vor alldem die schwierige Rückverfolgung spielt eine große Rolle in dem Darknet \vebd. Sie ist der Grund für mein Interesse, die Struktur zu verstehen und darauf einen neuartigen Messenger zu programmieren.
+
+\subsubsection{Asymmetrische Verschlüsselung}
+Bei der asymmetrischen Verschlüsselung steht für mich ein mathematischer Erklärungsansatz mitunter im Vordergrund meines Interesses: "Wie schafft es der Angreifer, eine verschlüsselte Nachricht nur mit dem öffentlichen Schlüssel nicht zu entschlüsseln?".
+
+\subsubsection{Programmatischer Aspekt}
+Aber auch zu der Programmierung habe ich ein hohes Interesse. Die vielen Facetten des Tor-Netzwerkes mit der asymmetrischen Verschlüsselung so zu verknüpfen, dass am Ende ein funktionierender Messenger entsteht. Die Dezentralisierung des Messengers tragen nochmals zu der Schwierigkeit bei, sodass fundierte Kenntnisse der Informatik erforderlich sind.
+
+\subsection{Relevanz}
+Durch die steigende Anzahl von Cyberangriffen geraten  Messenger immer mehr in den Fokus von Angreifern, da durch die Kompromittierung eines Messagingdienstes viele persönliche Daten erlangt werden können \vcite{Cyberattacks}. Da China eine ausgefeilte Analyse und Überwachung des Netzes betreibt, ist die eine Anonymität und Sicherheit von Messengern umso wichtiger \vcite{GreatFirewallChina}. Durch einen solchen Messenger könnten oppositionelle Meinungen und Ansichten das autoritär geführte Land verlassen und in der Außenwelt Gehör finden. Und auch hier stellt sich wieder die Frage: "Schützt ein solcher Messenger Bürger und Journalisten in einem totalitären Staat vor möglichen Konsequenzen?".
+
 \section{Asymmetrische Verschlüsselung}
 %//SECTION E2EE und asymmetrische Verschlüsselung
 Um einen sicheren Nachrichtenaustausch zu gewährleisten, wird in dieser Arbeit E2EE implementiert. Bei E2EE wird die Nachricht vom Sender verschlüsselt, bevor sie an den Empfänger gesendet wird \vcite{E2EE}. Zwischengeschaltete Akteure wie Server oder mögliche Angreifer können die Nachricht somit nicht lesen \vebd. \textbf{Nur} der Empfänger der Nachricht kann sie entschlüsseln. Als Ver- und Entschlüsselungsverfahren der Nachrichten wird die asymmetrische Verschlüsselung verwendet \vebd. Diese Arbeit beschränkt sich bei der asymmetrischen Verschlüsselung auf das RSA-Verfahren.
@@ -271,7 +285,7 @@ Alle Variablen der folgenden Berechnungen liegen im Bereich $\mathbb{N}$ \vcite{
 Zur Erzeugung des Schlüsselpaares benötigen wir zunächst zwei große zufällige Primzahlen $P$ und $Q$ \vebd. Daraus ergibt sich $n = P * Q$, wobei $P \neq Q$ ist, so dass $P$ bzw. $Q$ nicht durch $\sqrt{n}$ bestimmt werden können \vebd. Der private Schlüssel besteht aus den Komponenten $\{ n, d \}$, während der öffentliche Schlüssel aus $\{ n, e \}$ besteht \vcite{RsaVariables}.
 %//SECTION - Eulersche Phi-Funktion
 \subsubsection{Eulersche Phi-Funktion}
-Die Eulersche Phi-Funktion spielt eine wichtige Rolle im RSA-Verfahren \vcite{TotientFuncMultiplicative}. Grundsätzlich gibt $\phi(x)$ an, wie viele positive teilerfremde Zahlen es bis $x$ gibt (für wie viele Zahlen der größte gemeinsame Teiler ($\gcd$) $1$ ist). \vcite{EulersTotientFunktion}. So ergibt sich $\phi(6) = 2$ oder im Falle einer Primzahl $\phi(7) = 7 - 1 = 6$, also $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss \vcite{TotientFuncMultiplicative}.
+Die Eulersche Phi-Funktion spielt eine wichtige Rolle im RSA-Verfahren \vcite{TotientFuncMultiplicative}. Grundsätzlich gibt $\phi(x)$ an, wie viele positive teilerfremde Zahlen es bis $x$ gibt (für wie viele Zahlen der größte gemeinsame Teiler ($\gcd$) $1$ ist). \vcite{EulersTotientFunction}. So ergibt sich $\phi(6) = 2$ oder im Falle einer Primzahl $\phi(7) = 7 - 1 = 6$, also $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss \vcite{TotientFuncMultiplicative}.
 \begin{equation*}
 \begin{aligned}
     \phi(n) & = \phi(P \cdot Q)                                                \\
