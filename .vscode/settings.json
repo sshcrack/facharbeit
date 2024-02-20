@@ -9,7 +9,20 @@
     "ltex.latex.commands": {
         "\\cite{}": "dummy",
         "\\vcite{}": "dummy",
-        "\\cite[]{}": "dummy"
+        "\\cite[]{}": "dummy",
+        "\\entryn": "dummy",
+        "\\relayn": "dummy",
+        "\\relayns": "dummy",
+        "\\exitn": "dummy",
+        "\\exitns": "dummy",
+        "\\nodes": "dummy",
+        "\\node": "dummy",
+        "\\onion": "dummy",
+        "\\circuit": "dummy",
+        "\\circuits": "dummy",
+        "\\introp": "dummy",
+        "\\introps": "dummy",
+        "\\renp": "dummy",
     },
     "cSpell.enabled": false
 }
