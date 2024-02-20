@@ -8,7 +8,13 @@
 
 \usepackage{fontspec}
 \usepackage{babel}
+
+
+% Für Code
+\usepackage[outputdir=build]{minted}
 \usepackage{csquotes}
+
+% Svg Image with Inkscape
 \usepackage{svg}
 \usepackage{relsize}
 \usepackage{setspace}
@@ -138,12 +144,6 @@ maxbibnames=99
 \usepackage{graphicx}
 \usepackage{graphbox}
 
-% Für Algorithmen
-\usepackage{algpseudocode}
-
-% Für Quelltext
-\usepackage{listings}
-\usepackage{color}
 
 % Für PDF
 \usepackage{pdfpages}
@@ -155,26 +155,9 @@ maxbibnames=99
 \setstretch{1.5}
 
 
-% Umlaute erlauben
-\lstset{literate=%
-  {Ö}{{\"O}}1
-  {Ä}{{\"A}}1
-  {Ü}{{\"U}}1
-  {ß}{{\ss}}1
-  {ü}{{\"u}}1
-  {ä}{{\"a}}1
-  {ö}{{\"o}}1
-}
-%end
-
-
 % Diese beiden Pakete müssen zuletzt geladen werden
 \usepackage[hidelinks]{hyperref} % Anklickbare Links im Dokument
 \usepackage{cleveref}
-
-% Für Code
-\usepackage[outputdir=build]{minted}
-
 
 % Titlepage required things
 
@@ -231,15 +214,11 @@ maxbibnames=99
 \section{Einleitung}
 Russland, China, Iran. In diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. Allein in diesen 3 Ländern sind rund 1,7 Milliarden Menschen von der Einschränkung der Meinungsfreiheit betroffen.
 Wie können Bürger aus solchen Staaten ihre Meinung verbreiten und andere Menschen, staatliche oder nicht staatliche Organisationen auf staatskritische Situationen und Probleme aufmerksam machen, ohne sich selbst in Gefahr zu bringen? \\
-Bei herkömmlichen Messengern wie WhatsApp, Signal und Co. wird zur bi- oder multiliteralen Kommunikation die Telefonnummern benötgt, um untereinander in Kontakt treten zu können. Eine mögliche Gefahr besteht darin, dass sich ein totalitärer Staat als legitimer Empfänger ausgibt, wodurch Bürger und z.B. staatskritische Journalisten ihre privaten Telefonnummern an den Staat weitergeben, der dann wiederum in der Lage ist, diese Nummern zurückzuverfolgen \vcite{LocPolice}. Genau hier liegt das Problem: oppositionelle Bürger und Reporter können nicht über gewöhnliche Messenger mit der Außenwelt kommunizieren, da der Staat ihre Nummern zurückverfolgen kann, und sie mit einer weiteren Einschränkung ihrer Meinungsfreiheit oder sogar mit ihrer Verhaftung rechnen müssen \vcite{AmnReport}. \\
+Bei herkömmlichen Messengern wie WhatsApp, Signal und Co. wird zur bi- oder multilateralen Kommunikation die Telefonnummern benötigt, um untereinander in Kontakt treten zu können. Eine mögliche Gefahr besteht darin, dass sich ein totalitärer Staat als legitimer Empfänger ausgibt, wodurch Bürger und z.B. staatskritische Journalisten ihre privaten Telefonnummern an den Staat weitergeben, der dann wiederum in der Lage ist, diese Nummern zurückzuverfolgen \vcite{LocPolice}. Genau hier liegt das Problem: oppositionelle Bürger und Reporter können nicht über gewöhnliche Messenger mit der Außenwelt kommunizieren, da der Staat ihre Nummern zurückverfolgen kann, und sie mit einer weiteren Einschränkung ihrer Meinungsfreiheit oder sogar mit ihrer Verhaftung rechnen müssen \vcite{AmnReport}. \\
 Die zentrale Infrastruktur, der meisten Messengern wie WhatsApp und Signal, ermöglicht es außerdem totalitären Staaten wie China, die IP-Adressen von Servern zu blockieren und sie so für Bürger und Journalisten unzugänglich zu machen \vcite{ChinaFirewall,CentralizedWhatsapp}.
-%//!SECTION
-%//SECTION Lösungsvorschlag / Ziel
-%//!SECTION
 %//REVIEW - Ist verschlüsselt so okay aufgebrochen?
 Vor diesem Hintergrund könnte ein dezentraler, Ende-zu-Ende-ver-schlüsselter Messenger, der über das Tor-Netzwerk kommuniziert, eine Lösung für diese Probleme darstellen. Ziel dieser Arbeit ist es, diese Lösung auf ihre Sicherheit und Praktikabilität hin zu untersuchen und zu implementieren.\\
-%//SECTION E2EE Überleitung zu Kapitel-Auflistung
-%//!SECTION
+
 %//NOTE - Hier habe ich den 1. Satz nicht übernommen, hat nicht ganz den Sinn getroffen
 Um ein Verständnis für die Sicherheit dieses Messengers zu erlangen, geht diese Arbeit im zweiten Kapitel auf die asymmetrische Verschlüsselung und die Ende-zu-Ende-Verschlüsselung (E2EE) ein. Hierzu werden die mathematischen Zusammenhänge näher betrachtet, um im Anschluss die Sicherheit des Verfahrens beurteilen zu können.
 %//REVIEW - Habe ich so ergänzt ist okay?
@@ -251,7 +230,8 @@ Aufbauend auf das vierte Kapitel, in dem mit der Definition und der Sicherheit v
 Mein Interesse an Themenkomplex erstreckt sich über mehrere Ebenen. Neben der asymmetrischen Verschlüsselung und der dahinterliegenden Mathematik, ist die Programmierung selbst und die Implementierung eines sicheren Messengers im Tor-Netzwerk eine meiner Hauptmotivationen mich mit diesem umfangreichen Thema zu beschäftigen.
 
 Ich verfolge das Tor-Netzwerk und seine Struktur schon seit ein paar Jahren mit großem Interesse. Das Tor-Netzwerk wird oft mit dem Begriff des Darknets in Verbindung gebracht, was bei den meisten Menschen zu negative Assoziationen führt \vcite{BsiTorDarknet}. Die schwierige Rückverfolgung spielt eine große Rolle in der Anonymität des Tor-Netzwerkes und ist ein weiterer Aspekt, der mich an diesem Thema fasziniert \vebd.
-Zusätzlich steht der mathematische Erklärungsansatz der asymmetrischen Verschlüsselung für mich mitunter im Vordergrund meines Interesses: "Wie schafft es der Angreifer, eine verschlüsselte Nachricht nur mit dem öffentlichen Schlüssel nicht zu entschlüsseln?"
+%//REVIEW - Punkt hier komisch?
+Zusätzlich steht der mathematische Erklärungsansatz der asymmetrischen Verschlüsselung für mich mitunter im Vordergrund meines Interesses: "Wie schafft es der Angreifer, eine verschlüsselte Nachricht nur mit dem öffentlichen Schlüssel nicht zu entschlüsseln?".
 Die vielen Facetten des Tor-Netzwerks mit der Ende-zu-Ende-Verschlüsselung und der Dezentralisierung zu verbinden, sodass am Ende ein funktionierender Messenger entsteht, ist eine weitere Herausforderung, für die ich mich begeistern kann.
 
 \subsection{Relevanz}
@@ -260,26 +240,22 @@ Durch die steigende Anzahl von Cyberangriffen geraten  Messenger immer mehr in d
 \subsection{Methodisches Vorgehen}
 Zunächst werde ich die Grundlagen der asymmetrischen Verschlüsselung, des Tor-Netzwerks und der Dezentralisierung erläutern, um dann jeweils die Sicherheit des Verfahrens zu überprüfen. Den theoretischen Hintergrund werde ich anschließend anwenden und somit einen Messenger programmieren, auf dessen Nachteile und mögliche Lösungsmöglichkeiten hinweisen, und abschließend ein Fazit ziehen.
 
+%//REVIEW - E2EE-Method kann auch duch \vebd ersetzt werden
 \section{Asymmetrische Verschlüsselung}
-%//SECTION E2EE und asymmetrische Verschlüsselung
-Um einen sicheren Nachrichtenaustausch zu gewährleisten, wird in dieser Arbeit E2EE implementiert. Bei E2EE wird die Nachricht vom Sender verschlüsselt, bevor sie an den Empfänger gesendet wird \vcite{E2EE}. Zwischengeschaltete Akteure wie Server oder mögliche Angreifer können die Nachricht somit nicht lesen \vebd. \textbf{Nur} der Empfänger bzw. Sender der Nachricht kann sie entschlüsseln \vcite{E2EE-Method}. Als Ver- und Entschlüsselungsverfahren der Nachrichten wird (unter anderem) die asymmetrische Verschlüsselung verwendet \vebd. Diese Arbeit beschränkt sich bei der asymmetrischen Verschlüsselung auf das RSA-Verfahren.
-%//!SECTION
+Um einen sicheren Nachrichtenaustausch zu gewährleisten, wird in dieser Arbeit E2EE implementiert. Bei E2EE wird die Nachricht vom Sender verschlüsselt, bevor sie an den Empfänger gesendet wird \vcite{E2EE}. Zwischengeschaltete Akteure wie Server oder mögliche Angreifer können die Nachricht somit nicht lesen \vebd. \textbf{Nur} der Empfänger oder Sender der Nachricht kann diese entschlüsseln \vcite{E2EE-Method}. Als Verfahren zur Ver- und Entschlüsselung der Nachrichten wird (unter anderem) die asymmetrische Verschlüsselung verwendet \vebd. Diese Arbeit beschränkt sich bei der asymmetrischen Verschlüsselung auf das RSA-Verfahren.
+
+%//NOTE - Bis hier korrigiert
 \subsection{Grundlagen}
-%//SECTION Grundlagen
-Grundsätzlich wird bei der asymmetrischen Verschlüsselung ein Schlüsselpaar (Keypair) verwendet, das aus einem privaten Schlüssel (private key) und einem öffentlichen Schlüssel (public key) besteht \vcite{Rsa-Basics}. Diese beiden Schlüssel sind mathematisch so miteinander verknüpft, dass der öffentliche Schlüssel Nachrichten \textbf{nur} verschlüsseln, aber nicht \vebd. entschlüsseln kann. \textbf{Nur} der zum Schlüsselpaar gehörende private Schlüssel kann die verschlüsselte Nachricht wieder entschlüsseln (siehe \cref{fig:E2EE}) \vebd.
+Grundsätzlich wird bei der asymmetrischen Verschlüsselung ein Schlüsselpaar (key pair) verwendet, das aus einem privaten Schlüssel (private key) und einem öffentlichen Schlüssel (public key) besteht \vcite{Rsa-Basics}. Diese beiden Schlüssel sind mathematisch so miteinander verknüpft, dass der öffentliche Schlüssel Nachrichten \textbf{nur} verschlüsseln, aber nicht \vebd. entschlüsseln kann. \textbf{Nur} der zum Schlüsselpaar gehörende private Schlüssel kann die verschlüsselte Nachricht wieder entschlüsseln (siehe \cref{fig:E2EE}) \vebd.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.75\textwidth]{Briefkasten-asymm.png}
-  \caption{Jeder Sender kann mit dem öffentlichen Schlüssel die Nachricht "verschlüsseln" (also eine Nachricht in den Briefkasten werfen), aber nur der Empfänger kann den Briefkasten mit seinem privaten Schlüssel öffnen und somit die Nachricht herausnehmen\vcite{fig:Rsa-Cryptography} \label{fig:E2EE}}
+  \caption{Jeder Sender kann mit dem öffentlichen Schlüssel die Nachricht "verschlüsseln" (also eine Nachricht in den Briefkasten werfen), aber nur der Empfänger kann den Briefkasten mit seinem privaten Schlüssel öffnen und somit die Nachricht herausnehmen \vcite{fig:Rsa-Cryptography} \label{fig:E2EE}}
 \end{figure}
-%//!SECTION
-%//SECTION - Mathematische Betrachtung zu RSA
 
 \subsection{Mathematische Betrachtung}
-%//!SECTION
 Alle Variablen der folgenden Berechnungen liegen im Bereich $\mathbb{N}$ \vcite{RsaGenCond}. \\
 Zur Erzeugung des Schlüsselpaares benötigen wir zunächst zwei große zufällige Primzahlen $P$ und $Q$ \vebd. Daraus ergibt sich $n = P * Q$, wobei $P \neq Q$ ist, so dass $P$ bzw. $Q$ nicht durch $\sqrt{n}$ bestimmt werden können \vebd. Der private Schlüssel besteht aus den Komponenten $\{ n, d \}$, während der öffentliche Schlüssel aus $\{ n, e \}$ besteht \vcite{RsaVariables}.
-%//SECTION - Eulersche Phi-Funktion
 \subsubsection{Eulersche Phi-Funktion}
 Die Eulersche Phi-Funktion spielt eine wichtige Rolle im RSA-Verfahren \vcite{TotientFuncMultiplicative}. Grundsätzlich gibt $\phi(x)$ an, wie viele positive teilerfremde Zahlen es bis $x$ gibt (für wie viele Zahlen der größte gemeinsame Teiler ($\gcd$) $1$ ist). \vcite{EulersTotientFunction}. So ergibt sich $\phi(6) = 2$ oder im Falle einer Primzahl $\phi(7) = 7 - 1 = 6$, also $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss \vcite{TotientFuncMultiplicative}.
 \begin{equation*}
@@ -290,7 +266,7 @@ Die Eulersche Phi-Funktion spielt eine wichtige Rolle im RSA-Verfahren \vcite{To
     \phi(n) & = \left(P - 1 \right) \cdot \left( Q - 1\right)
   \end{aligned}
 \end{equation*}
-%//!SECTION
+
 \subsubsection{Generierung des Schlüsselpaares}
 Sowohl der private als auch der öffentliche Schlüssel bestehen unter anderem aus folgenden Komponenten: $n = P \cdot Q$ \vcite{RsaMaths1}. Für den öffentlichen Schlüssel benötigen wir die Komponente $e$, die zur Verschlüsselung einer Nachricht verwendet wird \vebd. $e$ ist eine Zufallszahl, für die folgende Bedingungen gelten \vebd:
 \begin{equation*}
