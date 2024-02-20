@@ -1,5 +1,5 @@
 use std::{
-    env::{args, current_exe}, io::{stdin, stdout, Write}, thread, time::Duration
+    env::{args, current_exe}, thread, time::Duration
 };
 
 use anyhow::Result;
@@ -12,7 +12,7 @@ use thirtyfour::{
 };
 use tokio::{
     fs::{self, File},
-    io::{AsyncReadExt, AsyncWriteExt, BufWriter},
+    io::AsyncReadExt,
     process::Command,
 };
 
@@ -34,6 +34,7 @@ async fn main() -> Result<()> {
     panic!("Can not have both features enabled at the same time");
 
     #[cfg(feature = "chrome")]
+    #[allow(unreachable_code)]
     let bin = include_bytes!("./bin/chromedriver.exe");
 
     #[cfg(feature = "firefox")]

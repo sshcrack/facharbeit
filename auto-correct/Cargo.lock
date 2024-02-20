@@ -118,6 +118,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "auto-correct"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "base64 0.21.5",
+ "clipboard-win",
+ "directories",
+ "env_logger",
+ "log",
+ "punkt",
+ "reqwest",
+ "same-file",
+ "serde_json",
+ "thirtyfour",
+ "tokio",
+ "zip-extract",
+]
+
+[[package]]
 name = "autocfg"
 version = "0.1.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -939,25 +958,6 @@ dependencies = [
  "libc",
  "wasi",
  "windows-sys 0.48.0",
-]
-
-[[package]]
-name = "molecule-orbitals"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "base64 0.21.5",
- "clipboard-win",
- "directories",
- "env_logger",
- "log",
- "punkt",
- "reqwest",
- "same-file",
- "serde_json",
- "thirtyfour",
- "tokio",
- "zip-extract",
 ]
 
 [[package]]
