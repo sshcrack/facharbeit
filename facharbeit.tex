@@ -254,7 +254,7 @@ Die vielen Facetten des Tor-Netzwerks mit der Ende-zu-Ende-Verschlüsselung und 
 In totalitären Staaten wie dem Iran ist die Pressefreiheit und Meinungsfreiheit massiv eingeschränkt \vcite{AmnReport}. Dadurch können Bürger und Journalisten ihre Meinung nicht öffentlich äußern, ohne mit Konsequenzen rechnen zu müssen. China betreibt zusätzlich eine ausgefeilte Analyse und Überwachung des Netzes, wodurch die eine Anonymität und Sicherheit von Messengern umso wichtiger ist \vcite{GreatFirewallChina}. Mit solch einem Messenger könnten oppositionelle Meinungen und Ansichten das autoritär geführte Land verlassen und in der Außenwelt Gehör finden. Und auch hier stellt sich wieder die Frage: "Schützt ein solcher Messenger Bürger und Journalisten in einem totalitären Staat vor möglichen Konsequenzen?".
 
 \subsection{Methodisches Vorgehen}
-Zunächst werde ich die Grundlagen der asymmetrischen Verschlüsselung, des Tor-Netzwerks und der Dezentralisierung erläutern, um dann jeweils die Sicherheit des Verfahrens zu überprüfen. Den theoretischen Hintergrund werde ich anschließend anwenden und somit einen Messenger programmieren, auf dessen Nachteile und mögliche Lösungsmöglichkeiten hinweisen, und abschließend ein Fazit ziehen.
+Zunächst werde ich die Grundlagen der asymmetrischen Verschlüsselung, des Tor-Netzwerks und der Dezentralisierung erläutern, um dann jeweils die Sicherheit des Verfahrens zu überprüfen. Woraufhin ich den theoretischen Hintergrund in die Praxis umsetze, also einen Messenger programmiere, auf dessen Nachteile und mögliche Lösungsmöglichkeiten hinweise, und abschließend ein Fazit ziehe.
 
 %//REVIEW - E2EE-Method kann auch duch \vebd ersetzt werden
 \section{Asymmetrische Verschlüsselung}
@@ -270,9 +270,9 @@ Grundsätzlich wird bei der asymmetrischen Verschlüsselung ein Schlüsselpaar (
 
 \subsection{Mathematische Betrachtung}
 %//REVIEW - Removed newline here
-Alle Variablen der folgenden Berechnungen liegen im Bereich $\mathbb{N}$ \vcite{RsaGenCond}. Zur Erzeugung des Schlüsselpaares benötigen wir zunächst zwei große zufällige Primzahlen $P$ und $Q$ \vebd. Daraus ergibt sich $n = P \cdot Q$, wobei $P \neq Q$ ist, sodass $P$ bzw. $Q$ nicht durch $\sqrt{n}$ bestimmt werden können \vebd. Der private Schlüssel setzt sich hierbei aus den Komponenten $\{ n, d \}$ zusammen, während der öffentliche Schlüssel aus $\{ n, e \}$ besteht \vcite{RsaVariables}.
+Alle Variablen der folgenden Berechnungen liegen im Bereich $\mathbb{N}$ \vcite{RsaGenCond}. Zur Erzeugung des Schlüsselpaares werden zwei große zufällige Primzahlen,genannt $P$ und $Q$, benötigt \vebd. Daraus ergibt sich $n = P \cdot Q$, wobei $P \neq Q$ ist, sodass $P$ und $Q$ nicht durch $\sqrt{n}$ bestimmt werden können \vebd. Der private Schlüssel setzt sich hierbei aus den Komponenten $\{ n, d \}$ zusammen, während der öffentliche Schlüssel aus $\{ n, e \}$ besteht \vcite{RsaVariables}.
 \subsubsection{Eulersche Phi-Funktion}
-Die eulersche Phi-Funktion spielt eine wichtige Rolle im RSA-Verfahren \vcite{TotientFuncMultiplicative}. Grundsätzlich gibt $\phi(x)$ an, wie viele positive teilerfremde Zahlen es bis $x$ gibt (für wie viele Zahlen der größte gemeinsame Teiler ($\gcd$) mit $x$ $1$ ist) \vcite{EulersTotientFunction}. So ergibt sich $\phi(6) = 2$ oder im Falle einer Primzahl $\phi(7) = 7 - 1 = 6$, also $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss \vcite{TotientFuncMultiplicative}. Somit gilt:
+Die eulersche Phi-Funktion spielt eine wichtige Rolle im RSA-Verfahren \vcite{TotientFuncMultiplicative}. $\phi(x)$ gibt an, wie viele positive teilerfremde Zahlen es bis $x$ gibt (für wie viele Zahlen der größte gemeinsame Teiler ($\gcd$) mit $x$ $1$ ist) \vcite{EulersTotientFunction}. So ergibt sich $\phi(6) = 2$ oder im Falle einer Primzahl $\phi(7) = 7 - 1 = 6$, also $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss \vcite{TotientFuncMultiplicative}. Somit gilt:
 \begin{equation*}
   \begin{aligned}
     \phi(n) & = \phi(P \cdot Q)                                                \\
@@ -283,7 +283,7 @@ Die eulersche Phi-Funktion spielt eine wichtige Rolle im RSA-Verfahren \vcite{To
 \end{equation*}
 
 \subsubsection{Generierung des Schlüsselpaares}
-Wie bereits erwähnt besteht sowohl der private als auch der öffentliche Schlüssel bestehen unter anderem aus der Komponente  $n$: $n = P \cdot Q$ \vcite{RsaMaths1}. Um mit dem öffentlichen Schlüssel eine Verschlüsselung durchführen zu können wir die Komponente $e$ benötigt \vebd. $e$ ist eine Zufallszahl, für welche folgende Bedingungen erfüllt sein müssen \vebd:
+Wie bereits erwähnt, besteht sowohl der private als auch der öffentliche Schlüssel unter anderem aus der Komponente $n$: $n = P \cdot Q$ \vcite{RsaMaths1}. Um mit dem öffentlichen Schlüssel eine Verschlüsselung durchführen zu können wir die Komponente $e$ benötigt \vebd. $e$ ist eine Zufallszahl, für welche folgende Bedingungen erfüllt sein müssen \vebd:
 \begin{equation*}
   e = \begin{cases}
     1 < e < \phi(n)      \\
@@ -298,7 +298,8 @@ Nachdem die Komponente $e$ gefunden wurde, ist der öffentliche Schlüssel nun v
     d       & = e^{-1} \mod \phi(n)
   \end{aligned}
 \end{equation*}
-Das Schlüsselpaar wurde nun vollständig berechnet und die beiden Schlüssel hängen mathematisch miteinander zusammen.
+%//REVIEW - Nochmal neu
+Sowohl der private als auch der öffentliche Schlüssel wurden nun berechnet, bilden also das Schlüsselpaar, und können nun zur Ver- und Entschlüsselung von Nachrichten verwendet werden.
 \subsection{Sicherheit}
 Um die Sicherheit des RSA-Verfahrens bewerten zu können, müssen wir zunächst den Ver-/Entschlüsselungsprozess betrachten.
 \begin{equation*}
@@ -307,7 +308,7 @@ Um die Sicherheit des RSA-Verfahrens bewerten zu können, müssen wir zunächst 
     m & = c^d \mod n & \text{Umkehroperation (Entschlüsslung) von $c$ zu $m$}
   \end{aligned}
 \end{equation*}
-Damit die verschlüsselte Nachricht $c$ wieder entschlüsselt werden kann, bräuchte ein Angreifer die Komponente $d$. Dadurch, dass $d$ nur im privaten Schlüssel enthalten ist, müsste der Angreifer also selbst $d$ berechnen, welches allerdings sehr rechenintensiv ist, da diese durch $\phi(n)$ berechnet werden müsste. Eine Primfaktorzerlegung von $n$ ist also nötig \vcite{EulersTotientFunction}. Die Verschlüsselung von $m$ nach $c$ ist eine Trapdoor-Einwegfunktion \vcite{RsaTrapdoor}. Das bedeutet, dass es zwar einfach ist, $f(x) = i$ zu berechnen (im Falle der RSA Verschlüsselung), es aber unmöglich ist, von $i$ auf den ursprünglichen Wert $x$ zu schließen, ohne eine weitere notwendige Komponente zu kennen (bei dem RSA-Verfahren wäre dies die Komponente $d$) \vebd.
+Damit die verschlüsselte Nachricht $c$ wieder entschlüsselt werden kann, bräuchte ein Angreifer die Komponente $d$. Dadurch, dass $d$ nur im privaten Schlüssel enthalten ist, müsste der Angreifer also selbst $d$ berechnen, welches allerdings sehr rechenintensiv ist, da diese durch $\phi(n)$ berechnet werden müsste. Somit ist eine Primfaktorzerlegung von $n$ nötig \vcite{EulersTotientFunction}. Die Verschlüsselung von $m$ nach $c$ ist eine Trapdoor-Einwegfunktion \vcite{RsaTrapdoor}. Das bedeutet, dass es zwar einfach ist, $f(x)$ zu berechnen (im Falle der RSA Verschlüsselung), jedoch unmöglich ist, von $f(x)$ auf den ursprünglichen Wert $x$ zu schließen, ohne eine weitere notwendige Komponente zu kennen (bei dem RSA-Verfahren wäre dies die Komponente $d$) \vebd.
 \begin{figure}[H]
   \centering
   \includesvg[width=0.5\textwidth]{img/Trapdoor_permutation.svg}
@@ -321,20 +322,20 @@ Der wesentliche Unterschied zur asymmetrischen Verschlüsselung besteht darin, d
 Die symmetrische Verschlüsselung eignet sich daher für die Verschlüsselung von Benutzerdaten des Messengers (wie z.B. Chatverläufe) mit einem benutzerdefinierten Passwort.
 
 \section{Das Tor-Netzwerk}
-Ein weiterer zentraler Aspekt dieser Arbeit ist die Anonymität der Nutzer, wobei das Tor-Netzwerk eine mögliche Lösung bietet. Das normale Routing, wie wir es täglich nutzen, eignet sich für eine hohe Anonymität nicht, da Clients direkt mit den Zielservern kommunizieren, der Zielserver somit die IP-Adresse des Clients sehen kann, wodurch eine Rückverfolgung der IP-Adresse möglich ist \vcite{TCP_IP,LocPolice}.
+Ein weiterer zentraler Aspekt dieser Arbeit ist die Anonymität der Nutzer, wobei das Tor-Netzwerk eine mögliche Lösung bietet. Das normale Routing, wie wir es täglich nutzen, eignet sich für eine hohe Anonymität nicht, da Clients direkt mit den Zielservern kommunizieren. Dabei kann der Zielserver die IP-Adresse der Clients einsehen, wodurch eine Rückverfolgung der IP-Adresse möglich ist \vcite{TCP_IP,LocPolice}.
 Genau an diesem Punkt setzt das Tor-Netzwerk an.
 Um das Problem der Rückverfolgung zu lösen, besteht das Tor-Netzwerk aus vielen "\nodes" (Server des Tor-Netzwerkes), welche eingehende Tor-Verbindungen annehmen und weiterverarbeiten  \vcite{TorStructure}.
-Damit ein Client eine Anfrage über das Tor-Netzwerk senden kann, sucht er sich zunächst einen "Weg", genannt \circuit, durch welchen die Anfrage des Clients geschickt werden kann \vcite{TorCircuits}.
+Damit ein Client eine Anfrage über das Tor-Netzwerk senden kann, sucht er sich zunächst einen Weg durch das Netzwerk, genannt "\circuit". Durch diesen \circuit kann die Anfrage des Clients geschickt werden kann \vcite{TorCircuits}.
 Der \circuit, welcher für zehn Minuten gültig ist, besteht in der Regel aus drei \nodes \vebd. Nachdem der \circuit ausgelaufen ist, wird dieser durch den Client erneuert \vcite{FAQCircuitLifetime}.
-Die drei \nodes werden hier in drei Kategorien unterteilt: Die \entryn, mit der sich der Client verbindet, die \relayn, welche zwischen \entryn und \exitn liegt, und die \exitn, welche sich mit dem Zielserver verbindet \vcite{TorStructure}. Der Client verschlüsselt die eigentliche Anfrage, welche er über das Tor-Netzwerk senden möchte, mehrfach, verpackt sie also in mehrere "Schalen", die eine \onion bilden, und leitet diese über den \circuit an den Zielserver weiter \vcite{TorFirstPub}.
-Zunächst wird die \onion vom Tor-Client an die \entryn gesendet \vcite{TorStructure}. An jeder \node, wie der \entryn, wird eine Schale der \onion "abgeschält" (die \onion also einmal entschlüsselt), wodurch diese \node Informationen über die nächste \node der \onion erhält \vcite{TorFirstPub}. Die \node leitet nun die \onion an den nächsten Knotenpunkt weiter \vebd. Sobald \onion die \exitn erreicht hat, entfernt diese die letzte "Schale" der Anfrage, wodurch diese nun vollständig entschlüsselt ist und an den Zielserver gesendet werden kann \vebd. Dieses Routing-Verfahren ist auch als \textit{Onion-Routing} bekannt \vcite{TorStructure2}.
+Die drei \nodes werden hier in drei Kategorien unterteilt: Die \entryn, mit der sich der Client verbindet, die \relayn, welche zwischen \entryn und \exitn liegt, und die \exitn, welche sich mit dem Zielserver verbindet \vcite{TorStructure}. Der Client verschlüsselt die eigentliche Anfrage, welche er über das Tor-Netzwerk senden möchte, mehrfach \vcite{TorFirstPub}. Die eigentliche Anfrage wird also durch mehrere "Schalen", ähnlich wie bei einer Zwiebel, geschützt. Fachsprachlich wird dies als \onion bezeichnet \vcite{TorFirstPub}. Diese \onion wird nun über den \circuit an den Zielserver weitergeleitet \vebd.
+Zunächst wird die \onion vom Tor-Client an die \entryn gesendet \vcite{TorStructure}. An jeder \node, wie der \entryn, wird die \onion einmal entschlüsselt (die Zwiebel wird also einmal "geschält"), wodurch diese \node Informationen über die nächste \node der \onion erhält \vcite{TorFirstPub}. Die \node leitet nun die \onion an den nächsten Knotenpunkt weiter \vebd. Sobald die \onion die \exitn erreicht hat, entfernt diese die letzte "Schale" der Anfrage \vebd. Die Anfrage ist somit nun vollständig entschlüsselt ist und an den Zielserver gesendet werden kann \vebd. Dieses Routing-Verfahren ist auch als \textit{Onion-Routing} bekannt \vcite{TorStructure2}.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.65\textwidth]{TorRoutingSimple.png}
   \caption{Das Prinzip des Onion-Routings \vcite{fig:Tor-Structure} \label{fig:TorStructure}}
 \end{figure}
 \textbf{Nur} die \entryn kennt also die echte IP-Adresse des Clients und \textbf{nur} die \exitn weiß, an welchen Zielserver die Anfrage geschickt wurde \vcite{TorStructure}. Zwischengeschaltete \nodes wie die \relayn erkennen nur eine verschlüsselte Anfrage und haben keine Informationen über den eigentlichen Client oder Zielserver der Anfrage \vcite{EEFTor}.
-Eine mögliche Schwachstelle liegt bei der \exitn, welche unverschlüsselte Anfragen an den Zielserver sendet, somit Benutzerdaten (wenn nicht mit TLS verschlüsselt) bzw. IP-Adressen ausgelesen werden können \vcite{TorBadRelay}. Durch die Einrichtung von \exitns im Tor-Netzwerk könnte ein Angreifer somit die Anonymität des Netzwerks bzw. der Benutzer gefährden (\exitn des Angreifers auch bekannt als Bad-Relay) \vebd.
+Eine mögliche Schwachstelle liegt bei der \exitn, welche unverschlüsselte Anfragen an den Zielserver sendet \vcite{TorBadRelay}. Dadurch können Benutzerdaten (wenn nicht mit TLS verschlüsselt) bzw. IP-Adressen ausgelesen werden \vebd. Durch die Einrichtung von \exitns im Tor-Netzwerk könnte ein Angreifer die Anonymität des Netzwerks bzw. der Benutzer gefährden (\exitn des Angreifers auch bekannt als Bad-Relay) \vebd.
 
 \subsection{Onion Services}
 Onion Services sind eine mögliche Lösung für den \exitn-Angriff \vcite{TorOnionServiceTalk}. Sie sind nicht auf \exitn angewiesen, agieren nur innerhalb des Tor-Netzwerks mit anderen \nodes und verhalten sich wie normale Tor-Clients \vebd. Onion Services sind nicht wie die Zielserver im vorherigen Beispiel über das normale Internet erreichbar, sondern nur über das Tor-Netzwerk \vcite{TorOnionService}. Im Gegensatz zu normalen öffentlichen Servern müssen bei Onion Services keine Ports geöffnet werden, damit sich ein Client mit dem Server verbinden kann, da der Onion Service mit dem Tor-Netzwerk nur über ausgehende Verbindungen kommuniziert (auch bekannt als \textit{NAT-Punching}) und alle Daten darüber geleitet werden \vebd.
