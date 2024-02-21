@@ -230,8 +230,8 @@ maxbibnames=99
 \linenumbers{}
 \modulolinenumbers[5]
 \section{Einleitung}
-Russland, China, Iran. In diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. Allein in diesen 3 Ländern sind rund 1,7 Milliarden Menschen von der Einschränkung der Meinungsfreiheit betroffen.
-Wie können Bürger aus solchen Staaten ihre Meinung verbreiten und andere Menschen, staatliche oder nicht staatliche Organisationen auf staatskritische Situationen und Probleme aufmerksam machen, ohne sich selbst in Gefahr zu bringen? \\
+Russland, China, Iran. In diesen totalitären Staaten herrscht eine starke Zensur \vcite{AmnReport}. Allein in diesen drei Ländern sind rund 1,7 Milliarden Menschen von der Einschränkung der Meinungsfreiheit betroffen.
+Wie können Bürger aus solchen Staaten ihre Meinung verbreiten, staatliche oder nichtstaatliche Organisationen auf staatskritische Situationen und Probleme aufmerksam machen, ohne sich selbst in Gefahr zu bringen? \\
 Bei herkömmlichen Messengern wie WhatsApp, Signal und Co. wird zur bi- oder multilateralen Kommunikation die Telefonnummern benötigt, um untereinander in Kontakt treten zu können. Eine mögliche Gefahr besteht darin, dass sich ein totalitärer Staat als legitimer Empfänger ausgibt, wodurch Bürger und z.B. staatskritische Journalisten ihre privaten Telefonnummern an den Staat weitergeben, der dann wiederum in der Lage ist, diese Nummern zurückzuverfolgen \vcite{LocPolice}. Genau hier liegt das Problem: oppositionelle Bürger und Reporter können nicht über gewöhnliche Messenger mit der Außenwelt kommunizieren, da der Staat ihre Nummern zurückverfolgen kann, und sie mit einer weiteren Einschränkung ihrer Meinungsfreiheit oder sogar mit ihrer Verhaftung rechnen müssen \vcite{AmnReport}. \\
 Die zentrale Infrastruktur, der meisten Messengern wie WhatsApp und Signal, ermöglicht es außerdem totalitären Staaten wie China, die IP-Adressen von Servern zu blockieren und sie so für Bürger und Journalisten unzugänglich zu machen \vcite{ChinaFirewall,CentralizedWhatsapp}.
 %//REVIEW - Ist verschlüsselt so okay aufgebrochen?
@@ -262,7 +262,7 @@ Um einen sicheren Nachrichtenaustausch zu gewährleisten, wird in dieser Arbeit 
 
 \subsection{Grundlagen}
 Grundsätzlich wird bei der asymmetrischen Verschlüsselung ein Schlüsselpaar (key pair) verwendet, das aus einem privaten Schlüssel (private key) und einem öffentlichen Schlüssel (public key) besteht \vcite{Rsa-Basics}. Diese beiden Schlüssel sind mathematisch so miteinander verknüpft, dass der öffentliche Schlüssel Nachrichten \textbf{nur} verschlüsseln, aber nicht entschlüsseln kann \vebd. \textbf{Nur} der zum Schlüsselpaar gehörende private Schlüssel kann die verschlüsselte Nachricht wieder entschlüsseln (siehe \cref{fig:E2EE}) \vebd.
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.75\textwidth]{Briefkasten-asymm.png}
   \caption{Jeder Sender kann mit dem öffentlichen Schlüssel die Nachricht "verschlüsseln" (also eine Nachricht in den Briefkasten werfen), aber nur der Empfänger kann den Briefkasten mit seinem privaten Schlüssel öffnen und somit die Nachricht herausnehmen \vcite{fig:Rsa-Cryptography} \label{fig:E2EE}}
@@ -308,7 +308,7 @@ Um die Sicherheit des RSA-Verfahrens bewerten zu können, müssen wir zunächst 
   \end{aligned}
 \end{equation*}
 Damit die verschlüsselte Nachricht $c$ wieder entschlüsselt werden kann, bräuchte ein Angreifer die Komponente $d$. Dadurch, dass $d$ nur im privaten Schlüssel enthalten ist, müsste der Angreifer also selbst $d$ berechnen, welches allerdings sehr rechenintensiv ist, da diese durch $\phi(n)$ berechnet werden müsste. Eine Primfaktorzerlegung von $n$ ist also nötig \vcite{EulersTotientFunction}. Die Verschlüsselung von $m$ nach $c$ ist eine Trapdoor-Einwegfunktion \vcite{RsaTrapdoor}. Das bedeutet, dass es zwar einfach ist, $f(x) = i$ zu berechnen (im Falle der RSA Verschlüsselung), es aber unmöglich ist, von $i$ auf den ursprünglichen Wert $x$ zu schließen, ohne eine weitere notwendige Komponente zu kennen (bei dem RSA-Verfahren wäre dies die Komponente $d$) \vebd.
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includesvg[width=0.5\textwidth]{img/Trapdoor_permutation.svg}
   \caption{Eine Visualisierung der Trapdoor-Einwegfunktion \vcite{fig:TrapdoorPermutation} \label{fig:TrapdoorFunc}}
@@ -323,16 +323,16 @@ Die symmetrische Verschlüsselung eignet sich daher für die Verschlüsselung vo
 \section{Das Tor-Netzwerk}
 Ein weiterer zentraler Aspekt dieser Arbeit ist die Anonymität der Nutzer, wobei das Tor-Netzwerk eine mögliche Lösung bietet. Das normale Routing, wie wir es täglich nutzen, eignet sich für eine hohe Anonymität nicht, da Clients direkt mit den Zielservern kommunizieren, der Zielserver somit die IP-Adresse des Clients sehen kann, wodurch eine Rückverfolgung der IP-Adresse möglich ist \vcite{TCP_IP,LocPolice}.
 Genau an diesem Punkt setzt das Tor-Netzwerk an.
-Um das Problem der Rückverfolgung zu lösen, besteht das Tor-Netzwerk aus vielen \nodes, welche eingehende Tor-Verbindungen annehmen und weiterverarbeiten \vcite{TorStructure}.
+Um das Problem der Rückverfolgung zu lösen, besteht das Tor-Netzwerk aus vielen "\nodes" (Server des Tor-Netzwerkes), welche eingehende Tor-Verbindungen annehmen und weiterverarbeiten  \vcite{TorStructure}.
 Damit ein Client eine Anfrage über das Tor-Netzwerk senden kann, sucht er sich zunächst einen "Weg", genannt \circuit, durch welchen die Anfrage des Clients geschickt werden kann \vcite{TorCircuits}.
-Der \circuit, welcher für 10 Minuten gültig ist, besteht in der Regel aus drei \nodes \vebd. Nachdem der \circuit ausgelaufen ist, wird dieser durch den Client erneuert \vcite{FAQCircuitLifetime}.
+Der \circuit, welcher für zehn Minuten gültig ist, besteht in der Regel aus drei \nodes \vebd. Nachdem der \circuit ausgelaufen ist, wird dieser durch den Client erneuert \vcite{FAQCircuitLifetime}.
 Die drei \nodes werden hier in drei Kategorien unterteilt: Die \entryn, mit der sich der Client verbindet, die \relayn, welche zwischen \entryn und \exitn liegt, und die \exitn, welche sich mit dem Zielserver verbindet \vcite{TorStructure}. Der Client verschlüsselt die eigentliche Anfrage, welche er über das Tor-Netzwerk senden möchte, mehrfach, verpackt sie also in mehrere "Schalen", die eine \onion bilden, und leitet diese über den \circuit an den Zielserver weiter \vcite{TorFirstPub}.
 Zunächst wird die \onion vom Tor-Client an die \entryn gesendet \vcite{TorStructure}. An jeder \node, wie der \entryn, wird eine Schale der \onion "abgeschält" (die \onion also einmal entschlüsselt), wodurch diese \node Informationen über die nächste \node der \onion erhält \vcite{TorFirstPub}. Die \node leitet nun die \onion an den nächsten Knotenpunkt weiter \vebd. Sobald \onion die \exitn erreicht hat, entfernt diese die letzte "Schale" der Anfrage, wodurch diese nun vollständig entschlüsselt ist und an den Zielserver gesendet werden kann \vebd. Dieses Routing-Verfahren ist auch als \textit{Onion-Routing} bekannt \vcite{TorStructure2}.
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=0.65\textwidth]{TorRoutingSimple.png}
   \caption{Das Prinzip des Onion-Routings \vcite{fig:Tor-Structure} \label{fig:TorStructure}}
-\end{figure} \\
+\end{figure}
 \textbf{Nur} die \entryn kennt also die echte IP-Adresse des Clients und \textbf{nur} die \exitn weiß, an welchen Zielserver die Anfrage geschickt wurde \vcite{TorStructure}. Zwischengeschaltete \nodes wie die \relayn erkennen nur eine verschlüsselte Anfrage und haben keine Informationen über den eigentlichen Client oder Zielserver der Anfrage \vcite{EEFTor}.
 Eine mögliche Schwachstelle liegt bei der \exitn, welche unverschlüsselte Anfragen an den Zielserver sendet, somit Benutzerdaten (wenn nicht mit TLS verschlüsselt) bzw. IP-Adressen ausgelesen werden können \vcite{TorBadRelay}. Durch die Einrichtung von \exitns im Tor-Netzwerk könnte ein Angreifer somit die Anonymität des Netzwerks bzw. der Benutzer gefährden (\exitn des Angreifers auch bekannt als Bad-Relay) \vebd.
 
@@ -350,13 +350,13 @@ Der Client besitzt nun die Adressen der \introps und die Signatur des \textit{De
 \subsection{Sicherheit}
 %//TODO Nochmal Studio durchlesen, ist noch nicht schlüssig
 %//TODO Angriff wurde schon von Tor gefixt, benutze OnionServiceFingerprinting
-Onion Services beheben im Vergleich zu normalen Zielservern im Tor-Netzwerk das Problem der \exitn-Angriffe, dadurch dass sie nicht mehr auf \exitns angewie~-sen sind.
-In der Sicherheitsbetrachtung beziehe ich mich ausschließlich auf die Verbindung zwischen den Onion Services und den Tor-Clients (also nicht zwischen Tor-Client und \exitn). Eine Deanonymisierung eines Onion Services theoretisch möglich, wenn der ISP (Internet Service Provider, also z.B. Telekom, EWE, etc.) eingehende und ausgehende Verbindungen zwischen Client und Onion Service bzw. zu deren \relayn aufzeichnet und mithilfe von Machine Learning analysiert \vcite{OnionServiceFingerprinting}. Die Umsetzung der theoretischen Grundlagen war bisher unter idealisierten Bedingungen erfolgreich, jedoch sind weitere Untersuchungen notwendig, um die potenziellen Gefahren dieses Algorithmus einordnen zu können \vebd. Bei einer Zusammenarbeit der Regierungen Deutschlands, der USA und Frankreichs könnten 78,34 \% der \circuits deanonymisiert werden \vebd.
-Dieses Szenario erscheint jedoch unrealistisch, da die Bürger in Deutschland, den USA und Frankreich das Recht auf freie Meinungsäußerung haben und daher höchstwahrscheinlich keine Deanonymisierungsangriffe starten werden, um die Privatsphäre z.B. von Whistleblowern zu schützen \vcite{AmnReport,ROG-USA}.
-%// REVIEW - Kann ich das so sagen oder einfach weglassen?
-Zudem reagiert die Organisation des Tor-Netzwerkes "The Tor Project" relativ schnell auf mögliche Deanonymisierungsangriffe und versucht diese zu beheben.
+Onion Services bieten eine mögliche Lösung für die \exitn-Angriffe, da diese nur innerhalb des Tor-Netzwerkes agieren, somit nicht auf \exitns angewie~-sen sind.
+Eine Deanonymisierung eines Onion Services wäre theoretisch möglich, wenn der ISP (Internet Service Provider, also z.B. Telekom, EWE, etc.) eingehende und ausgehende Verbindungen zwischen Client und Onion Service bzw. zu deren \relayn aufzeichnet und mithilfe von Machine Learning analysiert \vcite{OnionServiceFingerprinting}. Die Umsetzung der theoretischen Grundlagen war bisher unter idealisierten Bedingungen erfolgreich, jedoch sind weitere Untersuchungen notwendig, um die potenziellen Gefahren dieses Algorithmus einordnen zu können \vebd. Bei einer Zusammenarbeit der Regierungen Deutschlands, der USA und Frankreichs könnten nach der Studie 78,34 \% der \circuits deanonymisiert werden \vebd.
+%//REVIEW - z.B. und von vertauschen?
+Dieses Szenario erscheint jedoch unrealistisch, da die Bürger in Deutschland, den USA und Frankreich das Recht auf freie Meinungsäußerung haben und die Staaten daher höchstwahrscheinlich keine Deanonymisierungsangriffe starten werden, um die Privatsphäre von z.B. Whistleblowern zu schützen \vcite{AmnReport,ROG-USA}.
+%//REVIEW - Scuffter Satz
+Da über 6.500 verschiedene \nodes Teil des Tor-Netzwerkes sind, ist es in der Praxis kaum möglich alle \nodes zu blockieren, um das Netzwerk unzugänglich zu machen \footnote{Es ist zwar möglich die IP-Adressen jeglicher \relayns zu blockieren, jedoch ist dies durch Pluggable Transports umgänglich \vcite{PluggableTransports}} \vcite{DeanonymizingTorBook}.
 Im Gegenzug führt die hohe Anonymität, die durch die vielen \nodes und die mehrfache Verschlüsselung erreicht wird, auch dazu, dass das Tor-Netzwerk im Vergleich zum normalen Routing fast um das 120-fache langsamer ist \vcite{TorPerformance}.
-Zudem ist das Tor-Netzwerk ist in der Praxis kaum zu blockieren, da es über 6.500 verschiedene \nodes gibt und somit kein zentraler Hauptserver existiert, von dem das Tor-Netzwerk abhängig ist\footnote{Es ist zwar möglich die IP-Adressen jeglicher \relayns zu blockieren, jedoch ist dies durch Pluggable Transports umgänglich \vcite{PluggableTransports}} \vcite{DeanonymizingTorBook}.
 
 %//NOTE - Bis hier hin korrigiert
 \section{Dezentralisierung}
@@ -454,7 +454,7 @@ pub struct Connection {
 }
 \end{minted}
 Der \textit{MessagingManager} speichert sowohl Client-Server(C2S)- als auch Server-Client\\(S2C)-Verbindungen in einem allgemeinen Konstrukt, der \textit{Connection}. Diese \textit{Connection}s werden in einer \textit{HashMap} gespeichert. Der \textit{MessagingManager} stellt dem Frontend eine generelle Schnittstelle zum Senden und Empfangen von Nachrichten zur Verfügung.
-\begin{figure}[ht]
+\begin{figure}[H]
   \centering
   \includegraphics[width=\textwidth]{diagrams/messaging_messenger.pdf}
   \caption{Mögliches Beispiel für Messenger B, welcher eine Verbindung zu Messenger A aufgebaut hat, und Messenger C, welcher mit Messenger B verbunden ist \label{fig:MessagingMessenger}}
