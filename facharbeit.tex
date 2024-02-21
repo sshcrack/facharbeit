@@ -3,10 +3,12 @@
 \documentclass[a4paper,ngerman, headheight=28pt,12pt]{scrartcl}
 
 
+
 % PACKAGES
 \usepackage[a4paper,left=3cm,right=4cm,top=2.5cm,bottom=2.5cm]{geometry}
 
 \usepackage{fontspec}
+\usepackage{hyphenat}
 \usepackage{babel}
 
 
@@ -77,6 +79,8 @@ maxbibnames=99
   BoldItalicFont=*-BoldItalic,
 ]}{\setmainfont{Calibri}}
 
+% Used for babel hypernate
+\defineshorthand{~-}{\hyp{}}
 
 \MakeOuterQuote{"}
 
@@ -197,6 +201,15 @@ maxbibnames=99
 \fi
 
 
+
+% Used to adjust small overfulls
+\usepackage{microtype}
+
+
+% Hyphenations
+\hyphenation{an-ge-wie-sen}
+
+
 % Facharbeit
 
 \begin{document}
@@ -218,7 +231,7 @@ Wie können Bürger aus solchen Staaten ihre Meinung verbreiten und andere Mensc
 Bei herkömmlichen Messengern wie WhatsApp, Signal und Co. wird zur bi- oder multilateralen Kommunikation die Telefonnummern benötigt, um untereinander in Kontakt treten zu können. Eine mögliche Gefahr besteht darin, dass sich ein totalitärer Staat als legitimer Empfänger ausgibt, wodurch Bürger und z.B. staatskritische Journalisten ihre privaten Telefonnummern an den Staat weitergeben, der dann wiederum in der Lage ist, diese Nummern zurückzuverfolgen \vcite{LocPolice}. Genau hier liegt das Problem: oppositionelle Bürger und Reporter können nicht über gewöhnliche Messenger mit der Außenwelt kommunizieren, da der Staat ihre Nummern zurückverfolgen kann, und sie mit einer weiteren Einschränkung ihrer Meinungsfreiheit oder sogar mit ihrer Verhaftung rechnen müssen \vcite{AmnReport}. \\
 Die zentrale Infrastruktur, der meisten Messengern wie WhatsApp und Signal, ermöglicht es außerdem totalitären Staaten wie China, die IP-Adressen von Servern zu blockieren und sie so für Bürger und Journalisten unzugänglich zu machen \vcite{ChinaFirewall,CentralizedWhatsapp}.
 %//REVIEW - Ist verschlüsselt so okay aufgebrochen?
-Vor diesem Hintergrund könnte ein dezentraler, Ende-zu-Ende-ver-schlüsselter Messenger, der über das Tor-Netzwerk kommuniziert, eine Lösung für diese Probleme darstellen. Ziel dieser Arbeit ist es, diese Lösung auf ihre Sicherheit und Praktikabilität hin zu untersuchen und zu implementieren.\\
+Vor diesem Hintergrund könnte ein dezentraler, Ende-zu-Ende-ver~-schlüsselter Messenger, der über das Tor-Netzwerk kommuniziert, eine Lösung für diese Probleme darstellen. Ziel dieser Arbeit ist es, diese Lösung auf ihre Sicherheit und Praktikabilität hin zu untersuchen und zu implementieren.\\
 %//NOTE - Hier habe ich den 1. Satz nicht übernommen, hat nicht ganz den Sinn getroffen
 Um ein Verständnis für die Sicherheit dieses Messengers zu erlangen, geht diese Arbeit im zweiten Kapitel auf die asymmetrische Verschlüsselung und die Ende-zu-Ende-Verschlüsselung (E2EE) ein. Hierzu werden die mathematischen Zusammenhänge näher betrachtet, um im Anschluss die Sicherheit des Verfahrens beurteilen zu können.
 %//REVIEW - Habe ich so ergänzt ist okay?
@@ -252,8 +265,8 @@ Grundsätzlich wird bei der asymmetrischen Verschlüsselung ein Schlüsselpaar (
 \end{figure}
 
 \subsection{Mathematische Betrachtung}
-Alle Variablen der folgenden Berechnungen liegen im Bereich $\mathbb{N}$ \vcite{RsaGenCond}. \\
-Zur Erzeugung des Schlüsselpaares benötigen wir zunächst zwei große zufällige Primzahlen $P$ und $Q$ \vebd. Daraus ergibt sich $n = P \cdot Q$, wobei $P \neq Q$ ist, sodass $P$ bzw. $Q$ nicht durch $\sqrt{n}$ bestimmt werden können \vebd. Der private Schlüssel setzt sich hierbei aus den Komponenten $\{ n, d \}$ zusammen, während der öffentliche Schlüssel aus $\{ n, e \}$ besteht \vcite{RsaVariables}.
+%//REVIEW - Removed newline here
+Alle Variablen der folgenden Berechnungen liegen im Bereich $\mathbb{N}$ \vcite{RsaGenCond}. Zur Erzeugung des Schlüsselpaares benötigen wir zunächst zwei große zufällige Primzahlen $P$ und $Q$ \vebd. Daraus ergibt sich $n = P \cdot Q$, wobei $P \neq Q$ ist, sodass $P$ bzw. $Q$ nicht durch $\sqrt{n}$ bestimmt werden können \vebd. Der private Schlüssel setzt sich hierbei aus den Komponenten $\{ n, d \}$ zusammen, während der öffentliche Schlüssel aus $\{ n, e \}$ besteht \vcite{RsaVariables}.
 \subsubsection{Eulersche Phi-Funktion}
 Die eulersche Phi-Funktion spielt eine wichtige Rolle im RSA-Verfahren \vcite{TotientFuncMultiplicative}. Grundsätzlich gibt $\phi(x)$ an, wie viele positive teilerfremde Zahlen es bis $x$ gibt (für wie viele Zahlen der größte gemeinsame Teiler ($\gcd$) mit $x$ $1$ ist) \vcite{EulersTotientFunction}. So ergibt sich $\phi(6) = 2$ oder im Falle einer Primzahl $\phi(7) = 7 - 1 = 6$, also $\phi(x) = x-1$, wenn $x$ eine Primzahl ist, da jede Zahl kleiner als $x$ teilerfremd sein muss \vcite{TotientFuncMultiplicative}. Somit gilt:
 \begin{equation*}
@@ -274,7 +287,7 @@ Wie bereits erwähnt besteht sowohl der private als auch der öffentliche Schlü
     \text{$e$ kein Teiler von $\phi(n)$}
   \end{cases}
 \end{equation*}
-Nachdem die Komponente $e$ gefunden wurde, ist der öffentliche Schlüssel nun vollstndig und kann an den Absender übermittelt (bzw. veröffentlicht) werden. Zur Entschlüsselung einer Nachricht ist die Komponente $d$, welche im privaten Schlüssel enthalten ist, erforderlich \vcite{RsaMaths1}:
+Nachdem die Komponente $e$ gefunden wurde, ist der öffentliche Schlüssel nun vollständig und kann an den Absender übermittelt (bzw. veröffentlicht) werden. Zur Entschlüsselung einer Nachricht ist die Komponente $d$, welche im privaten Schlüssel enthalten ist, erforderlich \vcite{RsaMaths1}:
 \begin{equation*}
   \begin{aligned}
     \phi(n) & = (P-1)(Q-1)          \\
@@ -298,6 +311,7 @@ Damit die verschlüsselte Nachricht $c$ wieder entschlüsselt werden kann, bräu
 \end{figure}
 Die ausschlaggebende Größe ist hierbei die Bitlänge des Produktes $n$. Wird die Bitlänge von $n$ erhöht, steigt der Zeitaufwand, welcher für die Primfaktorzerlegung von $n$ benötigt wird, an. Somit empfiehlt das BSI eine Schlüssellänge (Länge von $n$) von mindestens 3000 Bit, um in naher Zukunft vor Angriffen geschützt zu sein \vcite{RsaKeyLength}.
 \subsection{Vergleich zur symmetrischen Verschlüsselung}
+%//REVIEW - Ok so?
 Der wesentliche Unterschied zur asymmetrischen Verschlüsselung besteht darin, dass bei symmetrischen Verschlüsselung derselbe Schlüssel zum Ver- und Entschlüsseln verwendet wird \vcite{GeneralSymmetricCryptography}. Im Vergleich zur asymmetrischen Verschlüsselung ist die symmetrische Verschlüsselung schneller und hat keine Beschränkung der Chiffretextlänge \vcite{RsaAESAnalysis, OpensslRsaMaxLength}. Allerdings muss der Schlüssel der symmetrischen Verschlüsselung dem anderen Kommunikationspartner sicher übermittelt werden, um die Nachrichten entschlüsseln zu können \vebd.
 %//REVIEW - Bisschen scuffed tbh
 Die symmetrische Verschlüsselung eignet sich daher für die Verschlüsselung von Benutzerdaten des Messengers (wie z.B. Chatverläufe) mit einem benutzerdefinierten Passwort.
@@ -310,13 +324,12 @@ Damit ein Client eine Anfrage über das Tor-Netzwerk senden kann, sucht er sich 
 Der \circuit, welcher für 10 Minuten gültig ist, besteht in der Regel aus drei \nodes \vebd. Nachdem der \circuit ausgelaufen ist, wird dieser durch den Client erneuert \vcite{FAQCircuitLifetime}.
 Die drei \nodes werden hier in drei Kategorien unterteilt: Die \entryn, mit der sich der Client verbindet, die \relayn, welche zwischen \entryn und \exitn liegt, und die \exitn, welche sich mit dem Zielserver verbindet \vcite{TorStructure}. Der Client verschlüsselt die eigentliche Anfrage, welche er über das Tor-Netzwerk senden möchte, mehrfach, verpackt sie also in mehrere "Schalen", die eine \onion bilden, und leitet diese über den \circuit an den Zielserver weiter \vcite{TorFirstPub}.
 Zunächst wird die \onion vom Tor-Client an die \entryn gesendet \vcite{TorStructure}. An jeder \node, wie der \entryn, wird eine Schale der \onion "abgeschält" (die \onion also einmal entschlüsselt), wodurch diese \node Informationen über die nächste \node der \onion erhält \vcite{TorFirstPub}. Die \node leitet nun die \onion an den nächsten Knotenpunkt weiter \vebd. Sobald \onion die \exitn erreicht hat, entfernt diese die letzte "Schale" der Anfrage, wodurch diese nun vollständig entschlüsselt ist und an den Zielserver gesendet werden kann \vebd. Dieses Routing-Verfahren ist auch als \textit{Onion-Routing} bekannt \vcite{TorStructure2}.
-
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.65\textwidth]{TorRoutingSimple.png}
   \caption{Das Prinzip des Onion-Routings \vcite{fig:Tor-Structure} \label{fig:TorStructure}}
-\end{figure}
-\textbf{Nur} die \entryn kennt also die echte IP-Adresse des Clients und \textbf{Nur} die \exitn weiß, an welchen Zielserver die Anfrage geschickt wurde \vcite{TorStructure}. Zwischengeschaltete \nodes wie die \relayn erkennen nur eine verschlüsselte Anfrage und haben keine Informationen über den eigentlichen Client oder Zielserver der Anfrage \vcite{EEFTor}.
+\end{figure} \\
+\textbf{Nur} die \entryn kennt also die echte IP-Adresse des Clients und \textbf{nur} die \exitn weiß, an welchen Zielserver die Anfrage geschickt wurde \vcite{TorStructure}. Zwischengeschaltete \nodes wie die \relayn erkennen nur eine verschlüsselte Anfrage und haben keine Informationen über den eigentlichen Client oder Zielserver der Anfrage \vcite{EEFTor}.
 Eine mögliche Schwachstelle liegt bei der \exitn, welche unverschlüsselte Anfragen an den Zielserver sendet, somit Benutzerdaten (wenn nicht mit TLS verschlüsselt) bzw. IP-Adressen ausgelesen werden können \vcite{TorBadRelay}. Durch die Einrichtung von \exitns im Tor-Netzwerk könnte ein Angreifer somit die Anonymität des Netzwerks bzw. der Benutzer gefährden (\exitn des Angreifers auch bekannt als Bad-Relay) \vebd.
 
 \subsection{Onion Services}
@@ -333,7 +346,7 @@ Der Client besitzt nun die Adressen der \introps und die Signatur des \textit{De
 \subsection{Sicherheit}
 %//TODO Nochmal Studio durchlesen, ist noch nicht schlüssig
 %//TODO Angriff wurde schon von Tor gefixt, benutze OnionServiceFingerprinting
-Onion Services beheben im Vergleich zu normalen Zielservern im Tor-Netzwerk das Problem der \exitn-Angriffe, dadurch dass sie nicht mehr auf \exitns angewiesen sind.
+Onion Services beheben im Vergleich zu normalen Zielservern im Tor-Netzwerk das Problem der \exitn-Angriffe, dadurch dass sie nicht mehr auf \exitns angewie~-sen sind.
 In der Sicherheitsbetrachtung beziehe ich mich ausschließlich auf die Verbindung zwischen den Onion Services und den Tor-Clients (also nicht zwischen Tor-Client und \exitn). Eine Deanonymisierung eines Onion Services theoretisch möglich, wenn der ISP (Internet Service Provider, also z.B. Telekom, EWE, etc.) eingehende und ausgehende Verbindungen zwischen Client und Onion Service bzw. zu deren \relayn aufzeichnet und mithilfe von Machine Learning analysiert \vcite{OnionServiceFingerprinting}. Die Umsetzung der theoretischen Grundlagen war bisher unter idealisierten Bedingungen erfolgreich, jedoch sind weitere Untersuchungen notwendig, um die potenziellen Gefahren dieses Algorithmus einordnen zu können \vebd. Bei einer Zusammenarbeit der Regierungen Deutschlands, der USA und Frankreichs könnten 78,34 \% der \circuits deanonymisiert werden \vebd.
 Dieses Szenario erscheint jedoch unrealistisch, da die Bürger in Deutschland, den USA und Frankreich das Recht auf freie Meinungsäußerung haben und daher höchstwahrscheinlich keine Deanonymisierungsangriffe starten werden, um die Privatsphäre z.B. von Whistleblowern zu schützen \vcite{AmnReport,ROG-USA}.
 %// REVIEW - Kann ich das so sagen oder einfach weglassen?
@@ -416,7 +429,7 @@ pub async fn new(onion_hostname: &str) -> Result<Self> {
 }
 \end{minted}
 Damit zwei Benutzer über den Messenger Nachrichten versenden können, muss ein Messenger die Rolle des Clients und der andere die Rolle des Servers übernehmen. Dadurch, dass jeder Messenger sowohl Client als auch Server sein kann, müssen empfangene Nachrichten von Client und Server zusammengeführt und an das Frontend übermittelt werden, welches in der Bibliothek \textit{messaging} implementiert ist:
-\begin{minted}{rust}
+\begin{minted}[breaklines]{rust}
 /// A Manager which holds the connections by receiver name
 pub struct MessagingManager {
   /// The connections by receiver name
@@ -436,7 +449,7 @@ pub struct Connection {
     notifier_ready_rx: Receiver<()>,
 }
 \end{minted}
-Der \textit{MessagingManager} speichert sowohl Client-Server-(C2S) als auch Server-Client(S2C)-Verbindungen in einem allgemeinen Konstrukt, der \textit{Connection}. Diese \textit{Connection}s werden in einer \textit{HashMap} gespeichert. Der \textit{MessagingManager} stellt dem Frontend eine generelle Schnittstelle zum Senden und Empfangen von Nachrichten zur Verfügung.
+Der \textit{MessagingManager} speichert sowohl Client-Server(C2S)- als auch Server-Client\\(S2C)-Verbindungen in einem allgemeinen Konstrukt, der \textit{Connection}. Diese \textit{Connection}s werden in einer \textit{HashMap} gespeichert. Der \textit{MessagingManager} stellt dem Frontend eine generelle Schnittstelle zum Senden und Empfangen von Nachrichten zur Verfügung.
 \begin{figure}[ht]
   \centering
   \includegraphics[width=\textwidth]{diagrams/messaging_messenger.pdf}
@@ -447,7 +460,7 @@ Wenn in diesem Beispiel das Frontend von Messenger B eine Anfrage an den \textit
 
 \subsection{Tor-Netzwerk}
 Damit der Messenger das Tor-Netzwerk verwenden kann, muss zunächst eine Verbindung zum Tor-Netzwerk hergestellt werden, welches über die \textit{tor-proxy} Bibliothek geschieht. Der HTTP-Server wird über den Tor-Proxy in das Tor-Netzwerk als Onion Service eingebunden. Damit sich der Tor-Proxy gestartet werden kann, wird eine Konfigurationsdatei benötigt, welche durch die \textit{tor-proxy} Bibliothek erstellt wird:
-\begin{minted}{rust}
+\begin{minted}[breaklines]{rust}
 /// Converts the configuration to a `torrc` file format
 async fn to_text(&self) -> Result<String> {
     let data = PathBuf::from(self.data_dir());
@@ -477,7 +490,7 @@ GeoIPv6File \"{}\"",
 }
 \end{minted}
 Nun muss nur noch der Tor-Proxy gestartet werden:
-\begin{minted}{rust}
+\begin{minted}[breaklines]{rust}
 let mut child = Command::new(TOR_BINARY_PATH.clone());
 child.args(["-f", &get_torrc().to_string_lossy()]);
 child.current_dir(TOR_BINARY_PATH.parent().unwrap());
@@ -509,12 +522,12 @@ Um die Nutzerdaten vor weiteren möglichen Angriffen zu schützen, verwende ich 
 
 \subsection{Ende-zu-Ende-Verschlüsselung}
 Das letzte Kriterium, welches der Messenger nun erfüllen muss, ist die Ende-zu-Ende-Verschlüsselung. Dazu muss zunächst die Identität des anderen Kommunikationspartners überprüft werden.
-\subsubsection{Identity verification}
+\subsubsection{Verifizierung der Identität}
 Um das Konzept der E2EE umzusetzen, muss der Sender einer Nachricht sicher sein, dass der Empfänger tatsächlich derjenige ist, für den er sich ausgibt. Zum Zwecke der Erklärung gehen wir nun davon aus, dass Messenger A eine Nachricht an Messenger B senden möchte. Messenger A wäre in diesem Fall der Client und Messenger B der Server.
 Messenger A und Messenger B erzeugen zunächst (falls noch nicht vorhanden) private Schlüssel und erstellen ein neues \textit{StorageChat}-Konstrukt, in welchem die privaten Schlüssel gespeichert werden.
 Damit sowohl Client als auch Server sicher sein können, dass der Kommunikationspartner tatsächlich der ist, für den er sich ausgibt, wird vom Client zunächst ein \identity-Packet versendet.
 Dieses besteht aus dem eigenen Hostnamen, der Signatur des Hostnames addiert mit dem Zielhostname (durch den privaten Schlüssel des Chats signiert) und dem öffentlichen Schlüssel des Schlüsselpaares (vom Chat). Das \identity-Packet wird also wie folgt generiert:
-\begin{minted}{rust}
+\begin{minted}[breaklines]{rust}
 async fn identity(receiver: &str) -> Result<Self> {
   // Get the own hostname
   let own_hostname = get_service_hostname(true)

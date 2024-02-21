@@ -26,3 +26,16 @@ Identitätspacket
 Identitätspackets
 
 Tauri
+HashMap
+StorageChat
+messages
+recpubkey
+zeroize
+Zeroization
+privkey
+Packet
+Packets
+Validierungsprozess
+long-term-circuit
+MessagingManager
+messaging
