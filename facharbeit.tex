@@ -219,7 +219,6 @@ Bei herkömmlichen Messengern wie WhatsApp, Signal und Co. wird zur bi- oder mul
 Die zentrale Infrastruktur, der meisten Messengern wie WhatsApp und Signal, ermöglicht es außerdem totalitären Staaten wie China, die IP-Adressen von Servern zu blockieren und sie so für Bürger und Journalisten unzugänglich zu machen \vcite{ChinaFirewall,CentralizedWhatsapp}.
 %//REVIEW - Ist verschlüsselt so okay aufgebrochen?
 Vor diesem Hintergrund könnte ein dezentraler, Ende-zu-Ende-ver-schlüsselter Messenger, der über das Tor-Netzwerk kommuniziert, eine Lösung für diese Probleme darstellen. Ziel dieser Arbeit ist es, diese Lösung auf ihre Sicherheit und Praktikabilität hin zu untersuchen und zu implementieren.\\
-
 %//NOTE - Hier habe ich den 1. Satz nicht übernommen, hat nicht ganz den Sinn getroffen
 Um ein Verständnis für die Sicherheit dieses Messengers zu erlangen, geht diese Arbeit im zweiten Kapitel auf die asymmetrische Verschlüsselung und die Ende-zu-Ende-Verschlüsselung (E2EE) ein. Hierzu werden die mathematischen Zusammenhänge näher betrachtet, um im Anschluss die Sicherheit des Verfahrens beurteilen zu können.
 %//REVIEW - Habe ich so ergänzt ist okay?
@@ -228,8 +227,7 @@ Dabei wird auf die Erklärung des Padding-Verfahrens der asymmetrischen Verschl�
 Aufbauend auf das vierte Kapitel, in dem mit der Definition und der Sicherheit von Dezentralisierung die Grundlagen gelegt werden, wird im darauffolgenden fünften Kapitel die Implementierung des Messengers beschrieben, woraufhin sechsten Kapitel auf die Nachteile des Messengers und deren Lösungsmöglichkeiten eingegangen wird. Die Arbeit endet mit dem siebten Kapitel, in welchem ein kurzes Fazit der erarbeiteten Ergebnisse gezogen wird.
 
 \subsection{Motivation}
-Mein Interesse an Themenkomplex erstreckt sich über mehrere Ebenen. Neben der asymmetrischen Verschlüsselung und der dahinterliegenden Mathematik, ist die Programmierung selbst und die Implementierung eines sicheren Messengers im Tor-Netzwerk eine meiner Hauptmotivationen mich mit diesem umfangreichen Thema zu beschäftigen.
-
+Mein Interesse an Themenkomplex erstreckt sich über mehrere Ebenen. Neben der asymmetrischen Verschlüsselung und der dahinterliegenden Mathematik, ist die Programmierung selbst und die Implementierung eines sicheren Messengers im Tor-Netzwerk eine meiner Hauptmotivationen mich mit diesem umfangreichen Thema zu beschäftigen. \\
 Ich verfolge das Tor-Netzwerk und seine Struktur schon seit ein paar Jahren mit großem Interesse. Das Tor-Netzwerk wird oft mit dem Begriff des Darknets in Verbindung gebracht, was bei den meisten Menschen zu negative Assoziationen führt \vcite{BsiTorDarknet}. Die schwierige Rückverfolgung spielt eine große Rolle in der Anonymität des Tor-Netzwerkes und ist ein weiterer Aspekt, der mich an diesem Thema fasziniert \vebd.
 %//REVIEW - Punkt hier komisch?
 Zusätzlich steht der mathematische Erklärungsansatz der asymmetrischen Verschlüsselung für mich mitunter im Vordergrund meines Interesses: "Wie schafft es der Angreifer, eine verschlüsselte Nachricht nur mit dem öffentlichen Schlüssel nicht zu entschlüsseln?".
@@ -283,7 +281,6 @@ Nachdem die Komponente $e$ gefunden wurde, ist der öffentliche Schlüssel nun v
     d       & = e^{-1} \mod \phi(n)
   \end{aligned}
 \end{equation*}
-
 Das Schlüsselpaar wurde nun vollständig berechnet und die beiden Schlüssel hängen mathematisch miteinander zusammen.
 \subsection{Sicherheit}
 Um die Sicherheit des RSA-Verfahrens bewerten zu können, müssen wir zunächst den Ver-/Entschlüsselungsprozess betrachten.
@@ -319,9 +316,7 @@ Zunächst wird die \onion vom Tor-Client an die \entryn gesendet \vcite{TorStruc
   \includegraphics[width=0.65\textwidth]{TorRoutingSimple.png}
   \caption{Das Prinzip des Onion-Routings \vcite{fig:Tor-Structure} \label{fig:TorStructure}}
 \end{figure}
-
 \textbf{Nur} die \entryn kennt also die echte IP-Adresse des Clients und \textbf{Nur} die \exitn weiß, an welchen Zielserver die Anfrage geschickt wurde \vcite{TorStructure}. Zwischengeschaltete \nodes wie die \relayn erkennen nur eine verschlüsselte Anfrage und haben keine Informationen über den eigentlichen Client oder Zielserver der Anfrage \vcite{EEFTor}.
-
 Eine mögliche Schwachstelle liegt bei der \exitn, welche unverschlüsselte Anfragen an den Zielserver sendet, somit Benutzerdaten (wenn nicht mit TLS verschlüsselt) bzw. IP-Adressen ausgelesen werden können \vcite{TorBadRelay}. Durch die Einrichtung von \exitns im Tor-Netzwerk könnte ein Angreifer somit die Anonymität des Netzwerks bzw. der Benutzer gefährden (\exitn des Angreifers auch bekannt als Bad-Relay) \vebd.
 
 \subsection{Onion Services}
@@ -356,7 +351,6 @@ Der Client muss bei dieser Netzwerkstruktur dem Hauptserver "vertrauen" und kann
 
 \subsection{Sicherheit}
 Durch die Abhängigkeit des zentralen Netzwerks von einem Hauptserver kann ein Angreifer gezielter, z.B. durch DDoS-Angriffe oder Kompromittierung, das gesamte Netzwerk außer Betrieb setzen oder möglicherweise Nutzerdaten (z.B. Telefonnummern bei Messengern) auslesen \vcite{CentralizedAttacks}.
-
 Ein dezentrales Netzwerk mit einer Peer-to-Peer-Architektur\footnote{Peer-to-Peer bedeutet, dass jeder Knoten im Netzwerk sowohl Client als auch Server sein kann, die bidirektional kommunizieren \vcite{PeerToPeerDef}} bietet dagegen eine größere Angriffsfläche, sodass mehrere Knoten im Netzwerk kompromittiert oder abgeschaltet werden müssen, um das Netzwerk für deren Benutzer unzugänglich zu machen \vcite{GeeksCentralizeDecentralized}.
 Es ist jedoch wichtig, dass die Knoten im Netzwerk vertrauenswürdig sind (im Beispiel des Messengers, dass nur die Gesprächsteilnehmer Teil des Netzwerks sind), um zu verhindern, dass ein Angreifer die Onion-Adressen der Gesprächsteilnehmer durch einfaches Beitreten zum Netzwerk auslesen kann.
 
@@ -493,7 +487,6 @@ child.stderr(Stdio::piped());
 let child = child.spawn()?;
 \end{minted}
 Wenn der Proxy gestartet ist, werden eingehende Verbindungen zum Onion Service dieses Messengers auf den Port des HTTP-Servers umgeleitet.
-
 Der Messenger ist also mit dem Tor-Netzwerk verbunden und der HTTP-Server ist über eine Onion Adresse erreichbar. Andere Messenger können sich folglich anonym über das Tor-Netzwerk mit diesem Messenger verbinden.
 \subsection{Sicherheit}
 Ein symmetrisch verschlüsselter Datenspeicher wird durch die Bibliothek \textit{secure-storage} implementiert. Mit dieser Bibliothek können beliebige \textit{Structs} in Text umgewandelt und verschlüsseln bzw. ausgelesen und entschlüsselt werden. Die \textit{storage-internal} Bibliothek verwendet hierbei die Methoden der \textit{secure-storage} Bibliothek und dient als Wrapper, um die Daten auf der Festplatte zu speichern und wieder auszulesen. Der Datenspeicher enthält hierbei eine \textit{HashMap}, die als Schlüssel die Onion Adresse anderer Messengers und als Wert die Chatinformationen enthält. Chatinformationen sind zum Beispiel gesendete oder empfangene Nachrichten, Schlüsselpaare und öffentliche Schlüssel.
