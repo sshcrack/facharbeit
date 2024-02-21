@@ -30,14 +30,10 @@ async fn main() -> Result<()> {
     f.read_to_string(&mut latex_doc).await?;
     drop(f);
 
-    #[cfg(all(feature = "firefox", feature = "chrome"))]
-    panic!("Can not have both features enabled at the same time");
-
     #[cfg(feature = "chrome")]
-    #[allow(unreachable_code)]
     let bin = include_bytes!("./bin/chromedriver.exe");
 
-    #[cfg(feature = "firefox")]
+    #[cfg(not(feature = "chrome"))]
     let bin = include_bytes!("./bin/geckodriver.exe");
 
     let driver_file = current_exe()

@@ -1,6 +1,6 @@
 %//cSpell:disable
 % LTeX: enabled=false
-\documentclass[a4paper,ngerman, headheight=28pt,12pt]{scrartcl}
+\documentclass[a4paper,ngerman, headheight=28pt,12pt, footheight=27pt]{scrartcl}
 
 
 
@@ -351,7 +351,7 @@ In der Sicherheitsbetrachtung beziehe ich mich ausschließlich auf die Verbindun
 Dieses Szenario erscheint jedoch unrealistisch, da die Bürger in Deutschland, den USA und Frankreich das Recht auf freie Meinungsäußerung haben und daher höchstwahrscheinlich keine Deanonymisierungsangriffe starten werden, um die Privatsphäre z.B. von Whistleblowern zu schützen \vcite{AmnReport,ROG-USA}.
 %// REVIEW - Kann ich das so sagen oder einfach weglassen?
 Zudem reagiert die Organisation des Tor-Netzwerkes "The Tor Project" relativ schnell auf mögliche Deanonymisierungsangriffe und versucht diese zu beheben.
-Im Gegenzug führt die hohe Anonymität, die durch die vielen \nodes und die mehrfache Verschlüsselung erreicht wird, auch dazu, dass das Tor-Netzwerk im Vergleich zum normalen Routing um das 120-fache langsamer ist \vcite{TorPerformance}.
+Im Gegenzug führt die hohe Anonymität, die durch die vielen \nodes und die mehrfache Verschlüsselung erreicht wird, auch dazu, dass das Tor-Netzwerk im Vergleich zum normalen Routing fast um das 120-fache langsamer ist \vcite{TorPerformance}.
 Zudem ist das Tor-Netzwerk ist in der Praxis kaum zu blockieren, da es über 6.500 verschiedene \nodes gibt und somit kein zentraler Hauptserver existiert, von dem das Tor-Netzwerk abhängig ist\footnote{Es ist zwar möglich die IP-Adressen jeglicher \relayns zu blockieren, jedoch ist dies durch Pluggable Transports umgänglich \vcite{PluggableTransports}} \vcite{DeanonymizingTorBook}.
 
 %//NOTE - Bis hier hin korrigiert
@@ -656,7 +656,7 @@ async fn inner_send(&self, msg: &str, date: u128) -> Result<()> {
 Der Server empfängt die verschlüsselte Nachricht vom Client über die Websocket-Verbindung und entschlüsselt sie anschließend mit dem privaten Schlüssel des Chats. Damit ist die Nachricht nun empfangen und entschlüsselt, sodass sie an das Frontend übermittelt werden kann. Benutzer können nun sicher und anonym miteinander kommunizieren.
 
 \section{Nachteile und Lösungsmöglichkeiten}
-Der Messenger bietet zwar hohe Anonymität und Sicherheit, jedoch ist es unerlässlich auch die Nachteile des Messengers und deren Lösungsmöglichkeiten zu betrachten. Durch die Struktur des Tor-Netzwerkes können Datenmengen um das 120-fache langsamer übermittelt werden, welches bei einfachen Textnachrichten nicht auffallen mag, bei größeren Datenmengen, wie zum Beispiel Bildern, jedoch ein Problem darstellen könnte \vcite{TorPerformance}. Dadurch, dass der Client eine Websocket-Verbindung mit dem Onion Service aufbaut, herrscht hier ein \textit{long-term-circuit}, wodurch der \circuit zwischen Onion Service und Client nicht erneuert wird, somit für Angriffe anfälliger sein könnte \vcite{FAQCircuitLifetime}. Zusätzlich ist die Nachrichtenlänge durch das Padding der asymmetrischen Verschlüsselung begrenzt \vcite{OpensslRsaMaxLength}.
+Der Messenger bietet zwar hohe Anonymität und Sicherheit, jedoch ist es unerlässlich auch die Nachteile des Messengers und deren Lösungsmöglichkeiten zu betrachten. Durch die Struktur des Tor-Netzwerkes können Datenmengen um fast das 120-fache langsamer übermittelt werden, welches bei einfachen Textnachrichten nicht auffallen mag, bei größeren Datenmengen, wie zum Beispiel Bildern, jedoch ein Problem darstellen könnte \vcite{TorPerformance}. Dadurch, dass der Client eine Websocket-Verbindung mit dem Onion Service aufbaut, herrscht hier ein \textit{long-term-circuit}, wodurch der \circuit zwischen Onion Service und Client nicht erneuert wird, somit für Angriffe anfälliger sein könnte \vcite{FAQCircuitLifetime}. Zusätzlich ist die Nachrichtenlänge durch das Padding der asymmetrischen Verschlüsselung begrenzt \vcite{OpensslRsaMaxLength}.
 Eine hybride Verschlüsselung, also eine Kombination aus asymmetrischer und symmetrischer Verschlüsselung, ist eine mögliche Lösung für die limitierte Nachrichtenlänge \vcite{HybridEncryption}. Dabei generiert bereits bei dem Verbindungsaufbau der Server einen zufälligen symmetrischen Schlüssel \vebd. Dieser wird mit dem öffentlichen Schlüssel des Clients verschlüsselt und an den Client übermittelt, welcher diesen entschlüsselt und abspeichert, sodass sowohl Server als auch Client den gleichen symmetrischen Schlüssel teilen \vebd. Mit diesem symmetrischen Schlüssel können nun Nachrichten ausgetauscht werden.
 Somit werden die Vorteile der symmetrischen Verschlüsselung (schnell und keine Nachrichtenlängenbegrenzung) mit den Vorteilen der asymmetrischen Verschlüsselung (sicherer Austausch von Schlüsseln) kombiniert \vcite{HybridTechnopedia}. Aufgrund der Infrastruktur dieses Messengers, müssen beide Kommunikationspartner den Messenger geöffnet haben, damit diese miteinander kommunizieren können (der Onion Service wird nur durch Öffnen des Messengers gestartet).
 
