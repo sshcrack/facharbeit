@@ -377,11 +377,11 @@ Wichtig hierbei ist allerdings, dass die Knoten im Netzwerk vertrauenswürdig si
 \section{Umsetzung des Messengers}
 Folgende Kriterien müssen erfüllt sein, um den Messenger sicher, anonym und einfach zu gestalten:
 \begin{description}
-  \item[Einfache Handhabung und Installation] \LongMinus Für die Installation und Nutzung des Messengers sollten möglichst wenig technische Kenntnisse nötig sein
-  \item[Peer-to-Peer-Verbindung] \LongMinus Die Kommunikation zwischen Messengern sollte nur über eine direkte Verbindung erfolgen
-  \item[Anonymität] \LongMinus Verbindungen zwischen Messengern nur das Tor-Netzwerk, keine Anfragen über das normale Internet
-  \item[Sicherheit] \LongMinus Verschlüsselte Speicherung von Chatverläufen und Schlüsselpaaren, um Auslesen der Daten (z.B. durch totalitäre Staaten) zu verhindern
-  \item[E2EE] \LongMinus Verschlüsselung der Nachrichten und Verifikation des Kommunikationspartners
+  \item[Einfache Handhabung und Installation] \LongMinus\;Für die Installation und Nutzung des Messengers sollten möglichst wenig technische Kenntnisse nötig sein
+  \item[Peer-to-Peer-Verbindung] \LongMinus\;Die Kommunikation zwischen Messengern sollte nur über eine direkte Verbindung erfolgen
+  \item[Anonymität] \LongMinus\;Verbindungen zwischen Messengern nur das Tor-Netzwerk, keine Anfragen über das normale Internet
+  \item[Sicherheit] \LongMinus\;Verschlüsselte Speicherung von Chatverläufen und Schlüsselpaaren, um Auslesen der Daten (z.B. durch totalitäre Staaten) zu verhindern
+  \item[E2EE] \LongMinus\;Verschlüsselung der Nachrichten und Verifikation des Kommunikationspartners
 \end{description}
 Damit der Benutzer keine Konsole verwenden muss, um den Messenger zu benutzen, habe ich eine Desktopanwendung mit Rust und Tauri entwickelt. Tauri erfordert hierbei keine zusätzlichen Interpreter oder Bibliotheken, was die Installation vereinfacht.
 Außerdem kann die Anwendung für Windows, Linux und macOS kompiliert werden \vcite{RustCompile}. Rust bietet eine hohe Performance und ist Memory Safe, wodurch viele Sicherheitslücken, wie Buffer Overflows, verhindert werden können \vcite{RustSecurity}. Das Tauri Framework bietet hier zwischen dem User Interface (UI), welches ich in Typescript und React programmiert habe, und dem Rust-Backend eine Schnittstelle, um Daten (\textit{payloads}) zwischen Frontend und Backend zu versenden \vcite{TauriPayloads}. Ich werde in diesem Kapitel nicht auf die Implementierung des Frontends eingehen, da dieser nur für die Benutzeroberfläche zuständig ist und keine weiteren Funktionalitäten bietet.
